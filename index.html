@@ -203,6 +203,18 @@ select{
 .syl-bloc.c1{background:var(--orange-pale);color:#9A3412;border:2.5px solid #FED7AA}
 .syl-bloc.actif{transform:scale(1.28);box-shadow:0 4px 14px rgba(0,0,0,.18)}
 .syl-bloc.fusion{border-color:transparent;background:transparent;color:var(--bleu-fonce);padding:2px 0}
+.abc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.abc-btn{background:#fff;border-radius:16px;border:3px solid;box-shadow:0 3px 0 rgba(0,0,0,.08);
+  padding:8px 2px;display:flex;flex-direction:column;align-items:center;gap:2px;transition:transform .15s}
+.abc-btn:active{transform:translateY(2px)}
+.abc-btn.vue{border-color:#BFDBFE}
+.abc-btn.nouvelle{border-color:#FED7AA}
+.abc-btn.actif{transform:scale(1.1);border-color:var(--vert-vif);background:var(--vert-pale)}
+.abc-paire{font-family:'Baloo 2';font-size:22px;font-weight:800;color:var(--bleu-fonce)}
+.abc-mot{font-size:10.5px;color:var(--gris);font-weight:700}
+.abc-pastille{display:inline-block;width:12px;height:12px;border-radius:4px;vertical-align:-1px;margin-right:4px}
+.abc-pastille.bleu{background:#BFDBFE}
+.abc-pastille.orange{background:#FED7AA}
 .mic-rec{background:#FEE2E2 !important;border-color:#EF4444 !important;animation:pulser 1s infinite}
 @keyframes pulser{50%{transform:scale(1.12)}}
 @keyframes pop{0%{transform:scale(.6)}60%{transform:scale(1.15)}100%{transform:scale(1)}}
@@ -217,7 +229,7 @@ select{
 <script>
 "use strict";
 /* ════════════════════════════════════════════════════════════
-   MON COACH LECTURE — v1.2
+   MON COACH LECTURE — v1.4
    HOPE 2026 · contenu validé par la formatrice (banque Excel v1)
    ════════════════════════════════════════════════════════════ */
 
@@ -245,7 +257,7 @@ function sauverEtat(){
   try{ localStorage.setItem("mcf_v1", JSON.stringify(E)); }catch(err){}
 }
 let E = chargerEtat();
-const VERSION = "1.2";
+const VERSION = "1.4";
 
 /* ── AUDIO : voix de synthèse ───────────────────────────── */
 let voixFR = [];
@@ -275,17 +287,32 @@ function parler(texte, opts){
 
 /* sons "bruit" des lettres : consonne + e muet, version prononçable par la voix */
 const SON_TTS = {
-  a:"a", e:"eu", i:"i", o:"o", u:"u",
-  l:"leu", m:"meu", s:"seu", r:"reu", n:"neu", t:"teu", p:"peu", f:"feu", v:"veu", b:"beu", d:"deu",
-  ou:"ou", an:"an", on:"on", oi:"oua", "é":"é", "è":"è", ch:"cheu", j:"jeu", z:"zeu", gn:"gneu"
+  a:"a", e:"euh", i:"i", o:"o", u:"u",
+  l:"le", m:"meuh", s:"se", r:"re", n:"ne", t:"te", p:"peu", f:"feu", v:"vœu", b:"bœufs", d:"de",
+  ou:"ou", an:"an", on:"on", oi:"oie", "é":"et", "è":"haie", ch:"che", j:"jeu", z:"ze", gn:"gne"
 };
 /* réécriture phonétique pour la voix : évite que BE, TO, SO, NO, IS, US…
    soient lus comme des mots ANGLAIS par le moteur du téléphone */
-const VMAP = { a:"a", e:"eu", i:"i", o:"au", u:"u", "é":"é" };
+const VMAP = { a:"a", e:"e", i:"i", o:"au", u:"u", "é":"ais" };
+/* 66 syllabes consonne+voyelle → vrai mot français (ou forme courte sans homographe anglais) */
+const DIRE_CV = {
+  la:"la", le:"le", li:"lit", lo:"lot", lu:"lu", "lé":"les",
+  ma:"ma", me:"meuh", mi:"mi", mo:"mot", mu:"mue", "mé":"mes",
+  sa:"sa", se:"se", si:"si", so:"seau", su:"su", "sé":"ses",
+  ra:"rat", re:"re", ri:"rit", ro:"rot", ru:"rue", "ré":"ré",
+  na:"na", ne:"ne", ni:"ni", no:"nos", nu:"nu", "né":"né",
+  ta:"ta", te:"te", ti:"ti", to:"tôt", tu:"tu", "té":"tes",
+  pa:"pas", pe:"peu", pi:"pie", po:"pot", pu:"pu", "pé":"paix",
+  fa:"fa", fe:"feu", fi:"fi", fo:"faux", fu:"fut", "fé":"fée",
+  va:"va", ve:"vœu", vi:"vie", vo:"veau", vu:"vu", "vé":"vais",
+  ba:"bas", be:"bœufs", bi:"bi", bo:"beau", bu:"bu", "bé":"bée",
+  da:"da", de:"de", di:"dit", do:"dos", du:"du", "dé":"dé"
+};
 const VCMAP = { al:"alle", il:"île", ol:"olle", ul:"ulle", ar:"are", ir:"ire", or:"hors", ur:"ure",
                 as:"asse", is:"isse", os:"osse", us:"usse", af:"affe", if:"iffe" };
 function direSyllabe(syl){
   const s = syl.toLowerCase();
+  if(DIRE_CV[s]) return DIRE_CV[s];
   if(VCMAP[s]) return VCMAP[s];
   if(s.length===2 && CONS.includes(s[0]) && VMAP[s[1]] !== undefined) return s[0] + VMAP[s[1]];
   return s;
@@ -470,60 +497,60 @@ const SYLL = {
   ami:[["a","a"],["mi","mi"]], midi:[["mi","mi"],["di","di"]],
   mardi:[["mar","marre"],["di","di"]], papa:[["pa","pa"],["pa","pa"]],
   moto:[["mo","mau"],["to","tau"]], "vélo":[["vé","vé"],["lo","lau"]],
-  salade:[["sa","sa"],["la","la"],["de","deu"]],
+  salade:[["sa","sa"],["la","la"],["de","de"]],
   lavabo:[["la","la"],["va","va"],["bo","bau"]],
   domino:[["do","dau"],["mi","mi"],["no","nau"]],
-  tomate:[["to","tau"],["ma","ma"],["te","teu"]],
-  banane:[["ba","ba"],["na","na"],["ne","neu"]],
-  samedi:[["sa","sa"],["me","meu"],["di","di"]],
-  madame:[["ma","ma"],["da","da"],["me","meu"]],
-  malade:[["ma","ma"],["la","la"],["de","deu"]],
-  minute:[["mi","mi"],["nu","nu"],["te","teu"]],
-  farine:[["fa","fa"],["ri","ri"],["ne","neu"]],
-  poule:[["pou","pou"],["le","leu"]], douche:[["dou","doux"],["che","cheu"]],
-  soupe:[["sou","sou"],["pe","peu"]], bouche:[["bou","bout"],["che","cheu"]],
-  route:[["rou","roux"],["te","teu"]], boule:[["bou","bout"],["le","leu"]],
-  mouche:[["mou","mou"],["che","cheu"]], rouge:[["rou","roux"],["ge","jeu"]],
-  douze:[["dou","doux"],["ze","zeu"]],
+  tomate:[["to","tau"],["ma","ma"],["te","te"]],
+  banane:[["ba","ba"],["na","na"],["ne","ne"]],
+  samedi:[["sa","sa"],["me","meuh"],["di","di"]],
+  madame:[["ma","ma"],["da","da"],["me","meuh"]],
+  malade:[["ma","ma"],["la","la"],["de","de"]],
+  minute:[["mi","mi"],["nu","nu"],["te","te"]],
+  farine:[["fa","fa"],["ri","ri"],["ne","ne"]],
+  poule:[["pou","pou"],["le","le"]], douche:[["dou","doux"],["che","che"]],
+  soupe:[["sou","sou"],["pe","peu"]], bouche:[["bou","bout"],["che","che"]],
+  route:[["rou","roux"],["te","te"]], boule:[["bou","bout"],["le","le"]],
+  mouche:[["mou","mou"],["che","che"]], rouge:[["rou","roux"],["ge","jeu"]],
+  douze:[["dou","doux"],["ze","ze"]],
   maman:[["ma","ma"],["man","ment"]], volcan:[["vol","vol"],["can","quand"]],
   ruban:[["ru","ru"],["ban","banc"]], "écran":[["é","é"],["cran","cran"]],
   divan:[["di","di"],["van","vent"]], savon:[["sa","sa"],["von","vont"]],
-  melon:[["me","meu"],["lon","long"]], ballon:[["bal","bal"],["lon","long"]],
+  melon:[["me","meuh"],["lon","long"]], ballon:[["bal","bal"],["lon","long"]],
   salon:[["sa","sa"],["lon","long"]], bonbon:[["bon","bon"],["bon","bon"]],
   mouton:[["mou","mou"],["ton","thon"]],
-  poire:[["poi","pois"],["re","reu"]], boire:[["boi","bois"],["re","reu"]],
-  voiture:[["voi","voix"],["tu","tu"],["re","reu"]],
-  "étoile":[["é","é"],["toi","toi"],["le","leu"]],
-  armoire:[["ar","are"],["moi","moi"],["re","reu"]],
+  poire:[["poi","pois"],["re","re"]], boire:[["boi","bois"],["re","re"]],
+  voiture:[["voi","voix"],["tu","tu"],["re","re"]],
+  "étoile":[["é","é"],["toi","toi"],["le","le"]],
+  armoire:[["ar","are"],["moi","moi"],["re","re"]],
   "café":[["ca","cas"],["fé","fée"]], "bébé":[["bé","bé"],["bé","bé"]],
-  "école":[["é","é"],["co","cau"],["le","leu"]],
+  "école":[["é","é"],["co","cau"],["le","le"]],
   "cinéma":[["ci","si"],["né","né"],["ma","ma"]],
-  "mère":[["mè","mais"],["re","reu"]], "père":[["pè","paix"],["re","reu"]],
-  "frère":[["frè","frais"],["re","reu"]],
-  "rivière":[["ri","ri"],["viè","viè"],["re","reu"]],
+  "mère":[["mè","mais"],["re","re"]], "père":[["pè","paix"],["re","re"]],
+  "frère":[["frè","frais"],["re","re"]],
+  "rivière":[["ri","ri"],["viè","viè"],["re","re"]],
   panier:[["pa","pa"],["nier","nier"]], manger:[["man","ment"],["ger","gé"]],
   poulet:[["pou","pou"],["let","lait"]],
-  chemise:[["che","cheu"],["mi","mi"],["se","seu"]],
-  vache:[["va","va"],["che","cheu"]], jupe:[["ju","jus"],["pe","peu"]],
-  valise:[["va","va"],["li","li"],["se","seu"]],
+  chemise:[["che","che"],["mi","mi"],["se","se"]],
+  vache:[["va","va"],["che","che"]], jupe:[["ju","jus"],["pe","peu"]],
+  valise:[["va","va"],["li","li"],["se","se"]],
   maison:[["mai","mai"],["son","sont"]], vision:[["vi","vie"],["sion","sion"]],
   musique:[["mu","mue"],["si","si"],["que","queue"]],
-  montagne:[["mon","mont"],["ta","ta"],["gne","gneu"]],
-  ligne:[["li","li"],["gne","gneu"]],
-  porte:[["por","port"],["te","teu"]], table:[["ta","ta"],["ble","bleu"]],
-  chaise:[["chai","chez"],["se","seu"]],
-  "fenêtre":[["fe","feu"],["nê","nê"],["tre","treu"]],
+  montagne:[["mon","mont"],["ta","ta"],["gne","gne"]],
+  ligne:[["li","li"],["gne","gne"]],
+  porte:[["por","port"],["te","te"]], table:[["ta","ta"],["ble","bleu"]],
+  chaise:[["chai","chez"],["se","se"]],
+  "fenêtre":[["fe","feu"],["nê","nê"],["tre","tre"]],
   lampe:[["lam","lent"],["pe","peu"]],
   citron:[["ci","si"],["tron","tron"]],
   magasin:[["ma","ma"],["ga","gars"],["sin","sain"]],
   "marché":[["mar","marre"],["ché","ché"]],
-  dimanche:[["di","di"],["man","ment"],["che","cheu"]],
+  dimanche:[["di","di"],["man","ment"],["che","che"]],
   matin:[["ma","ma"],["tin","teint"]],
-  semaine:[["se","seu"],["mai","mai"],["ne","neu"]],
-  tasse:[["tas","tas"],["se","seu"]], loupe:[["lou","loup"],["pe","peu"]],
+  semaine:[["se","se"],["mai","mai"],["ne","ne"]],
+  tasse:[["tas","tas"],["se","se"]], loupe:[["lou","loup"],["pe","peu"]],
   radio:[["ra","rat"],["dio","diau"]],
-  "téléphone":[["té","thé"],["lé","les"],["pho","fau"],["ne","neu"]],
-  lune:[["lu","lu"],["ne","neu"]], robe:[["ro","rau"],["be","beu"]],
+  "téléphone":[["té","thé"],["lé","les"],["pho","fau"],["ne","ne"]],
+  lune:[["lu","lu"],["ne","ne"]], robe:[["ro","rau"],["be","bœufs"]],
   "fumée":[["fu","fut"],["mée","mes"]],
   lundi:[["lun","l'un"],["di","di"]]
 };
@@ -1210,6 +1237,14 @@ function ecranAccueil(){
       <div class="flamme">🔥 ${E.serie.n||0}</div>
     </div>
     ${cartes}
+    <button class="parcours-card" id="abc" style="border-color:#2563EB33">
+      <div class="pc-emoji" style="background:var(--bleu-pale)">🔤</div>
+      <div style="flex:1">
+        <div class="pc-titre" style="color:var(--bleu-fonce)">L’alphabet</div>
+        <div class="pc-sub">Les 26 lettres, à écouter librement</div>
+      </div>
+      <div style="font-size:22px;color:#C9C2B8">▶</div>
+    </button>
     <button class="parcours-card" id="libre" style="border-color:#7C3AED55;${libreOuvert?"":"filter:grayscale(1);opacity:.6"}">
       <div class="pc-emoji" style="background:var(--violet-pale)">⚡</div>
       <div style="flex:1">
@@ -1226,6 +1261,7 @@ function ecranAccueil(){
   app.querySelectorAll(".parcours-card[data-p]").forEach(c=>{
     c.onclick=()=>ecranParcours(c.dataset.p);
   });
+  $("#abc").onclick=ecranAbecedaire;
   $("#libre").onclick=()=>{ if(libreOuvert) ecranLibre(); else parler("Termine d’abord un bilan pour débloquer l’entraînement libre !"); };
   $("#progres").onclick=ecranProgres;
   $("#reglages").onclick=ecranReglages;
@@ -1485,6 +1521,53 @@ async function jouerDemo(type, qModele, p, lvl){
     $("#go").onclick=()=>resoudre();
     $("#revoir").onclick=async ()=>{ delete E.demosVues[type]; await jouerDemo(type,qModele,p,lvl); resoudre(); };
   });
+}
+
+
+/* ── ABÉCÉDAIRE : 26 lettres, nom épelé (forme vocale sûre) + mot exemple ── */
+const ALPHABET = [
+  {l:"A",nom:"a",mot:"ami"},{l:"B",nom:"bé",mot:"banane"},{l:"C",nom:"cé",mot:"citron"},
+  {l:"D",nom:"dé",mot:"domino"},{l:"E",nom:"e",mot:"escargot"},{l:"F",nom:"èf",mot:"farine"},
+  {l:"G",nom:"gé",mot:"gâteau"},{l:"H",nom:"ache",mot:"hôtel"},{l:"I",nom:"i",mot:"igloo"},
+  {l:"J",nom:"ji",mot:"jour"},{l:"K",nom:"ka",mot:"kiwi"},{l:"L",nom:"èl",mot:"lune"},
+  {l:"M",nom:"èm",mot:"moto"},{l:"N",nom:"èn",mot:"nuage"},{l:"O",nom:"o",mot:"orange"},
+  {l:"P",nom:"pé",mot:"porte"},{l:"Q",nom:"cu",mot:"quatre"},{l:"R",nom:"èr",mot:"robe"},
+  {l:"S",nom:"èsse",mot:"salade"},{l:"T",nom:"té",mot:"tomate"},{l:"U",nom:"u",mot:"usine"},
+  {l:"V",nom:"vé",mot:"vélo"},{l:"W",nom:"double vé",mot:"wagon"},{l:"X",nom:"ixe",mot:"xylophone"},
+  {l:"Y",nom:"i grec",mot:"yaourt"},{l:"Z",nom:"zède",mot:"zéro"}
+];
+const LETTRES_TRAVAILLEES = new Set(["A","E","I","O","U","L","M","S","R","N","T","P","F","V","B","D"]);
+
+function ecranAbecedaire(){
+  app.innerHTML = html`
+    <div class="top">
+      <button class="retour" id="retour">←</button>
+      <div class="titre" style="font-size:21px;color:var(--bleu-fonce)">🔤 L’alphabet</div>
+    </div>
+    <p class="petit" style="margin-bottom:10px">Touche une lettre pour l’écouter.</p>
+    <div class="abc-grid">
+      ${ALPHABET.map((a,i)=>html`
+        <button class="abc-btn ${LETTRES_TRAVAILLEES.has(a.l)?"vue":"nouvelle"}" data-i="${i}">
+          <div class="abc-paire">${a.l} ${a.l.toLowerCase()}</div>
+          <div class="abc-mot">${a.mot}</div>
+        </button>`).join("")}
+    </div>
+    <div class="row" style="margin-top:14px;justify-content:center;gap:18px">
+      <span class="petit"><span class="abc-pastille bleu"></span> dans les exercices</span>
+      <span class="petit"><span class="abc-pastille orange"></span> autres lettres</span>
+    </div>`;
+  $("#retour").onclick=ecranAccueil;
+  app.querySelectorAll(".abc-btn").forEach(b=>{
+    b.onclick = async ()=>{
+      if(b.classList.contains("actif")) return;
+      const a = ALPHABET[parseInt(b.dataset.i)];
+      app.querySelectorAll(".abc-btn").forEach(x=>x.classList.remove("actif"));
+      b.classList.add("actif");
+      await parler("La lettre... "+a.nom+"... comme dans... "+a.mot+".");
+      b.classList.remove("actif");
+    };
+  });
+  parler("Touche une lettre pour l’écouter.");
 }
 
 /* ── PROGRÈS ────────────────────────────────────────────── */
