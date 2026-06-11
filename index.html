@@ -229,7 +229,7 @@ select{
 <script>
 "use strict";
 /* ════════════════════════════════════════════════════════════
-   MON COACH LECTURE — v1.4
+   MON COACH LECTURE — v1.6
    HOPE 2026 · contenu validé par la formatrice (banque Excel v1)
    ════════════════════════════════════════════════════════════ */
 
@@ -257,7 +257,7 @@ function sauverEtat(){
   try{ localStorage.setItem("mcf_v1", JSON.stringify(E)); }catch(err){}
 }
 let E = chargerEtat();
-const VERSION = "1.4";
+const VERSION = "1.6";
 
 /* ── AUDIO : voix de synthèse ───────────────────────────── */
 let voixFR = [];
@@ -513,17 +513,17 @@ const SYLL = {
   mouche:[["mou","mou"],["che","che"]], rouge:[["rou","roux"],["ge","jeu"]],
   douze:[["dou","doux"],["ze","ze"]],
   maman:[["ma","ma"],["man","ment"]], volcan:[["vol","vol"],["can","quand"]],
-  ruban:[["ru","ru"],["ban","banc"]], "écran":[["é","é"],["cran","cran"]],
+  ruban:[["ru","ru"],["ban","banc"]], "écran":[["é","et"],["cran","cran"]],
   divan:[["di","di"],["van","vent"]], savon:[["sa","sa"],["von","vont"]],
   melon:[["me","meuh"],["lon","long"]], ballon:[["bal","bal"],["lon","long"]],
   salon:[["sa","sa"],["lon","long"]], bonbon:[["bon","bon"],["bon","bon"]],
   mouton:[["mou","mou"],["ton","thon"]],
   poire:[["poi","pois"],["re","re"]], boire:[["boi","bois"],["re","re"]],
   voiture:[["voi","voix"],["tu","tu"],["re","re"]],
-  "étoile":[["é","é"],["toi","toi"],["le","le"]],
+  "étoile":[["é","et"],["toi","toi"],["le","le"]],
   armoire:[["ar","are"],["moi","moi"],["re","re"]],
   "café":[["ca","cas"],["fé","fée"]], "bébé":[["bé","bé"],["bé","bé"]],
-  "école":[["é","é"],["co","cau"],["le","le"]],
+  "école":[["é","et"],["co","cau"],["le","le"]],
   "cinéma":[["ci","si"],["né","né"],["ma","ma"]],
   "mère":[["mè","mais"],["re","re"]], "père":[["pè","paix"],["re","re"]],
   "frère":[["frè","frais"],["re","re"]],
@@ -548,7 +548,7 @@ const SYLL = {
   matin:[["ma","ma"],["tin","teint"]],
   semaine:[["se","se"],["mai","mai"],["ne","ne"]],
   tasse:[["tas","tas"],["se","se"]], loupe:[["lou","loup"],["pe","peu"]],
-  radio:[["ra","rat"],["dio","diau"]],
+  radio:[["ra","rat"],["di","dit"],["o","eau"]],
   "téléphone":[["té","thé"],["lé","les"],["pho","fau"],["ne","ne"]],
   lune:[["lu","lu"],["ne","ne"]], robe:[["ro","rau"],["be","bœufs"]],
   "fumée":[["fu","fut"],["mée","mes"]],
