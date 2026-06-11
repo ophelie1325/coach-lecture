@@ -229,7 +229,7 @@ select{
 <script>
 "use strict";
 /* ════════════════════════════════════════════════════════════
-   MON COACH LECTURE — v1.6
+   MON COACH LECTURE — v1.7
    HOPE 2026 · contenu validé par la formatrice (banque Excel v1)
    ════════════════════════════════════════════════════════════ */
 
@@ -257,7 +257,7 @@ function sauverEtat(){
   try{ localStorage.setItem("mcf_v1", JSON.stringify(E)); }catch(err){}
 }
 let E = chargerEtat();
-const VERSION = "1.6";
+const VERSION = "1.7";
 
 /* ── AUDIO : voix de synthèse ───────────────────────────── */
 let voixFR = [];
@@ -527,7 +527,7 @@ const SYLL = {
   "cinéma":[["ci","si"],["né","né"],["ma","ma"]],
   "mère":[["mè","mais"],["re","re"]], "père":[["pè","paix"],["re","re"]],
   "frère":[["frè","frais"],["re","re"]],
-  "rivière":[["ri","ri"],["viè","viè"],["re","re"]],
+  "rivière":[["ri","rit"],["vi","vie"],["è","haie"],["re","re"]],
   panier:[["pa","pa"],["nier","nier"]], manger:[["man","ment"],["ger","gé"]],
   poulet:[["pou","pou"],["let","lait"]],
   chemise:[["che","che"],["mi","mi"],["se","se"]],
@@ -539,7 +539,7 @@ const SYLL = {
   ligne:[["li","li"],["gne","gne"]],
   porte:[["por","port"],["te","te"]], table:[["ta","ta"],["ble","bleu"]],
   chaise:[["chai","chez"],["se","se"]],
-  "fenêtre":[["fe","feu"],["nê","nê"],["tre","tre"]],
+  "fenêtre":[["fe","feu"],["nê","naît"],["tre","tre"]],
   lampe:[["lam","lent"],["pe","peu"]],
   citron:[["ci","si"],["tron","tron"]],
   magasin:[["ma","ma"],["ga","gars"],["sin","sain"]],
