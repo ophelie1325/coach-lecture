@@ -1,0 +1,1576 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#2563EB">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>Mon Coach Lecture</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Baloo+2:wght@500;700;800&display=swap');
+
+:root{
+  --bleu:#2563EB; --bleu-fonce:#1E40AF; --bleu-pale:#EFF6FF;
+  --vert:#059669; --vert-pale:#ECFDF5; --vert-vif:#22C55E;
+  --orange:#EA580C; --orange-pale:#FFF7ED;
+  --violet:#7C3AED; --violet-pale:#F5F3FF;
+  --rouge:#DC2626; --rouge-pale:#FEF2F2;
+  --jaune:#F59E0B; --creme:#FAFAF8; --gris:#6B7280; --gris-pale:#F3F4F6;
+  --texte:#111827;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  font-family:'Nunito',sans-serif; background:var(--creme); color:var(--texte);
+  font-size:17px; line-height:1.5; overscroll-behavior:none;
+  user-select:none; -webkit-user-select:none;
+}
+#app{max-width:480px;margin:0 auto;min-height:100%;display:flex;flex-direction:column;padding:16px 16px 32px}
+button{font-family:'Nunito',sans-serif;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
+input{font-family:'Nunito',sans-serif}
+
+/* ── composants génériques ── */
+.titre{font-family:'Baloo 2',sans-serif;font-weight:800;line-height:1.15}
+.btn{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  width:100%;min-height:62px;border-radius:18px;
+  font-size:19px;font-weight:800;color:#fff;background:var(--bleu);
+  box-shadow:0 4px 0 rgba(0,0,0,.18);transition:transform .08s;
+}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.18)}
+.btn.vert{background:var(--vert)} .btn.orange{background:var(--orange)}
+.btn.violet{background:var(--violet)} .btn.gris{background:#9CA3AF}
+.btn.blanc{background:#fff;color:var(--texte);border:2px solid #E5E7EB;box-shadow:0 3px 0 #E5E7EB}
+.btn:disabled{opacity:.45;pointer-events:none}
+.btn-ico{
+  width:60px;height:60px;min-height:60px;border-radius:50%;font-size:26px;
+  background:#fff;border:2px solid #E5E7EB;box-shadow:0 3px 0 #E5E7EB;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.btn-ico:active{transform:translateY(2px)}
+.card{background:#fff;border-radius:20px;padding:18px;border:2px solid #EEE9E2;box-shadow:0 2px 6px rgba(0,0,0,.04)}
+.center{text-align:center}
+.row{display:flex;gap:12px;align-items:center}
+.spacer{flex:1}
+.petit{font-size:13.5px;color:var(--gris)}
+
+/* ── en-tête ── */
+.top{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.top .retour{width:46px;height:46px;border-radius:14px;background:#fff;border:2px solid #E5E7EB;font-size:20px}
+.flamme{
+  margin-left:auto;background:#FFF3E0;border:2px solid #FFD9A8;border-radius:20px;
+  padding:6px 14px;font-weight:900;font-size:16px;color:#C2540A;display:flex;gap:6px;align-items:center
+}
+
+/* ── accueil ── */
+.hero{margin:6px 0 18px}
+.hero h1{font-size:30px;color:var(--bleu-fonce)}
+.parcours-card{
+  display:flex;align-items:center;gap:14px;width:100%;text-align:left;
+  background:#fff;border-radius:22px;padding:16px;margin-bottom:14px;
+  border:2.5px solid;box-shadow:0 4px 0 rgba(0,0,0,.07);transition:transform .08s
+}
+.parcours-card:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.07)}
+.pc-emoji{font-size:38px;width:62px;height:62px;border-radius:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.pc-titre{font-family:'Baloo 2';font-size:19px;font-weight:800}
+.pc-sub{font-size:13.5px;color:var(--gris);margin-top:2px}
+.pc-prog{height:9px;background:#F0EDE7;border-radius:6px;margin-top:8px;overflow:hidden}
+.pc-prog>div{height:100%;border-radius:6px;transition:width .4s}
+
+/* ── carte de niveaux ── */
+.chemin{display:flex;flex-direction:column;gap:6px;padding:8px 0 20px}
+.niv-row{display:flex;justify-content:center}
+.niv-row:nth-child(odd){justify-content:flex-start;padding-left:14%}
+.niv-row:nth-child(even){justify-content:flex-end;padding-right:14%}
+.niveau{
+  width:88px;height:88px;border-radius:50%;background:#fff;
+  border:4px solid;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  box-shadow:0 5px 0 rgba(0,0,0,.10);font-weight:900;position:relative
+}
+.niveau:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(0,0,0,.10)}
+.niveau .num{font-family:'Baloo 2';font-size:24px}
+.niveau .etoiles{font-size:12px;letter-spacing:-1px}
+.niveau.verrou{filter:grayscale(1);opacity:.55}
+.niveau .badge-trophee{position:absolute;top:-8px;right:-8px;font-size:24px}
+.niv-label{font-size:11.5px;color:var(--gris);text-align:center;max-width:110px;margin-top:5px;line-height:1.25}
+.niv-wrap{display:flex;flex-direction:column;align-items:center}
+
+/* ── session / question ── */
+.q-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.q-picto{font-size:26px;width:48px;height:48px;background:#fff;border:2px solid #E5E7EB;border-radius:14px;display:flex;align-items:center;justify-content:center}
+.q-bar{flex:1;height:14px;background:#EFEAE3;border-radius:8px;overflow:hidden}
+.q-bar>div{height:100%;background:var(--vert-vif);border-radius:8px;transition:width .35s}
+.q-flag{width:42px;height:42px;border-radius:12px;background:#fff;border:2px solid #E5E7EB;font-size:17px;opacity:.75}
+.q-zone{flex:1;display:flex;flex-direction:column;justify-content:center;gap:18px;padding:8px 0}
+.q-audio{display:flex;gap:14px;justify-content:center}
+.gros-mot{
+  font-family:'Baloo 2';font-size:46px;font-weight:800;text-align:center;
+  letter-spacing:2px;color:var(--bleu-fonce);word-break:break-word;line-height:1.2
+}
+.gros-mot.moyen{font-size:32px;letter-spacing:1px}
+.gros-mot.phrase{font-size:27px;letter-spacing:.5px}
+.choix{display:flex;flex-direction:column;gap:12px}
+.choix.ligne{flex-direction:row}
+.choix-btn{
+  flex:1;min-height:74px;border-radius:20px;background:#fff;border:3px solid #E2DDD4;
+  font-family:'Baloo 2';font-size:32px;font-weight:800;color:var(--texte);
+  box-shadow:0 4px 0 #E2DDD4;transition:transform .08s
+}
+.choix-btn.texte{font-size:21px;font-family:'Nunito';font-weight:800}
+.choix-btn:active{transform:translateY(3px);box-shadow:0 1px 0 #E2DDD4}
+.choix-btn.ok{background:var(--vert-pale);border-color:var(--vert-vif);box-shadow:0 4px 0 var(--vert-vif);color:var(--vert)}
+.choix-btn.ko{background:var(--rouge-pale);border-color:#FCA5A5;box-shadow:0 4px 0 #FCA5A5;color:var(--rouge)}
+.lettres-mot{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.lettre-btn{
+  width:56px;height:64px;border-radius:14px;background:#fff;border:3px solid #E2DDD4;
+  font-family:'Baloo 2';font-size:30px;font-weight:800;box-shadow:0 3px 0 #E2DDD4
+}
+.lettre-btn.sel{background:var(--bleu-pale);border-color:var(--bleu);color:var(--bleu);box-shadow:0 3px 0 var(--bleu)}
+.lettre-btn.ok{background:var(--vert-pale);border-color:var(--vert-vif);color:var(--vert);box-shadow:0 3px 0 var(--vert-vif)}
+.lettre-btn.ko{background:var(--rouge-pale);border-color:#FCA5A5;color:var(--rouge);box-shadow:0 3px 0 #FCA5A5}
+.lettre-btn.espace{visibility:hidden;width:20px}
+.slots{display:flex;gap:8px;justify-content:center}
+.slot{
+  width:56px;height:64px;border-radius:14px;background:var(--gris-pale);
+  border:3px dashed #D5CFC5;display:flex;align-items:center;justify-content:center;
+  font-family:'Baloo 2';font-size:30px;font-weight:800
+}
+.slot.plein{background:#fff;border-style:solid;border-color:var(--bleu);color:var(--bleu-fonce)}
+.feedback{
+  text-align:center;font-family:'Baloo 2';font-size:23px;font-weight:800;min-height:34px
+}
+.feedback.ok{color:var(--vert)} .feedback.ko{color:var(--rouge)}
+.consigne-lien{
+  text-align:center;font-size:13px;color:#B7B0A6;text-decoration:underline;
+  background:none;width:100%;padding:10px 0 0;margin-top:auto
+}
+.consigne-texte{
+  background:#FFFBEB;border:2px solid #FDE68A;border-radius:14px;
+  padding:12px 14px;font-size:15px;text-align:center;color:#92400E;font-weight:700
+}
+.dictee-input{
+  width:100%;min-height:64px;border-radius:16px;border:3px solid #E2DDD4;
+  font-family:'Baloo 2';font-size:30px;font-weight:800;text-align:center;
+  background:#fff;color:var(--bleu-fonce);letter-spacing:2px;
+}
+.dictee-input:focus{outline:none;border-color:var(--bleu)}
+.mots-boxes{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.mot-box{min-width:84px;max-width:46%;flex:1}
+.mot-box input{
+  width:100%;min-height:54px;border-radius:14px;border:3px solid #E2DDD4;background:#fff;
+  font-family:'Baloo 2';font-size:22px;font-weight:800;text-align:center;color:var(--bleu-fonce)
+}
+.corrige{font-family:'Baloo 2';font-size:30px;text-align:center;letter-spacing:2px}
+.corrige .b{color:var(--vert)} .corrige .m{color:var(--rouge);text-decoration:underline}
+
+/* ── résultat ── */
+.resultat{flex:1;display:flex;flex-direction:column;justify-content:center;text-align:center;gap:16px}
+.res-etoiles{font-size:52px;letter-spacing:4px}
+.res-score{font-family:'Baloo 2';font-size:40px;font-weight:800;color:var(--bleu-fonce)}
+
+/* ── doigt fantôme / démo ── */
+#doigt{
+  position:fixed;font-size:46px;z-index:1000;pointer-events:none;display:none;
+  transition:left .9s ease-in-out, top .9s ease-in-out;
+  filter:drop-shadow(0 3px 4px rgba(0,0,0,.3));transform:rotate(-15deg)
+}
+.demo-bandeau{
+  background:var(--violet-pale);border:2px solid #DDD6FE;border-radius:14px;
+  padding:10px;text-align:center;font-weight:800;color:var(--violet);font-size:16px
+}
+.voile{pointer-events:none}
+
+/* ── progrès ── */
+.prog-ligne{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1.5px solid #F1EDE6;font-weight:700}
+.prog-ligne:last-child{border:none}
+
+/* ── divers ── */
+.onboard{flex:1;display:flex;flex-direction:column;justify-content:center;gap:20px;text-align:center}
+.onboard input{
+  width:100%;min-height:60px;border-radius:16px;border:3px solid #E2DDD4;
+  font-size:22px;font-weight:800;text-align:center;background:#fff
+}
+.onboard input:focus{outline:none;border-color:var(--bleu)}
+select{
+  width:100%;min-height:52px;border-radius:14px;border:2px solid #E2DDD4;
+  background:#fff;font-family:'Nunito';font-size:16px;font-weight:700;padding:0 12px
+}
+.syl-row{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;transition:gap .6s ease}
+.syl-bloc{font-family:'Baloo 2';font-size:40px;font-weight:800;padding:2px 12px;border-radius:14px;transition:transform .25s, box-shadow .25s;line-height:1.2}
+.syl-bloc.mot{font-size:24px;padding:2px 8px}
+.syl-bloc.c0{background:var(--bleu-pale);color:var(--bleu-fonce);border:2.5px solid #BFDBFE}
+.syl-bloc.c1{background:var(--orange-pale);color:#9A3412;border:2.5px solid #FED7AA}
+.syl-bloc.actif{transform:scale(1.28);box-shadow:0 4px 14px rgba(0,0,0,.18)}
+.syl-bloc.fusion{border-color:transparent;background:transparent;color:var(--bleu-fonce);padding:2px 0}
+.mic-rec{background:#FEE2E2 !important;border-color:#EF4444 !important;animation:pulser 1s infinite}
+@keyframes pulser{50%{transform:scale(1.12)}}
+@keyframes pop{0%{transform:scale(.6)}60%{transform:scale(1.15)}100%{transform:scale(1)}}
+.pop{animation:pop .4s}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+.shake{animation:shake .35s}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="doigt">👆</div>
+<script>
+"use strict";
+/* ════════════════════════════════════════════════════════════
+   MON COACH LECTURE — v1.2
+   HOPE 2026 · contenu validé par la formatrice (banque Excel v1)
+   ════════════════════════════════════════════════════════════ */
+
+/* ── ÉTAT ───────────────────────────────────────────────── */
+const DEFAUT = {
+  prenom:"", onboarde:false,
+  niveaux:{p1:{},p2:{},p3:{}},          // {1:{stars:2}, ...}
+  serie:{n:0, dernier:""},
+  demosVues:{},
+  rates:[],                              // clés d'items ratés (révision)
+  signales:[],                           // items neutralisés
+  totaux:{sessions:0, bonnes:0, posees:0},
+  reglages:{voix:"", debit:0.92}
+};
+let memoire = null;                      // secours si stockage indisponible
+function chargerEtat(){
+  try{
+    const brut = localStorage.getItem("mcf_v1");
+    if(brut){ const e = JSON.parse(brut); return Object.assign(JSON.parse(JSON.stringify(DEFAUT)), e); }
+  }catch(err){}
+  return memoire ? memoire : JSON.parse(JSON.stringify(DEFAUT));
+}
+function sauverEtat(){
+  memoire = E;
+  try{ localStorage.setItem("mcf_v1", JSON.stringify(E)); }catch(err){}
+}
+let E = chargerEtat();
+const VERSION = "1.2";
+
+/* ── AUDIO : voix de synthèse ───────────────────────────── */
+let voixFR = [];
+function chargerVoix(){
+  voixFR = speechSynthesis.getVoices().filter(v => v.lang && v.lang.toLowerCase().startsWith("fr"));
+}
+if("speechSynthesis" in window){
+  chargerVoix();
+  speechSynthesis.onvoiceschanged = chargerVoix;
+}
+function voixChoisie(){
+  if(E.reglages.voix){ const v = voixFR.find(v=>v.voiceURI===E.reglages.voix); if(v) return v; }
+  return voixFR.find(v=>v.lang.toLowerCase()==="fr-fr") || voixFR[0] || null;
+}
+function parler(texte, opts){
+  return new Promise(res=>{
+    if(!("speechSynthesis" in window)){ res(); return; }
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(texte);
+    u.lang = "fr-FR";
+    const v = voixChoisie(); if(v) u.voice = v;
+    u.rate = (opts && opts.lent) ? 0.6 : E.reglages.debit;
+    u.onend = ()=>res(); u.onerror = ()=>res();
+    speechSynthesis.speak(u);
+  });
+}
+
+/* sons "bruit" des lettres : consonne + e muet, version prononçable par la voix */
+const SON_TTS = {
+  a:"a", e:"eu", i:"i", o:"o", u:"u",
+  l:"leu", m:"meu", s:"seu", r:"reu", n:"neu", t:"teu", p:"peu", f:"feu", v:"veu", b:"beu", d:"deu",
+  ou:"ou", an:"an", on:"on", oi:"oua", "é":"é", "è":"è", ch:"cheu", j:"jeu", z:"zeu", gn:"gneu"
+};
+/* réécriture phonétique pour la voix : évite que BE, TO, SO, NO, IS, US…
+   soient lus comme des mots ANGLAIS par le moteur du téléphone */
+const VMAP = { a:"a", e:"eu", i:"i", o:"au", u:"u", "é":"é" };
+const VCMAP = { al:"alle", il:"île", ol:"olle", ul:"ulle", ar:"are", ir:"ire", or:"hors", ur:"ure",
+                as:"asse", is:"isse", os:"osse", us:"usse", af:"affe", if:"iffe" };
+function direSyllabe(syl){
+  const s = syl.toLowerCase();
+  if(VCMAP[s]) return VCMAP[s];
+  if(s.length===2 && CONS.includes(s[0]) && VMAP[s[1]] !== undefined) return s[0] + VMAP[s[1]];
+  return s;
+}
+function direSon(s, opts){ return parler(SON_TTS[s] !== undefined ? SON_TTS[s] : s, opts); }
+
+/* petits sons de feedback (bips doux, non vocaux) */
+let ctxAudio = null;
+function bip(freqs){
+  try{
+    if(!ctxAudio) ctxAudio = new (window.AudioContext||window.webkitAudioContext)();
+    let t = ctxAudio.currentTime;
+    freqs.forEach(f=>{
+      const o = ctxAudio.createOscillator(), g = ctxAudio.createGain();
+      o.type="sine"; o.frequency.value=f;
+      g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(0.18,t+0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001,t+0.22);
+      o.connect(g); g.connect(ctxAudio.destination); o.start(t); o.stop(t+0.25); t+=0.12;
+    });
+  }catch(err){}
+}
+const dingOK = ()=>bip([660,880]);
+const dingKO = ()=>bip([220]);
+const dingFin = ()=>bip([523,659,784]);
+
+/* ── BANQUES DE CONTENU (validées) ──────────────────────── */
+const VOY = ["a","e","i","o","u"];
+const CONS = ["l","m","s","r","n","t","p","f","v","b","d"];
+const VOY_SYL = ["A","E","I","O","U","É"];
+
+const B = {
+p1:{
+ 1:{ titre:"Les voyelles", picto:"👂", type:"paireVoyelles",
+     items:[["a","i"],["a","o"],["i","o"],["i","u"],["o","u"],["a","u"],["e","a"],["e","i"],["e","o"],["e","u"]] },
+ 2:{ titre:"Je reconnais les voyelles", picto:"🔤", type:"sonVersLettre",
+     items:[
+      {son:"a",rep:"A",d:["I","O"]},{son:"i",rep:"I",d:["E","U"]},{son:"o",rep:"O",d:["A","U"]},
+      {son:"u",rep:"U",d:["I","O"]},{son:"e",rep:"E",d:["A","I"]},{son:"a",rep:"A",d:["E","U"]},
+      {son:"i",rep:"I",d:["A","O"]},{son:"o",rep:"O",d:["E","I"]},{son:"u",rep:"U",d:["A","E"]},
+      {son:"e",rep:"E",d:["O","U"]}] },
+ 3:{ titre:"Majuscule et minuscule", picto:"🔠", type:"majMin",
+     items:[
+      {maj:"A",min:"a",d:["o","e"]},{maj:"B",min:"b",d:["d","p"]},{maj:"D",min:"d",d:["b","p"]},
+      {maj:"E",min:"e",d:["a","c"]},{maj:"F",min:"f",d:["t","l"]},{maj:"I",min:"i",d:["l","j"]},
+      {maj:"L",min:"l",d:["i","t"]},{maj:"M",min:"m",d:["n","w"]},{maj:"N",min:"n",d:["m","u"]},
+      {maj:"O",min:"o",d:["a","c"]},{maj:"P",min:"p",d:["b","q"]},{maj:"R",min:"r",d:["n","v"]},
+      {maj:"S",min:"s",d:["z","c"]},{maj:"T",min:"t",d:["f","l"]},{maj:"U",min:"u",d:["n","v"]},
+      {maj:"V",min:"v",d:["u","w"]}] },
+ 4:{ titre:"Les consonnes L M S R", picto:"🔤", type:"sonMotLettre",
+     items:[
+      {son:"l",rep:"L",mot:"lune",d:["M","R"]},{son:"m",rep:"M",mot:"moto",d:["N","L"]},
+      {son:"s",rep:"S",mot:"salade",d:["Z","C"]},{son:"r",rep:"R",mot:"robe",d:["L","N"]},
+      {son:"l",rep:"L",mot:"lavabo",d:["R","T"]},{son:"m",rep:"M",mot:"madame",d:["N","B"]},
+      {son:"s",rep:"S",mot:"samedi",d:["F","Z"]},{son:"r",rep:"R",mot:"radio",d:["L","V"]}] },
+ 5:{ titre:"Les consonnes N T P F", picto:"🔤", type:"sonMotLettre",
+     items:[
+      {son:"n",rep:"N",mot:"nid",d:["M","U"]},{son:"t",rep:"T",mot:"tomate",d:["D","F"]},
+      {son:"p",rep:"P",mot:"porte",d:["B","T"]},{son:"f",rep:"F",mot:"farine",d:["V","T"]},
+      {son:"n",rep:"N",mot:"numéro",d:["M","R"]},{son:"t",rep:"T",mot:"table",d:["P","D"]},
+      {son:"p",rep:"P",mot:"papa",d:["B","D"]},{son:"f",rep:"F",mot:"fumée",d:["V","S"]}] },
+ 6:{ titre:"Les consonnes V B D", picto:"🔤", type:"sonMotLettre",
+     items:[
+      {son:"v",rep:"V",mot:"vélo",d:["F","B"]},{son:"b",rep:"B",mot:"banane",d:["D","P"]},
+      {son:"d",rep:"D",mot:"domino",d:["B","T"]},{son:"v",rep:"V",mot:"valise",d:["B","F"]},
+      {son:"b",rep:"B",mot:"bol",d:["D","V"]},{son:"d",rep:"D",mot:"dimanche",d:["B","P"]},
+      {son:"b",rep:"B",mot:"bébé",d:["D","P"]},{son:"d",rep:"D",mot:"douche",d:["B","T"]}] },
+ 7:{ titre:"Où est la lettre ?", picto:"👆", type:"toucheLettre",
+     items:[
+      {mot:"MOTO",lettre:"M",pos:[0]},{mot:"SALADE",lettre:"S",pos:[0]},{mot:"VÉLO",lettre:"L",pos:[2]},
+      {mot:"ROBE",lettre:"R",pos:[0]},{mot:"BANANE",lettre:"B",pos:[0]},{mot:"TOMATE",lettre:"T",pos:[0,4]},
+      {mot:"PORTE",lettre:"P",pos:[0]},{mot:"FARINE",lettre:"F",pos:[0]},{mot:"DOMINO",lettre:"D",pos:[0]},
+      {mot:"LAVABO",lettre:"V",pos:[2]},{mot:"MADAME",lettre:"D",pos:[2]},{mot:"LUNE",lettre:"N",pos:[2]}] },
+ 8:{ titre:"J’entends ou pas ?", picto:"👂", type:"ouiNon",
+     items:[
+      {son:"s",mot:"salade",rep:true},{son:"s",mot:"moto",rep:false},{son:"s",mot:"soupe",rep:true},
+      {son:"s",mot:"banane",rep:false},{son:"s",mot:"tasse",rep:true},{son:"s",mot:"vélo",rep:false},
+      {son:"m",mot:"moto",rep:true},{son:"m",mot:"porte",rep:false},{son:"m",mot:"tomate",rep:true},
+      {son:"m",mot:"salade",rep:false},{son:"l",mot:"lune",rep:true},{son:"l",mot:"moto",rep:false},
+      {son:"l",mot:"vélo",rep:true},{son:"l",mot:"banane",rep:false},{son:"r",mot:"robe",rep:true},
+      {son:"r",mot:"salade",rep:false},{son:"r",mot:"farine",rep:true},{son:"r",mot:"domino",rep:false},
+      {son:"t",mot:"table",rep:true},{son:"t",mot:"banane",rep:false},{son:"f",mot:"farine",rep:true},
+      {son:"f",mot:"valise",rep:false},{son:"b",mot:"bol",rep:true},{son:"b",mot:"douche",rep:false}] },
+ 9:{ titre:"Le premier son", picto:"👂", type:"premierSon",
+     items:[
+      {mot:"moto",rep:"M",d:["S","V"]},{mot:"salade",rep:"S",d:["Z","F"]},{mot:"vélo",rep:"V",d:["F","B"]},
+      {mot:"lune",rep:"L",d:["R","N"]},{mot:"robe",rep:"R",d:["L","B"]},{mot:"nid",rep:"N",d:["M","D"]},
+      {mot:"tomate",rep:"T",d:["D","P"]},{mot:"porte",rep:"P",d:["B","T"]},{mot:"farine",rep:"F",d:["V","S"]},
+      {mot:"domino",rep:"D",d:["B","T"]},{mot:"banane",rep:"B",d:["P","D"]},{mot:"madame",rep:"M",d:["N","B"]}] },
+ 10:{ titre:"Bilan étoilé", picto:"🏆", type:"bilan", n:15 }
+},
+p2:{
+ 1:{ titre:"Syllabes simples", picto:"📖", type:"lecture", genere:"CV" },
+ 2:{ titre:"Syllabes inversées", picto:"📖", type:"lecture",
+     items:["AL","IL","OL","UL","AR","IR","OR","UR","AS","IS","OS","US","AF","IF"].map(s=>({aff:s,dire:direSyllabe(s)})) },
+ 3:{ titre:"Mots simples", picto:"📖", type:"lecture",
+     items:["ami","midi","mardi","papa","moto","vélo","salade","lavabo","domino","tomate","banane","samedi","madame","malade","minute","farine"].map(m=>({aff:m,dire:m})) },
+ 4:{ titre:"Le son [ou]", picto:"📖", type:"lecture",
+     items:["poule","douche","soupe","bouche","route","boule","mouche","rouge","jour","four","tour","douze"].map(m=>({aff:m,dire:m})) },
+ 5:{ titre:"[an] ou [on] ?", picto:"📖", type:"anOnLecture",
+     items:[
+      {mot:"maman",rep:"an"},{mot:"volcan",rep:"an"},{mot:"ruban",rep:"an"},{mot:"écran",rep:"an"},{mot:"divan",rep:"an"},
+      {mot:"savon",rep:"on"},{mot:"melon",rep:"on"},{mot:"ballon",rep:"on"},{mot:"salon",rep:"on"},
+      {mot:"bonbon",rep:"on"},{mot:"mouton",rep:"on"}] },
+ 6:{ titre:"Le son [oi]", picto:"📖", type:"lecture",
+     items:["roi","soir","noir","poire","boire","voiture","étoile","armoire","toit","trois"].map(m=>({aff:m,dire:m})) },
+ 7:{ titre:"É fermé et È ouvert", picto:"📖", type:"lecture",
+     items:["café","bébé","école","cinéma","mère","père","frère","rivière","nez","panier","manger","poulet"].map(m=>({aff:m,dire:m})) },
+ 8:{ titre:"Les sons pièges", picto:"📖", type:"lecture",
+     items:["chat","chemise","douche","vache","jour","jaune","jupe","rouge","valise","maison","vision","musique","montagne","ligne"].map(m=>({aff:m,dire:m})) },
+ 9:{ titre:"Mes premières phrases", picto:"📖", type:"lecture", phrase:true,
+     items:["Le café est bon.","Il ferme la porte.","La soupe est bonne.","Je lave la salade.","Elle a un vélo noir.","Le savon est rose.","La voiture roule vite.","Papa coupe la tomate.","La poule est dans la cour.","Je vois la lune.","Le bébé est malade.","Maman ferme la fenêtre."].map(m=>({aff:m,dire:m})) },
+ 10:{ titre:"Bilan lecteur", picto:"🏆", type:"bilan", n:15 }
+},
+p3:{
+ 1:{ titre:"Quelles lettres font le son ?", picto:"✍️", type:"graphies",
+     items:[
+      {mot:"SALADE",son:"a",pos:[1,3]},{mot:"TOMATE",son:"a",pos:[3]},{mot:"MIDI",son:"i",pos:[1,3]},
+      {mot:"DOMINO",son:"i",pos:[3]},{mot:"MOTO",son:"o",pos:[1,3]},{mot:"VÉLO",son:"o",pos:[3]},
+      {mot:"VÉLO",son:"l",pos:[2]},{mot:"SALADE",son:"l",pos:[2]},{mot:"MOTO",son:"m",pos:[0]},
+      {mot:"FARINE",son:"r",pos:[2]},{mot:"BANANE",son:"n",pos:[2,4]},{mot:"PORTE",son:"p",pos:[0]}] },
+ 2:{ titre:"Dictée de syllabes", picto:"✍️", type:"dicteeBanque",
+     items:["LA","MI","SO","RU","NO","TA","PI","FU","VA","BO","DI","MU","SA","LO","RI","TU"].map(s=>({mot:s,dire:direSyllabe(s),intrus:2})) },
+ 3:{ titre:"Dictée de mots courts", picto:"✍️", type:"dicteeBanque",
+     items:["ami","midi","moto","vélo","sac","bol","mur","robe","papa","lune","mardi","salade"].map(m=>({mot:m.toUpperCase(),dire:m,intrus:3})) },
+ 4:{ titre:"J’écris le son [ou]", picto:"✍️", type:"dicteeBanque",
+     items:["poule","douche","soupe","bouche","route","boule","mouche","jour","four","tour"].map(m=>({mot:m.toUpperCase(),dire:m,intrus:3})) },
+ 5:{ titre:"AN ou ON ?", picto:"✍️", type:"anOnEcrit",
+     items:[
+      {trou:"sav__",mot:"savon",rep:"ON"},{trou:"mel__",mot:"melon",rep:"ON"},{trou:"ball__",mot:"ballon",rep:"ON"},
+      {trou:"sal__",mot:"salon",rep:"ON"},{trou:"citr__",mot:"citron",rep:"ON"},
+      {trou:"mam__",mot:"maman",rep:"AN"},{trou:"volc__",mot:"volcan",rep:"AN"},{trou:"rub__",mot:"ruban",rep:"AN"},
+      {trou:"écr__",mot:"écran",rep:"AN"},{trou:"div__",mot:"divan",rep:"AN"}] },
+ 6:{ titre:"Les lettres qu’on n’entend pas", picto:"✍️", type:"muette",
+     items:[
+      {mot:"petit",ok:[4]},{mot:"grand",ok:[4]},{mot:"toit",ok:[3]},{mot:"trois",ok:[4]},
+      {mot:"rond",ok:[3]},{mot:"dos",ok:[2]},
+      {mot:"les vélos",ok:[2,8]},{mot:"les motos",ok:[2,8]}] },
+ 7:{ titre:"É, ER ou EZ ?", picto:"✍️", type:"finE",
+     items:[
+      {trou:"Je vais mang__ à midi.",plein:"Je vais manger à midi.",rep:"ER"},
+      {trou:"Vous parl__ bien français.",plein:"Vous parlez bien français.",rep:"EZ"},
+      {trou:"Le caf__ est bon.",plein:"Le café est bon.",rep:"É"},
+      {trou:"Je vais regard__ la télé.",plein:"Je vais regarder la télé.",rep:"ER"},
+      {trou:"Vous écout__ la radio.",plein:"Vous écoutez la radio.",rep:"EZ"},
+      {trou:"Le béb__ dort.",plein:"Le bébé dort.",rep:"É"},
+      {trou:"Vous arriv__ à huit heures.",plein:"Vous arrivez à huit heures.",rep:"EZ"},
+      {trou:"Je vais lav__ la salade.",plein:"Je vais laver la salade.",rep:"ER"},
+      {trou:"Le march__ est fermé.",plein:"Le marché est fermé.",rep:"É"},
+      {trou:"Vous ferm__ la porte.",plein:"Vous fermez la porte.",rep:"EZ"}] },
+ 8:{ titre:"Dictée de mots", picto:"✍️", type:"dicteeLibre",
+     items:["banane","salade","tomate","voiture","savon","ballon","douche","samedi","madame","merci","bonjour","porte","table","fenêtre","école","lundi"].map(m=>({mot:m})) },
+ 9:{ titre:"Dictée de phrases", picto:"✍️", type:"dicteePhrase",
+     items:["il mange","elle lave la salade","le café est bon","il a un vélo","la soupe est bonne","je ferme la porte","maman est malade","la porte est ouverte"].map(p=>({phrase:p})) },
+ 10:{ titre:"Bilan scripteur", picto:"🏆", type:"bilan", n:12 }
+}
+};
+
+/* Entraînement libre : mots du quotidien (banque validée) */
+const LIBRE = [
+ {m:"porte",d:1},{m:"table",d:1},{m:"chaise",d:0},{m:"fenêtre",d:1},{m:"lavabo",d:1},{m:"douche",d:1},
+ {m:"savon",d:1},{m:"lampe",d:0},{m:"armoire",d:1},{m:"salon",d:1},{m:"mur",d:1},{m:"lit",d:0},
+ {m:"banane",d:1},{m:"tomate",d:1},{m:"salade",d:1},{m:"soupe",d:1},{m:"café",d:1},{m:"melon",d:1},
+ {m:"citron",d:1},{m:"poire",d:1},{m:"farine",d:1},{m:"poulet",d:0},{m:"pain",d:0},{m:"riz",d:0},
+ {m:"moto",d:1},{m:"vélo",d:1},{m:"voiture",d:1},{m:"route",d:1},{m:"bus",d:1},{m:"train",d:0},
+ {m:"école",d:1},{m:"cinéma",d:1},{m:"marché",d:1},{m:"magasin",d:0},
+ {m:"madame",d:1},{m:"bébé",d:1},{m:"papa",d:1},{m:"maman",d:1},{m:"ami",d:1},{m:"frère",d:1},
+ {m:"mère",d:1},{m:"père",d:1},{m:"nez",d:0},{m:"bouche",d:1},{m:"dos",d:0},
+ {m:"lundi",d:1},{m:"mardi",d:1},{m:"samedi",d:1},{m:"dimanche",d:0},{m:"midi",d:1},{m:"minute",d:1},
+ {m:"jour",d:1},{m:"soir",d:1},{m:"matin",d:0},{m:"semaine",d:0},
+ {m:"sac",d:1},{m:"bol",d:1},{m:"tasse",d:1},{m:"valise",d:1},{m:"ballon",d:1},{m:"robe",d:1},
+ {m:"jupe",d:1},{m:"loupe",d:1},{m:"radio",d:1},{m:"musique",d:0},{m:"domino",d:1},{m:"téléphone",d:0},
+ {m:"lune",d:1},{m:"étoile",d:1},{m:"chat",d:0},{m:"poule",d:1},{m:"mouche",d:1},{m:"mouton",d:1},
+ {m:"vache",d:1},{m:"montagne",d:1},{m:"rivière",d:1},{m:"fumée",d:0}
+];
+
+
+/* ── DÉCOUPAGE SYLLABIQUE ──
+   Table manuelle : [syllabe écrite, forme envoyée à la voix].
+   Règle : jamais d'algorithme — chaque mot est découpé à la main,
+   chaque forme vocale est un vrai mot français ou une forme imprononçable en anglais. */
+const SYLL = {
+  ami:[["a","a"],["mi","mi"]], midi:[["mi","mi"],["di","di"]],
+  mardi:[["mar","marre"],["di","di"]], papa:[["pa","pa"],["pa","pa"]],
+  moto:[["mo","mau"],["to","tau"]], "vélo":[["vé","vé"],["lo","lau"]],
+  salade:[["sa","sa"],["la","la"],["de","deu"]],
+  lavabo:[["la","la"],["va","va"],["bo","bau"]],
+  domino:[["do","dau"],["mi","mi"],["no","nau"]],
+  tomate:[["to","tau"],["ma","ma"],["te","teu"]],
+  banane:[["ba","ba"],["na","na"],["ne","neu"]],
+  samedi:[["sa","sa"],["me","meu"],["di","di"]],
+  madame:[["ma","ma"],["da","da"],["me","meu"]],
+  malade:[["ma","ma"],["la","la"],["de","deu"]],
+  minute:[["mi","mi"],["nu","nu"],["te","teu"]],
+  farine:[["fa","fa"],["ri","ri"],["ne","neu"]],
+  poule:[["pou","pou"],["le","leu"]], douche:[["dou","doux"],["che","cheu"]],
+  soupe:[["sou","sou"],["pe","peu"]], bouche:[["bou","bout"],["che","cheu"]],
+  route:[["rou","roux"],["te","teu"]], boule:[["bou","bout"],["le","leu"]],
+  mouche:[["mou","mou"],["che","cheu"]], rouge:[["rou","roux"],["ge","jeu"]],
+  douze:[["dou","doux"],["ze","zeu"]],
+  maman:[["ma","ma"],["man","ment"]], volcan:[["vol","vol"],["can","quand"]],
+  ruban:[["ru","ru"],["ban","banc"]], "écran":[["é","é"],["cran","cran"]],
+  divan:[["di","di"],["van","vent"]], savon:[["sa","sa"],["von","vont"]],
+  melon:[["me","meu"],["lon","long"]], ballon:[["bal","bal"],["lon","long"]],
+  salon:[["sa","sa"],["lon","long"]], bonbon:[["bon","bon"],["bon","bon"]],
+  mouton:[["mou","mou"],["ton","thon"]],
+  poire:[["poi","pois"],["re","reu"]], boire:[["boi","bois"],["re","reu"]],
+  voiture:[["voi","voix"],["tu","tu"],["re","reu"]],
+  "étoile":[["é","é"],["toi","toi"],["le","leu"]],
+  armoire:[["ar","are"],["moi","moi"],["re","reu"]],
+  "café":[["ca","cas"],["fé","fée"]], "bébé":[["bé","bé"],["bé","bé"]],
+  "école":[["é","é"],["co","cau"],["le","leu"]],
+  "cinéma":[["ci","si"],["né","né"],["ma","ma"]],
+  "mère":[["mè","mais"],["re","reu"]], "père":[["pè","paix"],["re","reu"]],
+  "frère":[["frè","frais"],["re","reu"]],
+  "rivière":[["ri","ri"],["viè","viè"],["re","reu"]],
+  panier:[["pa","pa"],["nier","nier"]], manger:[["man","ment"],["ger","gé"]],
+  poulet:[["pou","pou"],["let","lait"]],
+  chemise:[["che","cheu"],["mi","mi"],["se","seu"]],
+  vache:[["va","va"],["che","cheu"]], jupe:[["ju","jus"],["pe","peu"]],
+  valise:[["va","va"],["li","li"],["se","seu"]],
+  maison:[["mai","mai"],["son","sont"]], vision:[["vi","vie"],["sion","sion"]],
+  musique:[["mu","mue"],["si","si"],["que","queue"]],
+  montagne:[["mon","mont"],["ta","ta"],["gne","gneu"]],
+  ligne:[["li","li"],["gne","gneu"]],
+  porte:[["por","port"],["te","teu"]], table:[["ta","ta"],["ble","bleu"]],
+  chaise:[["chai","chez"],["se","seu"]],
+  "fenêtre":[["fe","feu"],["nê","nê"],["tre","treu"]],
+  lampe:[["lam","lent"],["pe","peu"]],
+  citron:[["ci","si"],["tron","tron"]],
+  magasin:[["ma","ma"],["ga","gars"],["sin","sain"]],
+  "marché":[["mar","marre"],["ché","ché"]],
+  dimanche:[["di","di"],["man","ment"],["che","cheu"]],
+  matin:[["ma","ma"],["tin","teint"]],
+  semaine:[["se","seu"],["mai","mai"],["ne","neu"]],
+  tasse:[["tas","tas"],["se","seu"]], loupe:[["lou","loup"],["pe","peu"]],
+  radio:[["ra","rat"],["dio","diau"]],
+  "téléphone":[["té","thé"],["lé","les"],["pho","fau"],["ne","neu"]],
+  lune:[["lu","lu"],["ne","neu"]], robe:[["ro","rau"],["be","beu"]],
+  "fumée":[["fu","fut"],["mée","mes"]],
+  lundi:[["lun","l'un"],["di","di"]]
+};
+function decoupeDe(txt, direFinal){
+  if(txt.includes(" ")) return txt.split(" ").map(m=>[m, m]);     // phrase → mots
+  const low = txt.toLowerCase();
+  if(SYLL[low]){
+    let pos = 0;
+    return SYLL[low].map(([s,d])=>{ const aff = txt.slice(pos, pos+s.length); pos += s.length; return [aff, d]; });
+  }
+  if(txt.length===2 && SON_TTS[low[0]]!==undefined && SON_TTS[low[1]]!==undefined)
+    return [[txt[0], SON_TTS[low[0]]],[txt[1], SON_TTS[low[1]]]];  // syllabe → lettres
+  return [[txt, direFinal||low]];                                   // bloc unique
+}
+let DECOUPE_EN_COURS = false;
+async function jouerDecoupe(holder, txt, direFinal){
+  if(DECOUPE_EN_COURS) return;
+  DECOUPE_EN_COURS = true;
+  const parts = decoupeDe(txt, direFinal);
+  const phrase = txt.includes(" ");
+  const avant = holder.innerHTML;
+  holder.innerHTML = `<div class="syl-row" style="gap:${parts.length>1?14:0}px">`+
+    parts.map(([aff],i)=>`<span class="syl-bloc ${phrase?"mot":""} c${i%2}">${aff}</span>`).join("")+`</div>`;
+  const blocs = [...holder.querySelectorAll(".syl-bloc")];
+  await attendre(350);
+  for(let i=0;i<parts.length;i++){
+    blocs[i].classList.add("actif");
+    await parler(parts[i][1], {lent:true});
+    blocs[i].classList.remove("actif");
+    await attendre(200);
+  }
+  if(parts.length>1){
+    holder.querySelector(".syl-row").style.gap = "0px";   // fusion
+    await attendre(650);
+    blocs.forEach(b=>b.classList.add("fusion"));
+    await parler(direFinal || txt);
+    await attendre(350);
+  }
+  holder.innerHTML = avant;
+  DECOUPE_EN_COURS = false;
+}
+
+/* ── MICRO : je m'enregistre, je me compare ── */
+let MICRO = null;
+function microDispo(){ return !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia && window.MediaRecorder); }
+function nettoyerMicro(){
+  if(!MICRO) return;
+  try{ if(MICRO.recorder && MICRO.recorder.state!=="inactive") MICRO.recorder.stop(); }catch(e){}
+  try{ if(MICRO.stream) MICRO.stream.getTracks().forEach(t=>t.stop()); }catch(e){}
+  try{ if(MICRO.audio) MICRO.audio.pause(); }catch(e){}
+  try{ if(MICRO.url) URL.revokeObjectURL(MICRO.url); }catch(e){}
+  MICRO = null;
+}
+function brancherMicro(zone){
+  const btnMic = zone.querySelector("#mic");
+  const btnMoi = zone.querySelector("#moi");
+  if(!btnMic) return;
+  if(!microDispo()){ btnMic.style.display="none"; return; }
+  btnMic.onclick = async ()=>{
+    if(MICRO && MICRO.recorder && MICRO.recorder.state==="recording"){
+      MICRO.recorder.stop();
+      btnMic.textContent="🎤"; btnMic.classList.remove("mic-rec");
+      return;
+    }
+    try{
+      nettoyerMicro();
+      const stream = await navigator.mediaDevices.getUserMedia({audio:true});
+      const recorder = new MediaRecorder(stream);
+      const chunks = [];
+      recorder.ondataavailable = e=>{ if(e.data && e.data.size) chunks.push(e.data); };
+      recorder.onstop = ()=>{
+        stream.getTracks().forEach(t=>t.stop());
+        if(!chunks.length) return;
+        const blob = new Blob(chunks, {type: recorder.mimeType || "audio/webm"});
+        MICRO.url = URL.createObjectURL(blob);
+        if(btnMoi){ btnMoi.style.display="flex"; }
+      };
+      MICRO = {stream, recorder, chunks, url:null, audio:null};
+      recorder.start();
+      btnMic.textContent="⏹"; btnMic.classList.add("mic-rec");
+    }catch(e){ btnMic.style.display="none"; }
+  };
+  if(btnMoi) btnMoi.onclick = ()=>{
+    if(!MICRO || !MICRO.url) return;
+    try{ if(MICRO.audio) MICRO.audio.pause(); MICRO.audio = new Audio(MICRO.url); MICRO.audio.play(); }catch(e){}
+  };
+}
+
+/* ── CONSIGNES PAR TYPE D’EXERCICE ──────────────────────── */
+const CONSIGNES = {
+  paireVoyelles:{ picto:"👂", texte:"Écoute bien. Touche la lettre que tu entends." },
+  sonVersLettre:{ picto:"👂", texte:"Écoute le son. Touche la bonne lettre." },
+  majMin:{ picto:"🔠", texte:"Regarde la grande lettre. Touche la petite lettre qui va avec." },
+  sonMotLettre:{ picto:"👂", texte:"Écoute le son et le mot. Touche la bonne lettre." },
+  toucheLettre:{ picto:"👆", texte:"Écoute. Touche la lettre demandée dans le mot." },
+  ouiNon:{ picto:"👂", texte:"Écoute le mot. Tu entends le son ? Touche OUI ou NON." },
+  premierSon:{ picto:"👂", texte:"Écoute le mot. Touche la première lettre du mot." },
+  lecture:{ picto:"📖", texte:"Lis à voix haute. Touche Écouter pour vérifier. Tu avais dit pareil ?" },
+  anOnLecture:{ picto:"📖", texte:"Lis le mot dans ta tête. Tu vois le son AN ou le son ON ? Touche ta réponse." },
+  graphies:{ picto:"👆", texte:"Touche les lettres qui font le son demandé. Puis touche Valider." },
+  dicteeBanque:{ picto:"✍️", texte:"Écoute. Touche les lettres dans le bon ordre." },
+  anOnEcrit:{ picto:"👂", texte:"Écoute le mot. Il finit par AN ou par ON ? Touche ta réponse." },
+  muette:{ picto:"👆", texte:"Écoute et regarde le mot. Touche une lettre qu’on n’entend pas." },
+  finE:{ picto:"👂", texte:"Écoute la phrase. Choisis la bonne fin : É, ER ou EZ." },
+  dicteeLibre:{ picto:"✍️", texte:"Écoute le mot. Écris-le avec ton clavier. Puis touche Valider." },
+  dicteePhrase:{ picto:"✍️", texte:"Écoute la phrase. Écris chaque mot dans sa case. Puis touche Valider." }
+};
+
+const PARCOURS = {
+  p1:{ nom:"Premiers pas", emoji:"🐣", couleur:"var(--bleu)", pale:"var(--bleu-pale)", brut:"#2563EB" },
+  p2:{ nom:"J’apprends à lire", emoji:"📖", couleur:"var(--vert)", pale:"var(--vert-pale)", brut:"#059669" },
+  p3:{ nom:"J’apprends à écrire", emoji:"✍️", couleur:"var(--orange)", pale:"var(--orange-pale)", brut:"#EA580C" }
+};
+
+/* ── OUTILS ─────────────────────────────────────────────── */
+const $ = sel => document.querySelector(sel);
+const app = document.getElementById("app");
+function melange(a){ const t=[...a]; for(let i=t.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[t[i],t[j]]=[t[j],t[i]];} return t; }
+function tire(a,n){ return melange(a).slice(0,n); }
+function attendre(ms){ return new Promise(r=>setTimeout(r,ms)); }
+function html(strings,...vals){ return strings.map((s,i)=>s+(vals[i]!==undefined?vals[i]:"")).join(""); }
+function majSerie(){
+  const auj = new Date().toISOString().slice(0,10);
+  if(E.serie.dernier === auj) return;
+  const hier = new Date(Date.now()-86400000).toISOString().slice(0,10);
+  E.serie.n = (E.serie.dernier === hier) ? E.serie.n+1 : 1;
+  E.serie.dernier = auj;
+}
+function etoilesDe(stars){ return "⭐".repeat(stars) + "☆".repeat(Math.max(0,3-stars)); }
+function lettresIntruses(mot, n){
+  const pool = "abdefijlmnoprstuv".split("").filter(c => !mot.toLowerCase().includes(c));
+  return tire(pool, n).map(c => c.toUpperCase());
+}
+
+/* ════════════════════════════════════════════════════════
+   GÉNÉRATEURS DE QUESTIONS
+   chaque question : {type, cle, ...données}
+   ════════════════════════════════════════════════════════ */
+function genQuestions(p, lvl, n){
+  const def = B[p][lvl];
+  n = n || 10;
+  if(def.type === "bilan"){
+    let toutes = [];
+    for(let l=1; l<=9; l++) toutes = toutes.concat(genQuestions(p, l, 2));
+    return tire(toutes, def.n);
+  }
+  let items;
+  if(def.genere === "CV"){
+    items = [];
+    CONS.forEach(c => VOY_SYL.forEach(v => {
+      const syl = c + v.toLowerCase();
+      items.push({aff: syl.toUpperCase(), dire: direSyllabe(syl)});
+    }));
+  } else items = def.items;
+  const dispo = items.map((it,i)=>({it, cle:`${p}-${lvl}-${i}`}))
+                     .filter(x => !E.signales.includes(x.cle));
+  const choisis = tire(dispo, Math.min(n, dispo.length));
+  return choisis.map(x => Object.assign({type:def.type, cle:x.cle, phrase:!!def.phrase}, JSON.parse(JSON.stringify(x.it))));
+}
+
+/* ════════════════════════════════════════════════════════
+   RENDU DES TYPES DE QUESTIONS
+   chaque renderer : rend dans zone, appelle fini(bool) une fois
+   et expose demo() → {dire, cibles:[el], multi}
+   ════════════════════════════════════════════════════════ */
+const RENDUS = {
+
+paireVoyelles(q, zone, fini){
+  const v1=q["0"], v2=q["1"];
+  const bonne = Math.random()<0.5 ? v1 : v2;
+  zone.innerHTML = html`
+    <div class="q-audio">
+      <button class="btn-ico" id="rejoue">🔊</button>
+      <button class="btn-ico" id="lent">🐢</button>
+    </div>
+    <div class="choix ligne">
+      <button class="choix-btn" data-v="${v1}">${v1.toUpperCase()}</button>
+      <button class="choix-btn" data-v="${v2}">${v2.toUpperCase()}</button>
+    </div>`;
+  const joue = (o)=>direSon(bonne,o);
+  $("#rejoue").onclick = ()=>joue(); $("#lent").onclick = ()=>joue({lent:true});
+  zone.querySelectorAll(".choix-btn").forEach(b=>{
+    b.onclick = ()=> validerChoix(b, b.dataset.v===bonne, zone, fini, null, bonne);
+  });
+  joue();
+  return { cible: ()=>zone.querySelector(`[data-v="${bonne}"]`) };
+},
+
+sonVersLettre(q, zone, fini){
+  const opts = melange([q.rep, ...q.d]);
+  zone.innerHTML = html`
+    <div class="q-audio">
+      <button class="btn-ico" id="rejoue">🔊</button>
+      <button class="btn-ico" id="lent">🐢</button>
+    </div>
+    <div class="choix ligne">
+      ${opts.map(o=>`<button class="choix-btn" data-v="${o}">${o}</button>`).join("")}
+    </div>`;
+  const joue = (o)=>direSon(q.son,o);
+  $("#rejoue").onclick=()=>joue(); $("#lent").onclick=()=>joue({lent:true});
+  zone.querySelectorAll(".choix-btn").forEach(b=>{
+    b.onclick=()=>validerChoix(b, b.dataset.v===q.rep, zone, fini, null, q.rep);
+  });
+  joue();
+  return { cible: ()=>zone.querySelector(`[data-v="${q.rep}"]`) };
+},
+
+majMin(q, zone, fini){
+  const opts = melange([q.min, ...q.d]);
+  zone.innerHTML = html`
+    <div class="gros-mot">${q.maj} → ?</div>
+    <div class="q-audio"><button class="btn-ico" id="rejoue">🔊</button></div>
+    <div class="choix ligne">
+      ${opts.map(o=>`<button class="choix-btn" data-v="${o}">${o}</button>`).join("")}
+    </div>`;
+  const joue = ()=>parler("La lettre "+q.maj+". Touche la petite lettre.");
+  $("#rejoue").onclick=joue;
+  zone.querySelectorAll(".choix-btn").forEach(b=>{
+    b.onclick=()=>validerChoix(b, b.dataset.v===q.min, zone, fini, null, q.min);
+  });
+  joue();
+  return { cible: ()=>zone.querySelector(`[data-v="${q.min}"]`) };
+},
+
+sonMotLettre(q, zone, fini){
+  const opts = melange([q.rep, ...q.d]);
+  zone.innerHTML = html`
+    <div class="q-audio">
+      <button class="btn-ico" id="rejoue">🔊</button>
+      <button class="btn-ico" id="lent">🐢</button>
+    </div>
+    <div class="choix ligne">
+      ${opts.map(o=>`<button class="choix-btn" data-v="${o}">${o}</button>`).join("")}
+    </div>`;
+  const joue = async (o)=>{ await direSon(q.son,o); await parler("comme dans... "+q.mot, o); };
+  $("#rejoue").onclick=()=>joue(); $("#lent").onclick=()=>joue({lent:true});
+  zone.querySelectorAll(".choix-btn").forEach(b=>{
+    b.onclick=()=>validerChoix(b, b.dataset.v===q.rep, zone, fini, null, q.rep);
+  });
+  joue();
+  return { cible: ()=>zone.querySelector(`[data-v="${q.rep}"]`) };
+},
+
+toucheLettre(q, zone, fini){
+  zone.innerHTML = html`
+    <div class="q-audio"><button class="btn-ico" id="rejoue">🔊</button></div>
+    <div class="lettres-mot">
+      ${q.mot.split("").map((c,i)=>`<button class="lettre-btn" data-i="${i}">${c}</button>`).join("")}
+    </div>`;
+  const joue = ()=>parler("Touche la lettre "+q.lettre+", dans le mot "+q.mot.toLowerCase()+".");
+  $("#rejoue").onclick=joue;
+  let fait=false;
+  zone.querySelectorAll(".lettre-btn").forEach(b=>{
+    b.onclick=()=>{
+      if(fait) return;
+      const ok = q.pos.includes(parseInt(b.dataset.i));
+      fait=true;
+      b.classList.add(ok?"ok":"ko");
+      if(!ok) q.pos.forEach(i=>zone.querySelector(`[data-i="${i}"]`).classList.add("ok"));
+      retourEtSuite(ok, zone, fini, ok?null:("C’était la lettre "+q.lettre));
+    };
+  });
+  joue();
+  return { cible: ()=>zone.querySelector(`[data-i="${q.pos[0]}"]`) };
+},
+
+ouiNon(q, zone, fini){
+  zone.innerHTML = html`
+    <div class="q-audio">
+      <button class="btn-ico" id="rejoue">🔊</button>
+      <button class="btn-ico" id="lent">🐢</button>
+    </div>
+    <div class="choix ligne">
+      <button class="choix-btn texte" data-v="oui">✅ OUI</button>
+      <button class="choix-btn texte" data-v="non">❌ NON</button>
+    </div>`;
+  const joue = async (o)=>{ await parler("Tu entends...",o); await direSon(q.son,o); await parler("dans le mot... "+q.mot+" ?", o); };
+  $("#rejoue").onclick=()=>joue(); $("#lent").onclick=()=>joue({lent:true});
+  zone.querySelectorAll(".choix-btn").forEach(b=>{
+    b.onclick=()=>validerChoix(b, (b.dataset.v==="oui")===q.rep, zone, fini, null, q.rep?"oui":"non");
+  });
+  joue();
+  return { cible: ()=>zone.querySelector(`[data-v="${q.rep?"oui":"non"}"]`) };
+},
+
+premierSon(q, zone, fini){
+  const opts = melange([q.rep, ...q.d]);
+  zone.innerHTML = html`
+    <div class="q-audio">
+      <button class="btn-ico" id="rejoue">🔊</button>
+      <button class="btn-ico" id="lent">🐢</button>
+    </div>
+    <div class="choix ligne">
+      ${opts.map(o=>`<button class="choix-btn" data-v="${o}">${o}</button>`).join("")}
+    </div>`;
+  const joue = (o)=>parler(q.mot, o);
+  $("#rejoue").onclick=()=>joue(); $("#lent").onclick=()=>joue({lent:true});
+  zone.querySelectorAll(".choix-btn").forEach(b=>{
+    b.onclick=()=>validerChoix(b, b.dataset.v===q.rep, zone, fini, null, q.rep);
+  });
+  joue();
+  return { cible: ()=>zone.querySelector(`[data-v="${q.rep}"]`) };
+},
+
+lecture(q, zone, fini){
+  zone.innerHTML = html`
+    <div class="gros-mot ${q.phrase?"phrase":""}" id="aff">${q.aff}</div>
+    <div class="q-audio">
+      <button class="btn-ico" id="decouper" title="Découper en syllabes">🧩</button>
+      <button class="btn-ico" id="mic" title="Je m’enregistre">🎤</button>
+      <button class="btn-ico" id="moi" title="M’écouter" style="display:none">▶️</button>
+    </div>
+    <button class="btn" id="ecouter">🔊 Écouter</button>
+    <div class="choix ligne" id="auto" style="display:none">
+      <button class="choix-btn texte" data-v="oui">✅ J’avais bien lu</button>
+      <button class="choix-btn texte" data-v="non">❌ Je me suis trompé</button>
+    </div>`;
+  $("#decouper").onclick = ()=>jouerDecoupe($("#aff"), q.aff, q.dire);
+  brancherMicro(zone);
+  $("#ecouter").onclick = async ()=>{
+    await parler(q.dire);
+    $("#auto").style.display="flex";
+  };
+  zone.querySelectorAll("#auto .choix-btn").forEach(b=>{
+    b.onclick=()=>{
+      const ok = b.dataset.v==="oui";
+      b.classList.add(ok?"ok":"ko");
+      retourEtSuite(ok, zone, fini, ok?null:"Pas grave, on continue !");
+    };
+  });
+  return { cible: ()=>$("#ecouter"), cible2: ()=>zone.querySelector('[data-v="oui"]'), lectureDemo:true };
+},
+
+anOnLecture(q, zone, fini){
+  zone.innerHTML = html`
+    <div class="gros-mot moyen" id="aff">${q.mot}</div>
+    <div class="q-audio">
+      <button class="btn-ico" id="decouper" title="Découper en syllabes">🧩</button>
+      <button class="btn-ico" id="mic" title="Je m’enregistre">🎤</button>
+      <button class="btn-ico" id="moi" title="M’écouter" style="display:none">▶️</button>
+    </div>
+    <div class="petit center">Lis le mot. Tu vois quel son à la fin ?</div>
+    <div class="choix ligne">
+      <button class="choix-btn" data-v="an">AN</button>
+      <button class="choix-btn" data-v="on">ON</button>
+    </div>`;
+  $("#decouper").onclick = ()=>jouerDecoupe($("#aff"), q.mot, q.mot);
+  brancherMicro(zone);
+  zone.querySelectorAll(".choix-btn").forEach(b=>{
+    b.onclick= async ()=>{
+      const ok = b.dataset.v===q.rep;
+      await parler(q.mot);
+      validerChoix(b, ok, zone, fini, null, q.rep);
+    };
+  });
+  return { cible: ()=>zone.querySelector(`[data-v="${q.rep}"]`) };
+},
+
+graphies(q, zone, fini){
+  zone.innerHTML = html`
+    <div class="q-audio"><button class="btn-ico" id="rejoue">🔊</button></div>
+    <div class="lettres-mot">
+      ${q.mot.split("").map((c,i)=>`<button class="lettre-btn" data-i="${i}">${c}</button>`).join("")}
+    </div>
+    <button class="btn vert" id="valider">Valider ✓</button>`;
+  const joue = ()=>{ direSon(q.son).then(()=>parler("Touche les lettres qui font ce son, dans "+q.mot.toLowerCase()+".")); };
+  $("#rejoue").onclick=joue;
+  const sel = new Set();
+  zone.querySelectorAll(".lettre-btn").forEach(b=>{
+    b.onclick=()=>{
+      const i = parseInt(b.dataset.i);
+      if(sel.has(i)){ sel.delete(i); b.classList.remove("sel"); }
+      else { sel.add(i); b.classList.add("sel"); }
+    };
+  });
+  $("#valider").onclick=()=>{
+    const ok = sel.size===q.pos.length && q.pos.every(i=>sel.has(i));
+    q.pos.forEach(i=>{ const b=zone.querySelector(`[data-i="${i}"]`); b.classList.remove("sel"); b.classList.add("ok"); });
+    [...sel].filter(i=>!q.pos.includes(i)).forEach(i=>{
+      const b=zone.querySelector(`[data-i="${i}"]`); b.classList.remove("sel"); b.classList.add("ko");
+    });
+    $("#valider").disabled=true;
+    retourEtSuite(ok, zone, fini, ok?null:"Regarde les lettres en vert");
+  };
+  joue();
+  return { cible: ()=>zone.querySelector(`[data-i="${q.pos[0]}"]`), cibles: ()=>q.pos.map(i=>zone.querySelector(`[data-i="${i}"]`)), valider: ()=>$("#valider") };
+},
+
+dicteeBanque(q, zone, fini){
+  const lettres = melange([...q.mot.split(""), ...lettresIntruses(q.mot, q.intrus)]);
+  zone.innerHTML = html`
+    <div class="q-audio">
+      <button class="btn-ico" id="rejoue">🔊</button>
+      <button class="btn-ico" id="lent">🐢</button>
+    </div>
+    <div class="slots">${q.mot.split("").map(()=>`<div class="slot"></div>`).join("")}</div>
+    <div class="lettres-mot">
+      ${lettres.map((c,i)=>`<button class="lettre-btn" data-c="${c}" data-i="${i}">${c}</button>`).join("")}
+    </div>
+    <button class="btn blanc" id="effacer">⌫ Effacer</button>`;
+  const joue = (o)=>parler(q.dire, o);
+  $("#rejoue").onclick=()=>joue(); $("#lent").onclick=()=>joue({lent:true});
+  const slots = [...zone.querySelectorAll(".slot")];
+  let pile = [];
+  function maj(){
+    slots.forEach((s,i)=>{ s.textContent = pile[i] ? pile[i].c : ""; s.classList.toggle("plein", !!pile[i]); });
+  }
+  zone.querySelectorAll(".lettre-btn").forEach(b=>{
+    b.onclick=()=>{
+      if(b.disabled || pile.length>=slots.length) return;
+      pile.push({c:b.dataset.c, btn:b}); b.disabled=true; b.style.opacity=.3; maj();
+      if(pile.length===slots.length){
+        const essai = pile.map(p=>p.c).join("");
+        const ok = essai===q.mot;
+        slots.forEach((s,i)=>{ s.style.borderColor = q.mot[i]===pile[i].c ? "var(--vert-vif)" : "#FCA5A5"; });
+        if(!ok) afficherCorrection(zone, q.mot);
+        retourEtSuite(ok, zone, fini, null);
+      }
+    };
+  });
+  $("#effacer").onclick=()=>{
+    const der = pile.pop();
+    if(der){ der.btn.disabled=false; der.btn.style.opacity=1; maj(); }
+  };
+  joue();
+  return { cibles: ()=>q.mot.split("").map(c=>{
+      const dispo=[...zone.querySelectorAll(".lettre-btn")].find(b=>b.dataset.c===c && !b.dataset.pris);
+      if(dispo) dispo.dataset.pris="1"; return dispo;
+    }) , sequence:true };
+},
+
+anOnEcrit(q, zone, fini){
+  zone.innerHTML = html`
+    <div class="q-audio">
+      <button class="btn-ico" id="rejoue">🔊</button>
+      <button class="btn-ico" id="lent">🐢</button>
+    </div>
+    <div class="gros-mot moyen">${q.trou}</div>
+    <div class="choix ligne">
+      <button class="choix-btn" data-v="AN">AN</button>
+      <button class="choix-btn" data-v="ON">ON</button>
+    </div>`;
+  const joue=(o)=>parler(q.mot,o);
+  $("#rejoue").onclick=()=>joue(); $("#lent").onclick=()=>joue({lent:true});
+  zone.querySelectorAll(".choix-btn").forEach(b=>{
+    b.onclick=()=>{
+      const ok = b.dataset.v===q.rep;
+      if(ok) zone.querySelector(".gros-mot").textContent = q.mot;
+      validerChoix(b, ok, zone, fini, ok?null:("On écrit : "+q.mot), q.rep);
+    };
+  });
+  joue();
+  return { cible: ()=>zone.querySelector(`[data-v="${q.rep}"]`) };
+},
+
+muette(q, zone, fini){
+  zone.innerHTML = html`
+    <div class="q-audio"><button class="btn-ico" id="rejoue">🔊</button></div>
+    <div class="lettres-mot">
+      ${q.mot.split("").map((c,i)=> c===" "
+        ? `<span class="lettre-btn espace"></span>`
+        : `<button class="lettre-btn" data-i="${i}">${c}</button>`).join("")}
+    </div>`;
+  const joue=()=>parler(q.mot+". Touche une lettre qu’on n’entend pas.");
+  $("#rejoue").onclick=joue;
+  let fait=false;
+  zone.querySelectorAll("button.lettre-btn").forEach(b=>{
+    b.onclick=()=>{
+      if(fait) return; fait=true;
+      const ok = q.ok.includes(parseInt(b.dataset.i));
+      b.classList.add(ok?"ok":"ko");
+      if(!ok) q.ok.forEach(i=>{ const c=zone.querySelector(`[data-i="${i}"]`); if(c) c.classList.add("ok"); });
+      retourEtSuite(ok, zone, fini, null);
+    };
+  });
+  joue();
+  return { cible: ()=>zone.querySelector(`[data-i="${q.ok[0]}"]`) };
+},
+
+finE(q, zone, fini){
+  zone.innerHTML = html`
+    <div class="q-audio">
+      <button class="btn-ico" id="rejoue">🔊</button>
+      <button class="btn-ico" id="lent">🐢</button>
+    </div>
+    <div class="gros-mot phrase">${q.trou}</div>
+    <div class="choix ligne">
+      <button class="choix-btn" data-v="É">É</button>
+      <button class="choix-btn" data-v="ER">ER</button>
+      <button class="choix-btn" data-v="EZ">EZ</button>
+    </div>`;
+  const joue=(o)=>parler(q.plein,o);
+  $("#rejoue").onclick=()=>joue(); $("#lent").onclick=()=>joue({lent:true});
+  zone.querySelectorAll(".choix-btn").forEach(b=>{
+    b.onclick=()=>{
+      const ok=b.dataset.v===q.rep;
+      if(ok) zone.querySelector(".gros-mot").textContent=q.plein;
+      validerChoix(b, ok, zone, fini, ok?null:("On écrit : "+q.plein), q.rep);
+    };
+  });
+  joue();
+  return { cible: ()=>zone.querySelector(`[data-v="${q.rep}"]`) };
+},
+
+dicteeLibre(q, zone, fini){
+  let essais = 0;
+  zone.innerHTML = html`
+    <div class="q-audio">
+      <button class="btn-ico" id="rejoue">🔊</button>
+      <button class="btn-ico" id="lent">🐢</button>
+    </div>
+    <input class="dictee-input" id="saisie" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" inputmode="text">
+    <button class="btn vert" id="valider">Valider ✓</button>
+    <div id="aide"></div>`;
+  const joue=(o)=>parler(q.mot,o);
+  $("#rejoue").onclick=()=>joue(); $("#lent").onclick=()=>joue({lent:true});
+  $("#valider").onclick=()=>{
+    const v = $("#saisie").value.trim().toLowerCase();
+    if(!v) return;
+    if(v===q.mot){
+      $("#saisie").style.borderColor="var(--vert-vif)";
+      $("#valider").disabled=true;
+      retourEtSuite(true, zone, fini, null);
+    } else {
+      essais++;
+      if(essais===1){
+        $("#saisie").classList.add("shake");
+        setTimeout(()=>$("#saisie").classList.remove("shake"),400);
+        $("#aide").innerHTML = `<div class="consigne-texte">💡 Essaie encore ! Le mot commence par « ${q.mot[0].toUpperCase()} »</div>`;
+        joue();
+      } else {
+        $("#valider").disabled=true;
+        afficherCorrection(zone, q.mot, v);
+        retourEtSuite(false, zone, fini, null);
+      }
+    }
+  };
+  joue();
+  return { cible: ()=>$("#valider"), saisieDemo: q.mot };
+},
+
+dicteePhrase(q, zone, fini){
+  const mots = q.phrase.split(" ");
+  zone.innerHTML = html`
+    <div class="q-audio">
+      <button class="btn-ico" id="rejoue">🔊</button>
+      <button class="btn-ico" id="lent">🐢</button>
+    </div>
+    <div class="mots-boxes">
+      ${mots.map((m,i)=>`<div class="mot-box"><input data-i="${i}" type="text" autocomplete="off" autocapitalize="off" spellcheck="false"></div>`).join("")}
+    </div>
+    <button class="btn vert" id="valider">Valider ✓</button>`;
+  const joue=(o)=>parler(q.phrase,o);
+  $("#rejoue").onclick=()=>joue(); $("#lent").onclick=()=>joue({lent:true});
+  $("#valider").onclick=()=>{
+    let toutOK = true;
+    mots.forEach((m,i)=>{
+      const inp = zone.querySelector(`input[data-i="${i}"]`);
+      const bon = inp.value.trim().toLowerCase()===m;
+      inp.style.borderColor = bon ? "var(--vert-vif)" : "#FCA5A5";
+      if(!bon){ toutOK=false; inp.value=m; inp.style.color="var(--rouge)"; }
+    });
+    $("#valider").disabled=true;
+    retourEtSuite(toutOK, zone, fini, null);
+  };
+  joue();
+  return { cible: ()=>$("#valider"), phraseDemo: mots };
+}
+};
+
+/* aide commune : choix simple */
+function validerChoix(btn, ok, zone, fini, msgKO, bonneVal){
+  zone.querySelectorAll(".choix-btn").forEach(b=>b.style.pointerEvents="none");
+  btn.classList.add(ok?"ok":"ko");
+  if(!ok && bonneVal!==undefined){
+    const bon = zone.querySelector(`.choix-btn[data-v="${bonneVal}"]`);
+    if(bon) bon.classList.add("ok");
+  }
+  retourEtSuite(ok, zone, fini, msgKO);
+}
+function afficherCorrection(zone, bon, essai){
+  const div = document.createElement("div");
+  div.className="corrige";
+  if(essai){
+    div.innerHTML = bon.split("").map((c,i)=> (essai[i]===c) ? `<span class="b">${c}</span>` : `<span class="m">${c}</span>`).join("");
+  } else {
+    div.innerHTML = `<span class="b">${bon}</span>`;
+  }
+  zone.appendChild(div);
+}
+function retourEtSuite(ok, zone, fini, msgKO){
+  const fb = document.createElement("div");
+  fb.className = "feedback " + (ok?"ok":"ko");
+  fb.textContent = ok ? tire(["Bravo !","Super !","Très bien !","Oui !","Excellent !"],1)[0]
+                      : (msgKO || "Pas tout à fait…");
+  zone.appendChild(fb);
+  ok ? dingOK() : dingKO();
+  setTimeout(()=>fini(ok), ok ? 900 : 1900);
+}
+
+/* ════════════════════════════════════════════════════════
+   ÉCRANS
+   ════════════════════════════════════════════════════════ */
+function ecranOnboard(){
+  app.innerHTML = html`
+    <div class="onboard">
+      <div style="font-size:64px">🎓</div>
+      <h1 class="titre" style="font-size:30px;color:var(--bleu-fonce)">Mon Coach Lecture</h1>
+      <p style="font-weight:700">Bienvenue ! 👋<br>Comment tu t’appelles ?</p>
+      <input id="prenom" type="text" placeholder="Ton prénom" autocomplete="off">
+      <button class="btn" id="suite">Continuer ▶</button>
+    </div>`;
+  parler("Bienvenue ! Écris ton prénom, puis touche Continuer.");
+  $("#suite").onclick=()=>{
+    const p = $("#prenom").value.trim();
+    if(!p){ $("#prenom").classList.add("shake"); setTimeout(()=>$("#prenom").classList.remove("shake"),400); return; }
+    E.prenom = p; sauverEtat();
+    ecranTestSon();
+  };
+}
+
+function ecranTestSon(){
+  app.innerHTML = html`
+    <div class="onboard">
+      <div style="font-size:64px">🔊</div>
+      <h2 class="titre" style="font-size:24px">Test du son</h2>
+      <p style="font-weight:700">Monte le volume 🔉➡🔊<br>puis touche le bouton :</p>
+      <button class="btn" id="test">🔊 Écouter</button>
+      <p style="font-weight:700">Tu entends une voix en français ?</p>
+      <div class="row">
+        <button class="btn vert" id="oui">✅ OUI</button>
+        <button class="btn gris" id="non">❌ NON</button>
+      </div>
+    </div>`;
+  $("#test").onclick=()=>parler("Bonjour "+E.prenom+" ! Tu m’entends bien ? Si oui, touche le bouton vert.");
+  $("#oui").onclick=()=>{ E.onboarde=true; sauverEtat(); ecranAccueil(); };
+  $("#non").onclick=()=>{
+    app.innerHTML = html`
+      <div class="onboard">
+        <div style="font-size:56px">🔧</div>
+        <h2 class="titre" style="font-size:22px">Pas de son ?</h2>
+        <div class="card" style="text-align:left;font-weight:700;font-size:16px">
+          1. Monte le volume du téléphone 🔊<br><br>
+          2. Enlève le mode silencieux 🔕➡🔔<br><br>
+          3. Utilise Chrome 🌐<br><br>
+          4. Demande de l’aide à ta formatrice 👩‍🏫
+        </div>
+        <button class="btn" id="retest">🔄 Réessayer</button>
+        <button class="btn gris" id="passer">Continuer sans le test</button>
+      </div>`;
+    $("#retest").onclick=ecranTestSon;
+    $("#passer").onclick=()=>{ E.onboarde=true; sauverEtat(); ecranAccueil(); };
+  };
+}
+
+function progParcours(p){
+  const niv = E.niveaux[p];
+  let done = 0, total = 10;
+  for(let l=1;l<=10;l++) if(niv[l] && niv[l].stars>0) done++;
+  return {done, total, pct: Math.round(done/total*100)};
+}
+
+function ecranAccueil(){
+  const cartes = Object.keys(PARCOURS).map(p=>{
+    const P = PARCOURS[p], prog = progParcours(p);
+    return html`
+      <button class="parcours-card" data-p="${p}" style="border-color:${P.brut}55">
+        <div class="pc-emoji" style="background:${P.pale}">${P.emoji}</div>
+        <div style="flex:1">
+          <div class="pc-titre" style="color:${P.brut}">${P.nom}</div>
+          <div class="pc-sub">${prog.done} / ${prog.total} niveaux</div>
+          <div class="pc-prog"><div style="width:${prog.pct}%;background:${P.brut}"></div></div>
+        </div>
+        <div style="font-size:22px;color:#C9C2B8">▶</div>
+      </button>`;
+  }).join("");
+  const libreOuvert = (E.niveaux.p2[10]&&E.niveaux.p2[10].stars>0) || (E.niveaux.p3[10]&&E.niveaux.p3[10].stars>0);
+  app.innerHTML = html`
+    <div class="top">
+      <div>
+        <div class="titre" style="font-size:22px;color:var(--bleu-fonce)">Salut ${E.prenom} ! 👋</div>
+        <div class="petit">On s’entraîne un peu ?</div>
+      </div>
+      <div class="flamme">🔥 ${E.serie.n||0}</div>
+    </div>
+    ${cartes}
+    <button class="parcours-card" id="libre" style="border-color:#7C3AED55;${libreOuvert?"":"filter:grayscale(1);opacity:.6"}">
+      <div class="pc-emoji" style="background:var(--violet-pale)">⚡</div>
+      <div style="flex:1">
+        <div class="pc-titre" style="color:var(--violet)">Entraînement libre</div>
+        <div class="pc-sub">${libreOuvert?"Sessions illimitées !":"Termine un bilan 🏆 pour débloquer"}</div>
+      </div>
+      <div style="font-size:22px">${libreOuvert?"▶":"🔒"}</div>
+    </button>
+    <div class="row" style="margin-top:6px">
+      <button class="btn blanc" id="progres" style="min-height:54px;font-size:16px">📊 Mes progrès</button>
+      <button class="btn blanc" id="reglages" style="min-height:54px;font-size:16px">⚙️ Réglages</button>
+    </div>
+    <div class="petit center" style="margin-top:14px;opacity:.6">Mon Coach Lecture · version ${VERSION}</div>`;
+  app.querySelectorAll(".parcours-card[data-p]").forEach(c=>{
+    c.onclick=()=>ecranParcours(c.dataset.p);
+  });
+  $("#libre").onclick=()=>{ if(libreOuvert) ecranLibre(); else parler("Termine d’abord un bilan pour débloquer l’entraînement libre !"); };
+  $("#progres").onclick=ecranProgres;
+  $("#reglages").onclick=ecranReglages;
+}
+
+function ecranParcours(p){
+  const P = PARCOURS[p];
+  const rows = [];
+  for(let l=1;l<=10;l++){
+    const def = B[p][l];
+    const fait = E.niveaux[p][l];
+    const ouvert = l===1 || (E.niveaux[p][l-1] && E.niveaux[p][l-1].stars>0);
+    rows.push(html`
+      <div class="niv-row">
+        <div class="niv-wrap">
+          <button class="niveau ${ouvert?"":"verrou"}" data-l="${l}" style="border-color:${P.brut}">
+            <div class="num" style="color:${P.brut}">${ouvert ? (def.type==="bilan"?"🏆":l) : "🔒"}</div>
+            <div class="etoiles">${fait ? etoilesDe(fait.stars) : ""}</div>
+            ${(def.type==="bilan" && fait && fait.stars>0) ? `<div class="badge-trophee">🎉</div>` : ""}
+          </button>
+          <div class="niv-label">${def.titre}</div>
+        </div>
+      </div>`);
+  }
+  app.innerHTML = html`
+    <div class="top">
+      <button class="retour" id="retour">←</button>
+      <div class="titre" style="font-size:21px;color:${P.brut}">${P.emoji} ${P.nom}</div>
+      <div class="flamme">🔥 ${E.serie.n||0}</div>
+    </div>
+    <div class="chemin">${rows.join("")}</div>`;
+  $("#retour").onclick=ecranAccueil;
+  app.querySelectorAll(".niveau").forEach(b=>{
+    b.onclick=()=>{
+      const l = parseInt(b.dataset.l);
+      if(b.classList.contains("verrou")){ parler("Termine d’abord le niveau précédent !"); return; }
+      lancerSession(p, l);
+    };
+  });
+}
+
+/* ── SESSION ────────────────────────────────────────────── */
+let SESSION = null;
+async function lancerSession(p, lvl){
+  const def = B[p][lvl];
+  const qs = genQuestions(p, lvl, 10);
+  if(!qs.length){ parler("Plus de questions disponibles ici."); return; }
+  SESSION = {p, lvl, qs, idx:0, bonnes:0, libre:false};
+  const typePremier = qs[0].type;
+  if(!E.demosVues[typePremier]){
+    await jouerDemo(typePremier, qs[0], p, lvl);
+  }
+  afficherQuestion();
+}
+
+function afficherQuestion(){
+  nettoyerMicro(); DECOUPE_EN_COURS = false;
+  const S = SESSION;
+  if(S.idx >= S.qs.length){ finSession(); return; }
+  const q = S.qs[S.idx];
+  const cons = CONSIGNES[q.type] || {picto:"🎯", texte:""};
+  const P = S.libre ? PARCOURS.p2 : PARCOURS[S.p];
+  app.innerHTML = html`
+    <div class="q-head">
+      <button class="q-picto" id="picto" title="Réécouter la consigne">${cons.picto}</button>
+      <div class="q-bar"><div style="width:${Math.round(S.idx/S.qs.length*100)}%"></div></div>
+      <button class="q-flag" id="flag" title="Signaler un problème">⚠️</button>
+      <button class="q-flag" id="quitter">✖</button>
+    </div>
+    <div class="q-zone" id="zone"></div>
+    <div id="bloc-consigne"></div>
+    <button class="consigne-lien" id="voirconsigne">📄 voir la consigne</button>`;
+  const zone = $("#zone");
+  const fini = (ok)=>{
+    if(ok) S.bonnes++;
+    else if(!E.rates.includes(q.cle)){ E.rates.push(q.cle); if(E.rates.length>120) E.rates.shift(); }
+    S.idx++; sauverEtat(); afficherQuestion();
+  };
+  const demoVue = E.demosVues[q.type];
+  // consigne orale au tout début de la session seulement
+  if(S.idx===0 && demoVue) parler(cons.texte);
+  RENDUS[q.type](q, zone, fini);
+  $("#picto").onclick=()=>parler(cons.texte);
+  $("#voirconsigne").onclick=()=>{
+    $("#bloc-consigne").innerHTML = `<div class="consigne-texte">${cons.texte}</div>`;
+    $("#voirconsigne").style.display="none";
+  };
+  $("#quitter").onclick=()=>{ nettoyerMicro(); try{speechSynthesis.cancel();}catch(e){} S.libre ? ecranAccueil() : ecranParcours(S.p); };
+  $("#flag").onclick=()=>{
+    if(confirm("Signaler un problème sur cette question ?\nElle sera retirée et envoyée à la formatrice.")){
+      if(!E.signales.includes(q.cle)) E.signales.push(q.cle);
+      sauverEtat();
+      S.idx++; afficherQuestion();
+    }
+  };
+}
+
+function finSession(){
+  nettoyerMicro();
+  const S = SESSION;
+  try{speechSynthesis.cancel();}catch(e){}
+  const n = S.qs.length, b = S.bonnes, pct = b/n;
+  const stars = pct>=0.9?3 : pct>=0.7?2 : pct>=0.5?1 : 0;
+  majSerie();
+  E.totaux.sessions++; E.totaux.bonnes+=b; E.totaux.posees+=n;
+  if(!S.libre){
+    const prev = E.niveaux[S.p][S.lvl];
+    if(!prev || stars > prev.stars) E.niveaux[S.p][S.lvl] = {stars};
+  }
+  sauverEtat();
+  dingFin();
+  const messages = stars===3?"Incroyable ! 🎉":stars===2?"Très bien joué ! 💪":stars===1?"C’est gagné ! 👍":"Presque ! Réessaie 💪";
+  app.innerHTML = html`
+    <div class="resultat">
+      <div class="res-etoiles pop">${stars>0?etoilesDe(stars):"💪"}</div>
+      <div class="res-score">${b} / ${n}</div>
+      <div class="titre" style="font-size:24px">${messages}</div>
+      <button class="btn" id="rejouer">🔄 Rejouer</button>
+      <button class="btn ${stars>0?"vert":"gris"}" id="continuer">${S.libre?"⚡ Nouvelle session":"➡ Continuer"}</button>
+      <button class="btn blanc" id="accueil">🏠 Accueil</button>
+    </div>`;
+  parler(stars>0 ? ("Bravo "+E.prenom+" ! "+b+" bonnes réponses sur "+n+" !") : ("Tu as eu "+b+" bonnes réponses sur "+n+". Réessaie, tu vas y arriver !"));
+  $("#rejouer").onclick=()=>{ S.libre ? lancerLibre(S.mode) : lancerSession(S.p, S.lvl); };
+  $("#continuer").onclick=()=>{ S.libre ? lancerLibre(S.mode) : ecranParcours(S.p); };
+  $("#accueil").onclick=ecranAccueil;
+}
+
+/* ── ENTRAÎNEMENT LIBRE ─────────────────────────────────── */
+function ecranLibre(){
+  const lectOK = E.niveaux.p2[10] && E.niveaux.p2[10].stars>0;
+  const ecrOK = E.niveaux.p3[10] && E.niveaux.p3[10].stars>0;
+  app.innerHTML = html`
+    <div class="top">
+      <button class="retour" id="retour">←</button>
+      <div class="titre" style="font-size:21px;color:var(--violet)">⚡ Entraînement libre</div>
+    </div>
+    <p class="petit" style="margin-bottom:14px">Des sessions toujours différentes. Les mots ratés reviennent plus souvent !</p>
+    <button class="parcours-card" id="lect" style="border-color:#05966955;${lectOK?"":"filter:grayscale(1);opacity:.6"}">
+      <div class="pc-emoji" style="background:var(--vert-pale)">📖</div>
+      <div style="flex:1"><div class="pc-titre" style="color:var(--vert)">Lecture libre</div>
+      <div class="pc-sub">${lectOK?"Lis des mots variés":"Termine le Bilan lecteur 🏆"}</div></div>
+      <div style="font-size:22px">${lectOK?"▶":"🔒"}</div>
+    </button>
+    <button class="parcours-card" id="ecr" style="border-color:#EA580C55;${ecrOK?"":"filter:grayscale(1);opacity:.6"}">
+      <div class="pc-emoji" style="background:var(--orange-pale)">✍️</div>
+      <div style="flex:1"><div class="pc-titre" style="color:var(--orange)">Dictée libre</div>
+      <div class="pc-sub">${ecrOK?"Écris des mots variés":"Termine le Bilan scripteur 🏆"}</div></div>
+      <div style="font-size:22px">${ecrOK?"▶":"🔒"}</div>
+    </button>`;
+  $("#retour").onclick=ecranAccueil;
+  $("#lect").onclick=()=>{ if(lectOK) lancerLibre("lecture"); };
+  $("#ecr").onclick=()=>{ if(ecrOK) lancerLibre("dictee"); };
+}
+
+function lancerLibre(mode){
+  let pool;
+  if(mode==="lecture"){
+    pool = LIBRE.map((w,i)=>({type:"lecture", cle:"L-"+i, aff:w.m, dire:w.m}));
+  } else {
+    pool = LIBRE.filter(w=>w.d).map((w,i)=>({type:"dicteeLibre", cle:"D-"+i, mot:w.m}));
+  }
+  pool = pool.filter(q=>!E.signales.includes(q.cle));
+  // pondération : les ratés reviennent
+  const rates = pool.filter(q=>E.rates.includes(q.cle));
+  let qs = tire(pool, 10);
+  if(rates.length){
+    const injecter = tire(rates, Math.min(3, rates.length));
+    qs = melange([...qs.slice(0, 10-injecter.length), ...injecter]);
+  }
+  qs = qs.map(q=>JSON.parse(JSON.stringify(q)));
+  SESSION = {p:null, lvl:null, qs, idx:0, bonnes:0, libre:true, mode};
+  const t = qs[0].type;
+  if(!E.demosVues[t]) jouerDemo(t, qs[0]).then(afficherQuestion);
+  else afficherQuestion();
+}
+
+/* ── DÉMO AUTO-RÉSOLUE (doigt fantôme) ──────────────────── */
+const doigt = document.getElementById("doigt");
+async function pointerVers(el){
+  if(!el) return;
+  const r = el.getBoundingClientRect();
+  doigt.style.display="block";
+  doigt.style.left = (r.left + r.width/2 - 10) + "px";
+  doigt.style.top = (r.top + r.height/2 + 6) + "px";
+  await attendre(1000);
+}
+async function jouerDemo(type, qModele, p, lvl){
+  return new Promise(async (resoudre)=>{
+    const cons = CONSIGNES[type];
+    const q = JSON.parse(JSON.stringify(qModele));
+    app.innerHTML = html`
+      <div class="demo-bandeau">🎬 Regarde l’exemple…</div>
+      <div class="q-zone voile" id="zone"></div>`;
+    const zone = $("#zone");
+    let resolu = false;
+    const fini = ()=>{ if(resolu) return; resolu = true; };
+    await parler(cons.texte);
+    const ctl = RENDUS[type](q, zone, fini);
+    await attendre(600);
+    // séquence du doigt selon le type
+    if(ctl.lectureDemo){
+      await pointerVers(ctl.cible());
+      ctl.cible().click(); await attendre(1800);
+      const oui = ctl.cible2 && ctl.cible2();
+      if(oui){ await pointerVers(oui); oui.classList.add("ok"); dingOK(); }
+    } else if(ctl.sequence && ctl.cibles){
+      for(const el of ctl.cibles()){
+        if(!el) continue;
+        await pointerVers(el);
+        el.click();
+        await attendre(250);
+      }
+      await attendre(1200);
+    } else if(ctl.cibles){
+      for(const el of ctl.cibles()){
+        await pointerVers(el);
+        el.classList.add("sel");
+        await attendre(300);
+      }
+      if(ctl.valider){
+        await pointerVers(ctl.valider());
+        ctl.cibles().forEach(el=>{el.classList.remove("sel");el.classList.add("ok");});
+        dingOK();
+      }
+    } else if(ctl.phraseDemo){
+      for(let i=0;i<ctl.phraseDemo.length;i++){
+        const inp = zone.querySelector(`input[data-i="${i}"]`);
+        if(!inp) continue;
+        for(let k=1;k<=ctl.phraseDemo[i].length;k++){ inp.value = ctl.phraseDemo[i].slice(0,k); await attendre(110); }
+      }
+      await pointerVers(ctl.cible());
+      ctl.cible().click(); await attendre(900);
+    } else if(ctl.saisieDemo){
+      const inp = $("#saisie");
+      if(inp){
+        for(let i=1;i<=ctl.saisieDemo.length;i++){ inp.value = ctl.saisieDemo.slice(0,i); await attendre(180); }
+        await pointerVers(ctl.cible());
+        inp.style.borderColor="var(--vert-vif)"; dingOK();
+      }
+    } else if(ctl.cible){
+      const el = ctl.cible();
+      await pointerVers(el);
+      if(el){ el.classList.add(el.classList.contains("lettre-btn")?"ok":"ok"); dingOK(); }
+    }
+    await attendre(900);
+    doigt.style.display="none";
+    try{speechSynthesis.cancel();}catch(e){}
+    E.demosVues[type]=true; sauverEtat();
+    app.innerHTML = html`
+      <div class="onboard">
+        <div style="font-size:64px" class="pop">🎯</div>
+        <h2 class="titre" style="font-size:28px;color:var(--bleu-fonce)">À toi !</h2>
+        <button class="btn vert" id="go">C’est parti ▶</button>
+        <button class="btn blanc" id="revoir">🎬 Revoir l’exemple</button>
+      </div>`;
+    parler("À toi de jouer !");
+    $("#go").onclick=()=>resoudre();
+    $("#revoir").onclick=async ()=>{ delete E.demosVues[type]; await jouerDemo(type,qModele,p,lvl); resoudre(); };
+  });
+}
+
+/* ── PROGRÈS ────────────────────────────────────────────── */
+function ecranProgres(){
+  const lignes = Object.keys(PARCOURS).map(p=>{
+    const P=PARCOURS[p], prog=progParcours(p);
+    let totalStars=0; for(let l=1;l<=10;l++) totalStars += (E.niveaux[p][l]?E.niveaux[p][l].stars:0);
+    return `<div class="prog-ligne"><span style="font-size:24px">${P.emoji}</span>
+      <span style="flex:1">${P.nom}</span>
+      <span style="color:${P.brut}">${prog.done}/10 · ${totalStars}⭐</span></div>`;
+  }).join("");
+  const pctOK = E.totaux.posees ? Math.round(E.totaux.bonnes/E.totaux.posees*100) : 0;
+  app.innerHTML = html`
+    <div class="top">
+      <button class="retour" id="retour">←</button>
+      <div class="titre" style="font-size:21px;color:var(--bleu-fonce)">📊 Mes progrès</div>
+    </div>
+    <div class="card" style="margin-bottom:14px">
+      <div class="prog-ligne"><span style="font-size:24px">🔥</span><span style="flex:1">Jours d’affilée</span><b>${E.serie.n||0}</b></div>
+      <div class="prog-ligne"><span style="font-size:24px">🎮</span><span style="flex:1">Sessions jouées</span><b>${E.totaux.sessions}</b></div>
+      <div class="prog-ligne"><span style="font-size:24px">✅</span><span style="flex:1">Bonnes réponses</span><b>${E.totaux.bonnes} (${pctOK}%)</b></div>
+    </div>
+    <div class="card" style="margin-bottom:18px">${lignes}</div>
+    <button class="btn vert" id="partager">📤 Envoyer mes progrès à la formatrice</button>
+    <p class="petit center" style="margin-top:10px">Ça ouvre WhatsApp avec un message déjà écrit.</p>`;
+  $("#retour").onclick=ecranAccueil;
+  $("#partager").onclick=()=>{
+    const auj = new Date().toLocaleDateString("fr-FR");
+    let txt = `📊 Mon Coach Lecture v${VERSION} — ${E.prenom} — ${auj}\n`;
+    txt += `🔥 ${E.serie.n||0} jours d’affilée · 🎮 ${E.totaux.sessions} sessions · ✅ ${pctOK}% de réussite\n`;
+    Object.keys(PARCOURS).forEach(p=>{
+      const prog = progParcours(p);
+      let st=0; for(let l=1;l<=10;l++) st += (E.niveaux[p][l]?E.niveaux[p][l].stars:0);
+      txt += `${PARCOURS[p].emoji} ${PARCOURS[p].nom} : ${prog.done}/10 niveaux, ${st} étoiles\n`;
+    });
+    if(E.signales.length) txt += `⚠️ Questions signalées : ${E.signales.join(", ")}\n`;
+    window.open("https://wa.me/?text="+encodeURIComponent(txt), "_blank");
+  };
+}
+
+/* ── RÉGLAGES ───────────────────────────────────────────── */
+function ecranReglages(){
+  chargerVoix();
+  const opts = voixFR.map(v=>`<option value="${v.voiceURI}" ${E.reglages.voix===v.voiceURI?"selected":""}>${v.name}</option>`).join("");
+  app.innerHTML = html`
+    <div class="top">
+      <button class="retour" id="retour">←</button>
+      <div class="titre" style="font-size:21px;color:var(--bleu-fonce)">⚙️ Réglages</div>
+    </div>
+    <div class="card" style="display:flex;flex-direction:column;gap:14px">
+      <div>
+        <b>🗣 Choix de la voix</b>
+        <select id="voix"><option value="">Voix automatique</option>${opts}</select>
+      </div>
+      <div>
+        <b>⏱ Vitesse de la voix</b>
+        <div class="choix ligne" style="margin-top:8px">
+          <button class="choix-btn texte" data-d="0.75" style="min-height:54px">🐢 Lente</button>
+          <button class="choix-btn texte" data-d="0.92" style="min-height:54px">🙂 Normale</button>
+        </div>
+      </div>
+      <button class="btn" id="essai" style="min-height:54px">🔊 Essayer la voix</button>
+    </div>
+    <div class="card" style="margin-top:14px">
+      <b>👤 Prénom</b>
+      <input id="prenom" type="text" value="${E.prenom}" style="width:100%;min-height:50px;border-radius:12px;border:2px solid #E2DDD4;font-size:18px;font-weight:800;text-align:center;margin-top:8px">
+    </div>
+    <button class="btn blanc" id="sauver" style="margin-top:16px">💾 Enregistrer</button>`;
+  $("#retour").onclick=ecranAccueil;
+  app.querySelectorAll("[data-d]").forEach(b=>{
+    if(parseFloat(b.dataset.d)===E.reglages.debit) b.classList.add("sel");
+    b.onclick=()=>{ app.querySelectorAll("[data-d]").forEach(x=>x.classList.remove("sel")); b.classList.add("sel"); E.reglages.debit=parseFloat(b.dataset.d); };
+  });
+  $("#essai").onclick=()=>{ E.reglages.voix = $("#voix").value; parler("Bonjour ! Voici ma voix. On apprend le français ensemble !"); };
+  $("#sauver").onclick=()=>{
+    E.reglages.voix = $("#voix").value;
+    const p = $("#prenom").value.trim(); if(p) E.prenom = p;
+    sauverEtat(); ecranAccueil();
+  };
+}
+
+/* ── DÉMARRAGE ──────────────────────────────────────────── */
+window.addEventListener("load", ()=>{
+  if(!E.onboarde || !E.prenom) ecranOnboard();
+  else ecranAccueil();
+});
+</script>
+</body>
+</html>
