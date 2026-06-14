@@ -229,7 +229,7 @@ select{
 <script>
 "use strict";
 /* ════════════════════════════════════════════════════════════
-   MON COACH LECTURE — v1.7
+   MON COACH LECTURE — v2.0 (Parcours 1 complet)
    HOPE 2026 · contenu validé par la formatrice (banque Excel v1)
    ════════════════════════════════════════════════════════════ */
 
@@ -242,6 +242,7 @@ const DEFAUT = {
   rates:[],                              // clés d'items ratés (révision)
   signales:[],                           // items neutralisés
   totaux:{sessions:0, bonnes:0, posees:0},
+  vus:{},                                // {"p1-3":["cle1","cle2",...]} items déjà montrés
   reglages:{voix:"", debit:0.92}
 };
 let memoire = null;                      // secours si stockage indisponible
@@ -257,7 +258,7 @@ function sauverEtat(){
   try{ localStorage.setItem("mcf_v1", JSON.stringify(E)); }catch(err){}
 }
 let E = chargerEtat();
-const VERSION = "1.7";
+const VERSION = "2.0";
 
 /* ── AUDIO : voix de synthèse ───────────────────────────── */
 let voixFR = [];
@@ -272,17 +273,27 @@ function voixChoisie(){
   if(E.reglages.voix){ const v = voixFR.find(v=>v.voiceURI===E.reglages.voix); if(v) return v; }
   return voixFR.find(v=>v.lang.toLowerCase()==="fr-fr") || voixFR[0] || null;
 }
-function parler(texte, opts){
+function direUneFois(texte, lent){
   return new Promise(res=>{
     if(!("speechSynthesis" in window)){ res(); return; }
     speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(texte);
     u.lang = "fr-FR";
     const v = voixChoisie(); if(v) u.voice = v;
-    u.rate = (opts && opts.lent) ? 0.6 : E.reglages.debit;
+    u.rate = lent ? 0.45 : E.reglages.debit;
     u.onend = ()=>res(); u.onerror = ()=>res();
     speechSynthesis.speak(u);
   });
+}
+async function parler(texte, opts){
+  const lent = !!(opts && opts.lent);
+  await direUneFois(texte, lent);
+  /* éléments courts (sons, lettres, syllabes) : en mode lent, on répète avec une vraie pause —
+     fonctionne même si le moteur du téléphone ignore le réglage de vitesse */
+  if(lent && texte.length <= 5){
+    await new Promise(r=>setTimeout(r, 650));
+    await direUneFois(texte, lent);
+  }
 }
 
 /* sons "bruit" des lettres : consonne + e muet, version prononçable par la voix */
@@ -345,79 +356,44 @@ const VOY_SYL = ["A","E","I","O","U","É"];
 
 const B = {
 p1:{
- 1:{ titre:"Les voyelles", picto:"👂", type:"paireVoyelles",
-     items:[["a","i"],["a","o"],["i","o"],["i","u"],["o","u"],["a","u"],["e","a"],["e","i"],["e","o"],["e","u"]] },
- 2:{ titre:"Je reconnais les voyelles", picto:"🔤", type:"sonVersLettre",
-     items:[
-      {son:"a",rep:"A",d:["I","O"]},{son:"i",rep:"I",d:["E","U"]},{son:"o",rep:"O",d:["A","U"]},
-      {son:"u",rep:"U",d:["I","O"]},{son:"e",rep:"E",d:["A","I"]},{son:"a",rep:"A",d:["E","U"]},
-      {son:"i",rep:"I",d:["A","O"]},{son:"o",rep:"O",d:["E","I"]},{son:"u",rep:"U",d:["A","E"]},
-      {son:"e",rep:"E",d:["O","U"]}] },
- 3:{ titre:"Majuscule et minuscule", picto:"🔠", type:"majMin",
-     items:[
-      {maj:"A",min:"a",d:["o","e"]},{maj:"B",min:"b",d:["d","p"]},{maj:"D",min:"d",d:["b","p"]},
-      {maj:"E",min:"e",d:["a","c"]},{maj:"F",min:"f",d:["t","l"]},{maj:"I",min:"i",d:["l","j"]},
-      {maj:"L",min:"l",d:["i","t"]},{maj:"M",min:"m",d:["n","w"]},{maj:"N",min:"n",d:["m","u"]},
-      {maj:"O",min:"o",d:["a","c"]},{maj:"P",min:"p",d:["b","q"]},{maj:"R",min:"r",d:["n","v"]},
-      {maj:"S",min:"s",d:["z","c"]},{maj:"T",min:"t",d:["f","l"]},{maj:"U",min:"u",d:["n","v"]},
-      {maj:"V",min:"v",d:["u","w"]}] },
- 4:{ titre:"Les consonnes L M S R", picto:"🔤", type:"sonMotLettre",
-     items:[
-      {son:"l",rep:"L",mot:"lune",d:["M","R"]},{son:"m",rep:"M",mot:"moto",d:["N","L"]},
-      {son:"s",rep:"S",mot:"salade",d:["Z","C"]},{son:"r",rep:"R",mot:"robe",d:["L","N"]},
-      {son:"l",rep:"L",mot:"lavabo",d:["R","T"]},{son:"m",rep:"M",mot:"madame",d:["N","B"]},
-      {son:"s",rep:"S",mot:"samedi",d:["F","Z"]},{son:"r",rep:"R",mot:"radio",d:["L","V"]}] },
- 5:{ titre:"Les consonnes N T P F", picto:"🔤", type:"sonMotLettre",
-     items:[
-      {son:"n",rep:"N",mot:"nid",d:["M","U"]},{son:"t",rep:"T",mot:"tomate",d:["D","F"]},
-      {son:"p",rep:"P",mot:"porte",d:["B","T"]},{son:"f",rep:"F",mot:"farine",d:["V","T"]},
-      {son:"n",rep:"N",mot:"numéro",d:["M","R"]},{son:"t",rep:"T",mot:"table",d:["P","D"]},
-      {son:"p",rep:"P",mot:"papa",d:["B","D"]},{son:"f",rep:"F",mot:"fumée",d:["V","S"]}] },
- 6:{ titre:"Les consonnes V B D", picto:"🔤", type:"sonMotLettre",
-     items:[
-      {son:"v",rep:"V",mot:"vélo",d:["F","B"]},{son:"b",rep:"B",mot:"banane",d:["D","P"]},
-      {son:"d",rep:"D",mot:"domino",d:["B","T"]},{son:"v",rep:"V",mot:"valise",d:["B","F"]},
-      {son:"b",rep:"B",mot:"bol",d:["D","V"]},{son:"d",rep:"D",mot:"dimanche",d:["B","P"]},
-      {son:"b",rep:"B",mot:"bébé",d:["D","P"]},{son:"d",rep:"D",mot:"douche",d:["B","T"]}] },
- 7:{ titre:"Où est la lettre ?", picto:"👆", type:"toucheLettre",
-     items:[
-      {mot:"MOTO",lettre:"M",pos:[0]},{mot:"SALADE",lettre:"S",pos:[0]},{mot:"VÉLO",lettre:"L",pos:[2]},
-      {mot:"ROBE",lettre:"R",pos:[0]},{mot:"BANANE",lettre:"B",pos:[0]},{mot:"TOMATE",lettre:"T",pos:[0,4]},
-      {mot:"PORTE",lettre:"P",pos:[0]},{mot:"FARINE",lettre:"F",pos:[0]},{mot:"DOMINO",lettre:"D",pos:[0]},
-      {mot:"LAVABO",lettre:"V",pos:[2]},{mot:"MADAME",lettre:"D",pos:[2]},{mot:"LUNE",lettre:"N",pos:[2]}] },
- 8:{ titre:"J’entends ou pas ?", picto:"👂", type:"ouiNon",
-     items:[
-      {son:"s",mot:"salade",rep:true},{son:"s",mot:"moto",rep:false},{son:"s",mot:"soupe",rep:true},
-      {son:"s",mot:"banane",rep:false},{son:"s",mot:"tasse",rep:true},{son:"s",mot:"vélo",rep:false},
-      {son:"m",mot:"moto",rep:true},{son:"m",mot:"porte",rep:false},{son:"m",mot:"tomate",rep:true},
-      {son:"m",mot:"salade",rep:false},{son:"l",mot:"lune",rep:true},{son:"l",mot:"moto",rep:false},
-      {son:"l",mot:"vélo",rep:true},{son:"l",mot:"banane",rep:false},{son:"r",mot:"robe",rep:true},
-      {son:"r",mot:"salade",rep:false},{son:"r",mot:"farine",rep:true},{son:"r",mot:"domino",rep:false},
-      {son:"t",mot:"table",rep:true},{son:"t",mot:"banane",rep:false},{son:"f",mot:"farine",rep:true},
-      {son:"f",mot:"valise",rep:false},{son:"b",mot:"bol",rep:true},{son:"b",mot:"douche",rep:false}] },
- 9:{ titre:"Le premier son", picto:"👂", type:"premierSon",
-     items:[
-      {mot:"moto",rep:"M",d:["S","V"]},{mot:"salade",rep:"S",d:["Z","F"]},{mot:"vélo",rep:"V",d:["F","B"]},
-      {mot:"lune",rep:"L",d:["R","N"]},{mot:"robe",rep:"R",d:["L","B"]},{mot:"nid",rep:"N",d:["M","D"]},
-      {mot:"tomate",rep:"T",d:["D","P"]},{mot:"porte",rep:"P",d:["B","T"]},{mot:"farine",rep:"F",d:["V","S"]},
-      {mot:"domino",rep:"D",d:["B","T"]},{mot:"banane",rep:"B",d:["P","D"]},{mot:"madame",rep:"M",d:["N","B"]}] },
- 10:{ titre:"Bilan étoilé", picto:"🏆", type:"bilan", n:15 }
+ 1:{ titre:"Compter les syllabes", picto:"👂", type:"compterSyll", items:[{mot:"ami",dire:"ami",rep:2},{mot:"vélo",dire:"vélo",rep:2},{mot:"moto",dire:"moto",rep:2},{mot:"midi",dire:"midi",rep:2},{mot:"mardi",dire:"mardi",rep:2},{mot:"jupe",dire:"jupe",rep:1},{mot:"robe",dire:"robe",rep:1},{mot:"chat",dire:"chat",rep:1},{mot:"lune",dire:"lune",rep:1},{mot:"sac",dire:"sac",rep:1},{mot:"bol",dire:"bol",rep:1},{mot:"jour",dire:"jour",rep:1},{mot:"mur",dire:"mur",rep:1},{mot:"nid",dire:"nid",rep:1},{mot:"banane",dire:"banane",rep:3},{mot:"domino",dire:"domino",rep:3},{mot:"tomate",dire:"tomate",rep:3},{mot:"salade",dire:"salade",rep:3},{mot:"samedi",dire:"samedi",rep:3},{mot:"madame",dire:"madame",rep:3},{mot:"limonade",dire:"limonade",rep:4},{mot:"cinéma",dire:"cinéma",rep:3},{mot:"farine",dire:"farine",rep:3},{mot:"minute",dire:"minute",rep:3},{mot:"lavabo",dire:"lavabo",rep:3},{mot:"table",dire:"table",rep:1},{mot:"porte",dire:"porte",rep:1},{mot:"vache",dire:"vache",rep:1},{mot:"poule",dire:"poule",rep:1},{mot:"douche",dire:"douche",rep:1},{mot:"soupe",dire:"soupe",rep:1}] },
+ 2:{ titre:"La première syllabe", picto:"👂", type:"choixSyll", items:[{mot:"moto",dire:"moto",rep:"MO",d:["TO", "LA"]},{mot:"vélo",dire:"vélo",rep:"VÉ",d:["LO", "BA"]},{mot:"salade",dire:"salade",rep:"SA",d:["LA", "DE"]},{mot:"banane",dire:"banane",rep:"BA",d:["NA", "NE"]},{mot:"tomate",dire:"tomate",rep:"TO",d:["MA", "TE"]},{mot:"domino",dire:"domino",rep:"DO",d:["MI", "NO"]},{mot:"samedi",dire:"samedi",rep:"SA",d:["ME", "DI"]},{mot:"madame",dire:"madame",rep:"MA",d:["DA", "ME"]},{mot:"lavabo",dire:"lavabo",rep:"LA",d:["VA", "BO"]},{mot:"farine",dire:"farine",rep:"FA",d:["RI", "NE"]},{mot:"minute",dire:"minute",rep:"MI",d:["NU", "TE"]},{mot:"mardi",dire:"mardi",rep:"MAR",d:["DI", "LA"]},{mot:"limonade",dire:"limonade",rep:"LI",d:["MO", "NA"]},{mot:"cinéma",dire:"cinéma",rep:"CI",d:["NÉ", "MA"]}] },
+ 3:{ titre:"La dernière syllabe", picto:"👂", type:"choixSyll", items:[{mot:"salade",dire:"salade",rep:"DE",d:["SA", "LA"]},{mot:"vélo",dire:"vélo",rep:"LO",d:["VÉ", "MO"]},{mot:"moto",dire:"moto",rep:"TO",d:["MO", "LA"]},{mot:"banane",dire:"banane",rep:"NE",d:["BA", "NA"]},{mot:"domino",dire:"domino",rep:"NO",d:["DO", "MI"]},{mot:"tomate",dire:"tomate",rep:"TE",d:["TO", "MA"]},{mot:"madame",dire:"madame",rep:"ME",d:["MA", "DA"]},{mot:"farine",dire:"farine",rep:"NE",d:["FA", "RI"]},{mot:"mardi",dire:"mardi",rep:"DI",d:["MAR", "LA"]},{mot:"samedi",dire:"samedi",rep:"DI",d:["SA", "ME"]},{mot:"minute",dire:"minute",rep:"TE",d:["MI", "NU"]},{mot:"lavabo",dire:"lavabo",rep:"BO",d:["LA", "VA"]},{mot:"limonade",dire:"limonade",rep:"DE",d:["LI", "MO"]},{mot:"cinéma",dire:"cinéma",rep:"MA",d:["CI", "NÉ"]}] },
+ 4:{ titre:"Au début ou à la fin ?", picto:"👂", type:"localise", items:[{son:"a",mot:"ami",rep:"debut"},{son:"a",mot:"chat",rep:"fin"},{son:"i",mot:"midi",rep:"fin"},{son:"o",mot:"moto",rep:"fin"},{son:"m",mot:"moto",rep:"debut"},{son:"r",mot:"robe",rep:"debut"},{son:"r",mot:"jour",rep:"fin"},{son:"l",mot:"lune",rep:"debut"},{son:"s",mot:"salade",rep:"debut"},{son:"s",mot:"bus",rep:"fin"},{son:"v",mot:"vélo",rep:"debut"},{son:"d",mot:"dos",rep:"debut"},{son:"p",mot:"porte",rep:"debut"},{son:"t",mot:"table",rep:"debut"},{son:"f",mot:"farine",rep:"debut"},{son:"n",mot:"nid",rep:"debut"},{son:"b",mot:"banane",rep:"debut"},{son:"j",mot:"jour",rep:"debut"},{son:"l",mot:"bol",rep:"fin"},{son:"r",mot:"mur",rep:"fin"}] },
+ 5:{ titre:"Les voyelles A E I O U", picto:"👂", type:"sonVersLettre", items:[{son:"a",rep:"A",d:["E", "I"]},{son:"e",rep:"E",d:["A", "I"]},{son:"i",rep:"I",d:["A", "E"]},{son:"o",rep:"O",d:["A", "E"]},{son:"u",rep:"U",d:["A", "E"]}] },
+ 6:{ titre:"L · M · R", picto:"👂", type:"sonMotLettre", items:[{son:"le",rep:"L",mot:"lune",d:["M", "R"]},{son:"le",rep:"L",mot:"lavabo",d:["M", "R"]},{son:"meuh",rep:"M",mot:"moto",d:["N", "L"]},{son:"meuh",rep:"M",mot:"madame",d:["N", "L"]},{son:"re",rep:"R",mot:"robe",d:["L", "N"]},{son:"re",rep:"R",mot:"farine",d:["L", "N"]}] },
+ 7:{ titre:"S · N · P · T", picto:"👂", type:"sonMotLettre", items:[{son:"se",rep:"S",mot:"salade",d:["Z", "C"]},{son:"se",rep:"S",mot:"samedi",d:["Z", "C"]},{son:"ne",rep:"N",mot:"nid",d:["M", "U"]},{son:"ne",rep:"N",mot:"banane",d:["M", "U"]},{son:"peu",rep:"P",mot:"porte",d:["B", "T"]},{son:"peu",rep:"P",mot:"papa",d:["B", "T"]},{son:"te",rep:"T",mot:"tomate",d:["D", "P"]},{son:"te",rep:"T",mot:"table",d:["D", "P"]}] },
+ 8:{ titre:"F · V · D · B", picto:"👂", type:"sonMotLettre", items:[{son:"feu",rep:"F",mot:"farine",d:["V", "T"]},{son:"feu",rep:"F",mot:"fumée",d:["V", "T"]},{son:"vœu",rep:"V",mot:"vélo",d:["F", "B"]},{son:"vœu",rep:"V",mot:"valise",d:["F", "B"]},{son:"de",rep:"D",mot:"domino",d:["B", "T"]},{son:"de",rep:"D",mot:"douche",d:["B", "T"]},{son:"bœufs",rep:"B",mot:"banane",d:["D", "P"]},{son:"bœufs",rep:"B",mot:"bol",d:["D", "P"]}] },
+ 9:{ titre:"Les lettres miroir b d p q", picto:"👆", type:"sonMotLettre", items:[{son:"bœufs",rep:"B",mot:"",d:["D", "P", "Q"],miroir:true},{son:"bœufs",rep:"B",mot:"bol",d:["D", "P"]},{son:"bœufs",rep:"B",mot:"banane",d:["D", "P"]},{son:"bœufs",rep:"B",mot:"bébé",d:["D", "P"]},{son:"de",rep:"D",mot:"",d:["B", "P", "Q"],miroir:true},{son:"de",rep:"D",mot:"domino",d:["B", "P"]},{son:"de",rep:"D",mot:"dos",d:["B", "P"]},{son:"de",rep:"D",mot:"dé",d:["B", "P"]},{son:"peu",rep:"P",mot:"",d:["B", "D", "Q"],miroir:true},{son:"peu",rep:"P",mot:"porte",d:["B", "D"]},{son:"peu",rep:"P",mot:"papa",d:["B", "D"]},{son:"peu",rep:"P",mot:"pot",d:["B", "D"]},{son:"cu",rep:"Q",mot:"",d:["B", "D", "P"],miroir:true}] },
+ 10:{ titre:"J · CH · C · G · H", picto:"👂", type:"sonMotLettre", items:[{son:"jeu",rep:"J",mot:"jour",d:["CH", "G"]},{son:"jeu",rep:"J",mot:"jupe",d:["CH", "G"]},{son:"che",rep:"CH",mot:"chat",d:["S", "J"]},{son:"che",rep:"CH",mot:"douche",d:["S", "J"]},{son:"ke",rep:"C",mot:"café",d:["K", "S"]},{son:"ke",rep:"C",mot:"école",d:["K", "S"]},{son:"gue",rep:"G",mot:"gâteau",d:["J", "C"]},{son:"gue",rep:"G",mot:"légume",d:["J", "C"]},{son:"ache",rep:"H",mot:"hôtel",d:["A","E"],muette:true},{son:"ache",rep:"H",mot:"homme",d:["O","E"],muette:true}] },
+ 11:{ titre:"Lettres rares K W X Y Z", picto:"👂", type:"sonMotLettre", items:[{son:"ke",rep:"K",mot:"kiwi",d:["C", "Q"]},{son:"ke",rep:"K",mot:"koala",d:["C", "Q"]},{son:"double vé",rep:"W",mot:"wagon",d:["V", "Z"],nomlettre:true},{son:"ixe",rep:"X",mot:"taxi",d:["S", "K"],nomlettre:true},{son:"i",rep:"Y",mot:"stylo",d:["I", "J"]},{son:"i",rep:"Y",mot:"yaourt",d:["I", "J"]},{son:"ze",rep:"Z",mot:"zéro",d:["S", "J"]},{son:"ze",rep:"Z",mot:"zèbre",d:["S", "J"]}] },
+ 12:{ titre:"Où est la lettre ?", picto:"👆", type:"toucheLettre", items:[{mot:"MOTO",lettre:"M",pos:[0]},{mot:"SALADE",lettre:"S",pos:[0]},{mot:"VÉLO",lettre:"L",pos:[2]},{mot:"ROBE",lettre:"R",pos:[0]},{mot:"BANANE",lettre:"B",pos:[0]},{mot:"TOMATE",lettre:"T",pos:[0, 4]},{mot:"PORTE",lettre:"P",pos:[0]},{mot:"FARINE",lettre:"F",pos:[0]},{mot:"DOMINO",lettre:"D",pos:[0]},{mot:"LAVABO",lettre:"V",pos:[2]},{mot:"MADAME",lettre:"D",pos:[2]},{mot:"LUNE",lettre:"N",pos:[2]},{mot:"JUPE",lettre:"J",pos:[0]},{mot:"CHAT",lettre:"C",pos:[0]},{mot:"ZÉRO",lettre:"Z",pos:[0]},{mot:"KIWI",lettre:"K",pos:[0]}] },
+ 13:{ titre:"J’entends ou pas ?", picto:"👂", type:"ouiNon", items:[{son:"s",mot:"salade",rep:true},{son:"s",mot:"moto",rep:false},{son:"s",mot:"soupe",rep:true},{son:"s",mot:"banane",rep:false},{son:"m",mot:"moto",rep:true},{son:"m",mot:"porte",rep:false},{son:"m",mot:"tomate",rep:true},{son:"m",mot:"salade",rep:false},{son:"l",mot:"lune",rep:true},{son:"l",mot:"moto",rep:false},{son:"l",mot:"vélo",rep:true},{son:"l",mot:"banane",rep:false},{son:"r",mot:"robe",rep:true},{son:"r",mot:"salade",rep:false},{son:"r",mot:"farine",rep:true},{son:"r",mot:"domino",rep:false},{son:"t",mot:"table",rep:true},{son:"t",mot:"banane",rep:false},{son:"f",mot:"farine",rep:true},{son:"f",mot:"valise",rep:false},{son:"b",mot:"bol",rep:true},{son:"b",mot:"douche",rep:false},{son:"d",mot:"domino",rep:true},{son:"d",mot:"lune",rep:false}] },
+ 14:{ titre:"Le premier son", picto:"👂", type:"premierSon", items:[{mot:"moto",rep:"M",d:["S", "V"]},{mot:"salade",rep:"S",d:["Z", "F"]},{mot:"vélo",rep:"V",d:["F", "B"]},{mot:"lune",rep:"L",d:["R", "N"]},{mot:"robe",rep:"R",d:["L", "B"]},{mot:"nid",rep:"N",d:["M", "D"]},{mot:"tomate",rep:"T",d:["D", "P"]},{mot:"porte",rep:"P",d:["B", "T"]},{mot:"farine",rep:"F",d:["V", "S"]},{mot:"domino",rep:"D",d:["B", "T"]},{mot:"banane",rep:"B",d:["P", "D"]},{mot:"jour",rep:"J",d:["CH", "G"]},{mot:"kiwi",rep:"K",d:["G", "T"]},{mot:"zéro",rep:"Z",d:["S", "J"]}] },
+ 15:{ titre:"Le dernier son", picto:"👂", type:"dernierSon", items:[{mot:"jour",rep:"R",d:["S", "T"]},{mot:"sac",rep:"C",d:["S", "K"]},{mot:"bol",rep:"L",d:["R", "N"]},{mot:"mur",rep:"R",d:["L", "N"]},{mot:"bus",rep:"S",d:["Z", "T"]},{mot:"nid",rep:"D",d:["T", "N"]},{mot:"four",rep:"R",d:["L", "F"]},{mot:"tour",rep:"R",d:["T", "D"]},{mot:"riz",rep:"Z",d:["S", "R"]},{mot:"dos",rep:"S",d:["D", "Z"]}] },
+ 16:{ titre:"F ou P ?", picto:"👂", type:"paireMin", items:[{mot:"fou",dire:"fou",rep:"F",opts:["F", "P"]},{mot:"pou",dire:"pou",rep:"P",opts:["F", "P"]},{mot:"feu",dire:"feu",rep:"F",opts:["F", "P"]},{mot:"peu",dire:"peu",rep:"P",opts:["F", "P"]},{mot:"fort",dire:"fort",rep:"F",opts:["F", "P"]},{mot:"port",dire:"port",rep:"P",opts:["F", "P"]},{mot:"fin",dire:"fin",rep:"F",opts:["F", "P"]},{mot:"pin",dire:"pin",rep:"P",opts:["F", "P"]},{mot:"faux",dire:"faux",rep:"F",opts:["F", "P"]},{mot:"pauvre",dire:"pauvre",rep:"P",opts:["F", "P"]},{mot:"foule",dire:"foule",rep:"F",opts:["F", "P"]},{mot:"poule",dire:"poule",rep:"P",opts:["F", "P"]},{mot:"fil",dire:"fil",rep:"F",opts:["F", "P"]},{mot:"pile",dire:"pile",rep:"P",opts:["F", "P"]},{mot:"face",dire:"face",rep:"F",opts:["F", "P"]},{mot:"passe",dire:"passe",rep:"P",opts:["F", "P"]}] },
+ 17:{ titre:"F ou V ?", picto:"👂", type:"paireMin", items:[{mot:"fou",dire:"fou",rep:"F",opts:["F", "V"]},{mot:"vous",dire:"vous",rep:"V",opts:["F", "V"]},{mot:"faire",dire:"faire",rep:"F",opts:["F", "V"]},{mot:"verre",dire:"verre",rep:"V",opts:["F", "V"]},{mot:"fin",dire:"fin",rep:"F",opts:["F", "V"]},{mot:"vin",dire:"vin",rep:"V",opts:["F", "V"]},{mot:"faux",dire:"faux",rep:"F",opts:["F", "V"]},{mot:"veau",dire:"veau",rep:"V",opts:["F", "V"]},{mot:"fil",dire:"fil",rep:"F",opts:["F", "V"]},{mot:"ville",dire:"ville",rep:"V",opts:["F", "V"]},{mot:"fer",dire:"fer",rep:"F",opts:["F", "V"]},{mot:"vert",dire:"vert",rep:"V",opts:["F", "V"]},{mot:"foie",dire:"foie",rep:"F",opts:["F", "V"]},{mot:"voie",dire:"voie",rep:"V",opts:["F", "V"]}] },
+ 18:{ titre:"P ou B ?", picto:"👂", type:"paireMin", items:[{mot:"pain",dire:"pain",rep:"P",opts:["B", "P"]},{mot:"bain",dire:"bain",rep:"B",opts:["B", "P"]},{mot:"poule",dire:"poule",rep:"P",opts:["B", "P"]},{mot:"boule",dire:"boule",rep:"B",opts:["B", "P"]},{mot:"pas",dire:"pas",rep:"P",opts:["B", "P"]},{mot:"bas",dire:"bas",rep:"B",opts:["B", "P"]},{mot:"pont",dire:"pont",rep:"P",opts:["B", "P"]},{mot:"bon",dire:"bon",rep:"B",opts:["B", "P"]},{mot:"pull",dire:"poule",rep:"P",opts:["B", "P"]},{mot:"bulle",dire:"bulle",rep:"B",opts:["B", "P"]},{mot:"poire",dire:"poire",rep:"P",opts:["B", "P"]},{mot:"boire",dire:"boire",rep:"B",opts:["B", "P"]},{mot:"pou",dire:"pou",rep:"P",opts:["B", "P"]},{mot:"bout",dire:"bout",rep:"B",opts:["B", "P"]}] },
+ 19:{ titre:"T ou D ?", picto:"👂", type:"paireMin", items:[{mot:"thé",dire:"thé",rep:"T",opts:["D", "T"]},{mot:"dé",dire:"dé",rep:"D",opts:["D", "T"]},{mot:"tout",dire:"tout",rep:"T",opts:["D", "T"]},{mot:"doux",dire:"doux",rep:"D",opts:["D", "T"]},{mot:"ton",dire:"ton",rep:"T",opts:["D", "T"]},{mot:"don",dire:"don",rep:"D",opts:["D", "T"]},{mot:"temps",dire:"temps",rep:"T",opts:["D", "T"]},{mot:"dent",dire:"dent",rep:"D",opts:["D", "T"]},{mot:"tante",dire:"tante",rep:"T",opts:["D", "T"]},{mot:"toit",dire:"toit",rep:"T",opts:["D", "T"]},{mot:"doigt",dire:"doigt",rep:"D",opts:["D", "T"]},{mot:"tour",dire:"tour",rep:"T",opts:["D", "T"]},{mot:"dur",dire:"dur",rep:"D",opts:["D", "T"]}] },
+ 20:{ titre:"S ou CH ?", picto:"👂", type:"paireMin", items:[{mot:"sou",dire:"sou",rep:"S",opts:["CH", "S"]},{mot:"chou",dire:"chou",rep:"CH",opts:["CH", "S"]},{mot:"seau",dire:"seau",rep:"S",opts:["CH", "S"]},{mot:"chaud",dire:"chaud",rep:"CH",opts:["CH", "S"]},{mot:"sac",dire:"sac",rep:"S",opts:["CH", "S"]},{mot:"chaque",dire:"chaque",rep:"CH",opts:["CH", "S"]},{mot:"sien",dire:"sien",rep:"S",opts:["CH", "S"]},{mot:"chien",dire:"chien",rep:"CH",opts:["CH", "S"]},{mot:"sale",dire:"sale",rep:"S",opts:["CH", "S"]},{mot:"chat",dire:"chat",rep:"CH",opts:["CH", "S"]},{mot:"son",dire:"son",rep:"S",opts:["CH", "S"]},{mot:"chant",dire:"champ",rep:"CH",opts:["CH", "S"]},{mot:"masse",dire:"masse",rep:"S",opts:["CH", "S"]},{mot:"mâche",dire:"mâche",rep:"CH",opts:["CH", "S"]}] },
+ 21:{ titre:"CH ou J ?", picto:"👂", type:"paireMin", items:[{mot:"chou",dire:"chou",rep:"CH",opts:["CH", "J"]},{mot:"joue",dire:"joue",rep:"J",opts:["CH", "J"]},{mot:"chaud",dire:"chaud",rep:"CH",opts:["CH", "J"]},{mot:"jaune",dire:"jaune",rep:"J",opts:["CH", "J"]},{mot:"cheval",dire:"cheval",rep:"CH",opts:["CH", "J"]},{mot:"javel",dire:"javel",rep:"J",opts:["CH", "J"]},{mot:"chic",dire:"chic",rep:"CH",opts:["CH", "J"]},{mot:"gilet",dire:"gilet",rep:"J",opts:["CH", "J"]},{mot:"hache",dire:"hache",rep:"CH",opts:["CH", "J"]},{mot:"âge",dire:"âge",rep:"J",opts:["CH", "J"]},{mot:"bouche",dire:"bouche",rep:"CH",opts:["CH", "J"]},{mot:"bouge",dire:"bouge",rep:"J",opts:["CH", "J"]},{mot:"cache",dire:"cache",rep:"CH",opts:["CH", "J"]},{mot:"cage",dire:"cage",rep:"J",opts:["CH", "J"]}] },
+ 22:{ titre:"Bilan Premiers pas", picto:"🏆", type:"bilan", n:15 }
 },
 p2:{
  1:{ titre:"Syllabes simples", picto:"📖", type:"lecture", genere:"CV" },
  2:{ titre:"Syllabes inversées", picto:"📖", type:"lecture",
      items:["AL","IL","OL","UL","AR","IR","OR","UR","AS","IS","OS","US","AF","IF"].map(s=>({aff:s,dire:direSyllabe(s)})) },
  3:{ titre:"Mots simples", picto:"📖", type:"lecture",
-     items:["ami","midi","mardi","papa","moto","vélo","salade","lavabo","domino","tomate","banane","samedi","madame","malade","minute","farine"].map(m=>({aff:m,dire:m})) },
+     items:["ami","amie","midi","mardi","lundi","papa","mamie","papi","moto","vélo","salade","lavabo","domino","tomate","banane","samedi","madame","malade","minute","farine","limonade","robe","jupe","lune","tasse","vache"].map(m=>({aff:m,dire:m})) },
  4:{ titre:"Le son [ou]", picto:"📖", type:"lecture",
-     items:["poule","douche","soupe","bouche","route","boule","mouche","rouge","jour","four","tour","douze"].map(m=>({aff:m,dire:m})) },
+     items:["poule","douche","soupe","bouche","route","boule","mouche","rouge","jour","four","tour","douze","moule","loupe","sous","cou","loup","roue","poupe","toux"].map(m=>({aff:m,dire:m})) },
  5:{ titre:"[an] ou [on] ?", picto:"📖", type:"anOnLecture",
      items:[
       {mot:"maman",rep:"an"},{mot:"volcan",rep:"an"},{mot:"ruban",rep:"an"},{mot:"écran",rep:"an"},{mot:"divan",rep:"an"},
       {mot:"savon",rep:"on"},{mot:"melon",rep:"on"},{mot:"ballon",rep:"on"},{mot:"salon",rep:"on"},
       {mot:"bonbon",rep:"on"},{mot:"mouton",rep:"on"}] },
  6:{ titre:"Le son [oi]", picto:"📖", type:"lecture",
-     items:["roi","soir","noir","poire","boire","voiture","étoile","armoire","toit","trois"].map(m=>({aff:m,dire:m})) },
+     items:["roi","soir","noir","poire","boire","voiture","étoile","armoire","toit","trois","mois","bois","fois","voile","poil","loi","joie","oie"].map(m=>({aff:m,dire:m})) },
  7:{ titre:"É fermé et È ouvert", picto:"📖", type:"lecture",
      items:["café","bébé","école","cinéma","mère","père","frère","rivière","nez","panier","manger","poulet"].map(m=>({aff:m,dire:m})) },
  8:{ titre:"Les sons pièges", picto:"📖", type:"lecture",
@@ -485,7 +461,10 @@ const LIBRE = [
  {m:"sac",d:1},{m:"bol",d:1},{m:"tasse",d:1},{m:"valise",d:1},{m:"ballon",d:1},{m:"robe",d:1},
  {m:"jupe",d:1},{m:"loupe",d:1},{m:"radio",d:1},{m:"musique",d:0},{m:"domino",d:1},{m:"téléphone",d:0},
  {m:"lune",d:1},{m:"étoile",d:1},{m:"chat",d:0},{m:"poule",d:1},{m:"mouche",d:1},{m:"mouton",d:1},
- {m:"vache",d:1},{m:"montagne",d:1},{m:"rivière",d:1},{m:"fumée",d:0}
+ {m:"vache",d:1},{m:"montagne",d:1},{m:"rivière",d:1},{m:"fumée",d:0},
+ {m:"fraise",d:1},{m:"sable",d:1},{m:"niche",d:1},{m:"ruche",d:1},
+ {m:"moule",d:1},{m:"jardin",d:0},{m:"journal",d:0},{m:"chocolat",d:0},
+ {m:"cheval",d:0},{m:"limonade",d:1},{m:"amie",d:1},{m:"mamie",d:1},{m:"rampe",d:1}
 ];
 
 
@@ -494,6 +473,26 @@ const LIBRE = [
    Règle : jamais d'algorithme — chaque mot est découpé à la main,
    chaque forme vocale est un vrai mot français ou une forme imprononçable en anglais. */
 const SYLL = {
+  "amie":[["a","a"],["mie","mie"]],
+  "mamie":[["ma","ma"],["mie","mie"]],
+  "papi":[["pa","pa"],["pi","pie"]],
+  "lundi":[["lun","l'un"],["di","di"]],
+  "limonade":[["li","lit"],["mo","mot"],["na","na"],["de","de"]],
+  "tasse":[["ta","ta"],["sse","ce"]],
+  "moule":[["mou","mou"],["le","le"]],
+  "loupe":[["lou","loup"],["pe","peu"]],
+  "chaise":[["chai","chez"],["se","ze"]],
+  "fraise":[["frai","frais"],["se","ze"]],
+  "sable":[["sa","sa"],["ble","bleu"]],
+  "niche":[["ni","nid"],["che","che"]],
+  "ruche":[["ru","rue"],["che","che"]],
+  "rampe":[["ram","rang"],["pe","peu"]],
+  "jardin":[["jar","jarre"],["din","daim"]],
+  "journal":[["jour","jour"],["nal","nal"]],
+  "chocolat":[["cho","chaud"],["co","co"],["lat","la"]],
+  "cheval":[["che","che"],["val","val"]],
+  "voile":[["voi","voie"],["le","le"]],
+  "poire":[["poi","poids"],["re","re"]],
   ami:[["a","a"],["mi","mi"]], midi:[["mi","mi"],["di","di"]],
   mardi:[["mar","marre"],["di","di"]], papa:[["pa","pa"],["pa","pa"]],
   moto:[["mo","mau"],["to","tau"]], "vélo":[["vé","vé"],["lo","lau"]],
@@ -641,6 +640,11 @@ function brancherMicro(zone){
 
 /* ── CONSIGNES PAR TYPE D’EXERCICE ──────────────────────── */
 const CONSIGNES = {
+  compterSyll:{ picto:"👂", texte:"Écoute le mot. Compte les morceaux. Touche le bon nombre." },
+  choixSyll:{ picto:"👂", texte:"Écoute le mot. Touche la bonne syllabe." },
+  localise:{ picto:"👂", texte:"Écoute. Le son est au début ou à la fin du mot ?" },
+  dernierSon:{ picto:"👂", texte:"Écoute le mot. Touche la dernière lettre que tu entends." },
+  paireMin:{ picto:"👂", texte:"Écoute bien le mot. Touche la lettre que tu entends." },
   paireVoyelles:{ picto:"👂", texte:"Écoute bien. Touche la lettre que tu entends." },
   sonVersLettre:{ picto:"👂", texte:"Écoute le son. Touche la bonne lettre." },
   majMin:{ picto:"🔠", texte:"Regarde la grande lettre. Touche la petite lettre qui va avec." },
@@ -689,6 +693,30 @@ function lettresIntruses(mot, n){
    GÉNÉRATEURS DE QUESTIONS
    chaque question : {type, cle, ...données}
    ════════════════════════════════════════════════════════ */
+function tirerSansRepeter(idNiveau, dispo, n){
+  // pioche en priorité les items jamais vus ; recommence un cycle quand la banque est épuisée
+  if(!E.vus[idNiveau]) E.vus[idNiveau] = [];
+  let vus = E.vus[idNiveau];
+  const clesDispo = dispo.map(x=>x.cle);
+  // purge des clés qui n'existent plus (banque modifiée)
+  vus = vus.filter(c => clesDispo.includes(c));
+  let jamais = dispo.filter(x => !vus.includes(x.cle));
+  let choisis = [];
+  if(jamais.length >= n){
+    choisis = tire(jamais, n);
+  } else {
+    // on prend tous les non-vus, puis on recommence un cycle pour compléter
+    choisis = [...jamais];
+    vus = [];                                  // cycle terminé → on réinitialise
+    let reste = dispo.filter(x => !choisis.includes(x));
+    choisis = choisis.concat(tire(reste, n - choisis.length));
+  }
+  vus = vus.concat(choisis.map(x=>x.cle));
+  E.vus[idNiveau] = vus;
+  sauverEtat();
+  return choisis;
+}
+
 function genQuestions(p, lvl, n){
   const def = B[p][lvl];
   n = n || 10;
@@ -707,7 +735,7 @@ function genQuestions(p, lvl, n){
   } else items = def.items;
   const dispo = items.map((it,i)=>({it, cle:`${p}-${lvl}-${i}`}))
                      .filter(x => !E.signales.includes(x.cle));
-  const choisis = tire(dispo, Math.min(n, dispo.length));
+  const choisis = tirerSansRepeter(`${p}-${lvl}`, dispo, Math.min(n, dispo.length));
   return choisis.map(x => Object.assign({type:def.type, cle:x.cle, phrase:!!def.phrase}, JSON.parse(JSON.stringify(x.it))));
 }
 
@@ -730,7 +758,7 @@ paireVoyelles(q, zone, fini){
       <button class="choix-btn" data-v="${v1}">${v1.toUpperCase()}</button>
       <button class="choix-btn" data-v="${v2}">${v2.toUpperCase()}</button>
     </div>`;
-  const joue = (o)=>direSon(bonne,o);
+  const joue = async (o)=>{ await direSon(bonne,o); if(!(o&&o.lent)){ await attendre(600); await direSon(bonne,o); } };
   $("#rejoue").onclick = ()=>joue(); $("#lent").onclick = ()=>joue({lent:true});
   zone.querySelectorAll(".choix-btn").forEach(b=>{
     b.onclick = ()=> validerChoix(b, b.dataset.v===bonne, zone, fini, null, bonne);
@@ -749,7 +777,7 @@ sonVersLettre(q, zone, fini){
     <div class="choix ligne">
       ${opts.map(o=>`<button class="choix-btn" data-v="${o}">${o}</button>`).join("")}
     </div>`;
-  const joue = (o)=>direSon(q.son,o);
+  const joue = async (o)=>{ await direSon(q.son,o); if(!(o&&o.lent)){ await attendre(600); await direSon(q.son,o); } };
   $("#rejoue").onclick=()=>joue(); $("#lent").onclick=()=>joue({lent:true});
   zone.querySelectorAll(".choix-btn").forEach(b=>{
     b.onclick=()=>validerChoix(b, b.dataset.v===q.rep, zone, fini, null, q.rep);
@@ -777,6 +805,111 @@ majMin(q, zone, fini){
 
 sonMotLettre(q, zone, fini){
   const opts = melange([q.rep, ...q.d]);
+  const aMot = q.mot && q.mot.length>0;
+  zone.innerHTML = html`
+    <div class="q-audio">
+      <button class="btn-ico" id="rejoue">🔊</button>
+      <button class="btn-ico" id="lent">🐢</button>
+    </div>
+    ${aMot?`<div class="gros-mot moyen" id="aff">${q.mot}</div>`:""}
+    ${aMot?`<div class="q-audio"><button class="btn-ico" id="decouper" title="Découper">🧩</button></div>`:""}
+    <div class="choix ligne">
+      ${opts.map(o=>`<button class="choix-btn" data-v="${o}">${o}</button>`).join("")}
+    </div>`;
+  const joue = async (o)=>{
+    if(q.nomlettre){ await parler("La lettre... "+q.son, o); }
+    else if(q.muette){ await parler("Dans le mot "+q.mot+"... on n’entend pas la lettre... "+q.son.toUpperCase()+". Touche la lettre "+q.son.toUpperCase()+".", o); return; }
+    else { await direSon(q.son,o); if(!(o&&o.lent)){ await attendre(500); await direSon(q.son,o); } }
+    if(aMot && !q.nomlettre){ await attendre(450); await parler("comme dans... "+q.mot, o); }
+  };
+  $("#rejoue").onclick=()=>joue(); $("#lent").onclick=()=>joue({lent:true});
+  if(aMot){ const dc=$("#decouper"); if(dc) dc.onclick=()=>jouerDecoupe($("#aff"), q.mot, q.mot); }
+  zone.querySelectorAll(".choix-btn").forEach(b=>{
+    b.onclick=()=>validerChoix(b, b.dataset.v===q.rep, zone, fini, null, q.rep);
+  });
+  joue();
+  return { cible: ()=>zone.querySelector(`[data-v="${q.rep}"]`) };
+},
+
+compterSyll(q, zone, fini){
+  const n = decoupeDe(q.mot, q.dire).length;
+  zone.innerHTML = html`
+    <div class="q-audio">
+      <button class="btn-ico" id="rejoue">🔊</button>
+      <button class="btn-ico" id="lent">🐢</button>
+    </div>
+    <div class="petit center">Combien de morceaux (syllabes) ?</div>
+    <div class="choix ligne">
+      <button class="choix-btn" data-v="1">1</button>
+      <button class="choix-btn" data-v="2">2</button>
+      <button class="choix-btn" data-v="3">3</button>
+      <button class="choix-btn" data-v="4">4</button>
+    </div>
+    <div class="gros-mot moyen" id="aff" style="display:none">${q.mot}</div>
+    <div class="q-audio" style="display:none" id="zd"><button class="btn-ico" id="decouper" title="Découper">🧩</button></div>`;
+  const joue=(o)=>parler(q.dire,o);
+  $("#rejoue").onclick=()=>joue(); $("#lent").onclick=()=>joue({lent:true});
+  zone.querySelectorAll(".choix-btn").forEach(b=>{
+    b.onclick=()=>{
+      const ok = parseInt(b.dataset.v)===q.rep;
+      const aff=zone.querySelector("#aff"), zd=zone.querySelector("#zd"), dc=zone.querySelector("#decouper");
+      if(aff) aff.style.display="block"; if(zd) zd.style.display="flex";
+      if(dc) dc.onclick=()=>jouerDecoupe(aff, q.mot, q.dire);
+      validerChoix(b, ok, zone, fini, ok?null:("Le mot a "+q.rep+" morceaux"), String(q.rep));
+    };
+  });
+  joue();
+  return { cible: ()=>zone.querySelector(`[data-v="${q.rep}"]`) };
+},
+
+choixSyll(q, zone, fini){
+  const opts = melange([q.rep, ...q.d]);
+  zone.innerHTML = html`
+    <div class="q-audio">
+      <button class="btn-ico" id="rejoue">🔊</button>
+      <button class="btn-ico" id="lent">🐢</button>
+    </div>
+    <div class="choix ligne">
+      ${opts.map(o=>`<button class="choix-btn" data-v="${o}">${o}</button>`).join("")}
+    </div>
+    <div class="gros-mot moyen" id="aff" style="display:none">${q.mot}</div>
+    <div class="q-audio" style="display:none" id="zd"><button class="btn-ico" id="decouper" title="Découper">🧩</button></div>`;
+  const joue=(o)=>parler(q.dire,o);
+  $("#rejoue").onclick=()=>joue(); $("#lent").onclick=()=>joue({lent:true});
+  zone.querySelectorAll(".choix-btn").forEach(b=>{
+    b.onclick=()=>{
+      const ok=b.dataset.v===q.rep;
+      const aff=zone.querySelector("#aff"), zd=zone.querySelector("#zd"), dc=zone.querySelector("#decouper");
+      if(aff) aff.style.display="block"; if(zd) zd.style.display="flex";
+      if(dc) dc.onclick=()=>jouerDecoupe(aff, q.mot, q.dire);
+      validerChoix(b, ok, zone, fini, null, q.rep);
+    };
+  });
+  joue();
+  return { cible: ()=>zone.querySelector(`[data-v="${q.rep}"]`) };
+},
+
+localise(q, zone, fini){
+  zone.innerHTML = html`
+    <div class="q-audio">
+      <button class="btn-ico" id="rejoue">🔊</button>
+      <button class="btn-ico" id="lent">🐢</button>
+    </div>
+    <div class="choix ligne">
+      <button class="choix-btn texte" data-v="debut">⬅️ Au début</button>
+      <button class="choix-btn texte" data-v="fin">À la fin ➡️</button>
+    </div>`;
+  const joue=async(o)=>{ await parler("Le son...",o); await direSon(q.son,o); await attendre(400); await parler("dans le mot... "+q.mot,o); };
+  $("#rejoue").onclick=()=>joue(); $("#lent").onclick=()=>joue({lent:true});
+  zone.querySelectorAll(".choix-btn").forEach(b=>{
+    b.onclick=()=>validerChoix(b, b.dataset.v===q.rep, zone, fini, null, q.rep);
+  });
+  joue();
+  return { cible: ()=>zone.querySelector(`[data-v="${q.rep}"]`) };
+},
+
+dernierSon(q, zone, fini){
+  const opts = melange([q.rep, ...q.d]);
   zone.innerHTML = html`
     <div class="q-audio">
       <button class="btn-ico" id="rejoue">🔊</button>
@@ -785,10 +918,34 @@ sonMotLettre(q, zone, fini){
     <div class="choix ligne">
       ${opts.map(o=>`<button class="choix-btn" data-v="${o}">${o}</button>`).join("")}
     </div>`;
-  const joue = async (o)=>{ await direSon(q.son,o); await parler("comme dans... "+q.mot, o); };
+  const joue=(o)=>parler(q.mot,o);
   $("#rejoue").onclick=()=>joue(); $("#lent").onclick=()=>joue({lent:true});
   zone.querySelectorAll(".choix-btn").forEach(b=>{
     b.onclick=()=>validerChoix(b, b.dataset.v===q.rep, zone, fini, null, q.rep);
+  });
+  joue();
+  return { cible: ()=>zone.querySelector(`[data-v="${q.rep}"]`) };
+},
+
+paireMin(q, zone, fini){
+  const opts = q.opts;
+  zone.innerHTML = html`
+    <div class="q-audio">
+      <button class="btn-ico" id="rejoue">🔊</button>
+      <button class="btn-ico" id="lent">🐢</button>
+    </div>
+    <div class="choix ligne">
+      ${opts.map(o=>`<button class="choix-btn" data-v="${o}">${o}</button>`).join("")}
+    </div>
+    <div class="gros-mot moyen" id="aff" style="display:none">${q.mot}</div>`;
+  const joue=async(o)=>{ await parler(q.dire,o); if(o&&o.lent){ await attendre(400); await parler(q.dire,o);} };
+  $("#rejoue").onclick=()=>joue(); $("#lent").onclick=()=>joue({lent:true});
+  zone.querySelectorAll(".choix-btn").forEach(b=>{
+    b.onclick=()=>{
+      const ok=b.dataset.v===q.rep;
+      const aff=zone.querySelector("#aff"); if(aff) aff.style.display="block";
+      validerChoix(b, ok, zone, fini, ok?null:("Le mot était : "+q.mot), q.rep);
+    };
   });
   joue();
   return { cible: ()=>zone.querySelector(`[data-v="${q.rep}"]`) };
@@ -827,7 +984,7 @@ ouiNon(q, zone, fini){
       <button class="choix-btn texte" data-v="oui">✅ OUI</button>
       <button class="choix-btn texte" data-v="non">❌ NON</button>
     </div>`;
-  const joue = async (o)=>{ await parler("Tu entends...",o); await direSon(q.son,o); await parler("dans le mot... "+q.mot+" ?", o); };
+  const joue = async (o)=>{ await parler("Tu entends...",o); await attendre(350); await direSon(q.son,o); await attendre(550); await parler("dans le mot... "+q.mot+" ?", o); };
   $("#rejoue").onclick=()=>joue(); $("#lent").onclick=()=>joue({lent:true});
   zone.querySelectorAll(".choix-btn").forEach(b=>{
     b.onclick=()=>validerChoix(b, (b.dataset.v==="oui")===q.rep, zone, fini, null, q.rep?"oui":"non");
@@ -916,7 +1073,15 @@ graphies(q, zone, fini){
       ${q.mot.split("").map((c,i)=>`<button class="lettre-btn" data-i="${i}">${c}</button>`).join("")}
     </div>
     <button class="btn vert" id="valider">Valider ✓</button>`;
-  const joue = ()=>{ direSon(q.son).then(()=>parler("Touche les lettres qui font ce son, dans "+q.mot.toLowerCase()+".")); };
+  const joue = async ()=>{
+    await parler("Écoute bien le son.");
+    await attendre(400);
+    await direSon(q.son, {lent:true});
+    await attendre(650);
+    await direSon(q.son, {lent:true});
+    await attendre(500);
+    await parler("Touche les lettres qui font ce son, dans "+q.mot.toLowerCase()+".");
+  };
   $("#rejoue").onclick=joue;
   const sel = new Set();
   zone.querySelectorAll(".lettre-btn").forEach(b=>{
@@ -1257,7 +1422,7 @@ function ecranAccueil(){
       <button class="btn blanc" id="progres" style="min-height:54px;font-size:16px">📊 Mes progrès</button>
       <button class="btn blanc" id="reglages" style="min-height:54px;font-size:16px">⚙️ Réglages</button>
     </div>
-    <div class="petit center" style="margin-top:14px;opacity:.6">Mon Coach Lecture · version ${VERSION}</div>`;
+    <div class="petit center" style="margin-top:14px;opacity:.6">Mon Coach Lecture · version ${VERSION} · 🔓 mode test (niveaux ouverts)</div>`;
   app.querySelectorAll(".parcours-card[data-p]").forEach(c=>{
     c.onclick=()=>ecranParcours(c.dataset.p);
   });
@@ -1273,7 +1438,7 @@ function ecranParcours(p){
   for(let l=1;l<=10;l++){
     const def = B[p][l];
     const fait = E.niveaux[p][l];
-    const ouvert = l===1 || (E.niveaux[p][l-1] && E.niveaux[p][l-1].stars>0);
+    const ouvert = true; // MODE TEST : tous les niveaux ouverts (à réactiver pour les stagiaires)
     rows.push(html`
       <div class="niv-row">
         <div class="niv-wrap">
