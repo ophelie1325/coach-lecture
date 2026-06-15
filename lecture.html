@@ -260,7 +260,7 @@ function sauverEtat(){
   try{ localStorage.setItem("mcf_v1", JSON.stringify(E)); }catch(err){}
 }
 let E = chargerEtat();
-const VERSION = "2.1";
+const VERSION = "2.2";
 
 /* ── AUDIO : voix de synthèse ───────────────────────────── */
 let voixFR = [];
@@ -1399,8 +1399,9 @@ function ecranTestSon(){
 
 function progParcours(p){
   const niv = E.niveaux[p];
-  let done = 0, total = 10;
-  for(let l=1;l<=10;l++) if(niv[l] && niv[l].stars>0) done++;
+  const total = Object.keys(B[p]).length;
+  let done = 0;
+  for(let l=1;l<=total;l++) if(niv[l] && niv[l].stars>0) done++;
   return {done, total, pct: Math.round(done/total*100)};
 }
 
@@ -1461,7 +1462,8 @@ function ecranAccueil(){
 function ecranParcours(p){
   const P = PARCOURS[p];
   const rows = [];
-  for(let l=1;l<=10;l++){
+  const nbNiveaux = Object.keys(B[p]).length;
+  for(let l=1;l<=nbNiveaux;l++){
     const def = B[p][l];
     const fait = E.niveaux[p][l];
     const ouvert = true; // MODE TEST : tous les niveaux ouverts (à réactiver pour les stagiaires)
@@ -1765,10 +1767,10 @@ function ecranAbecedaire(){
 function ecranProgres(){
   const lignes = Object.keys(PARCOURS).map(p=>{
     const P=PARCOURS[p], prog=progParcours(p);
-    let totalStars=0; for(let l=1;l<=10;l++) totalStars += (E.niveaux[p][l]?E.niveaux[p][l].stars:0);
+    let totalStars=0; for(let l=1;l<=prog.total;l++) totalStars += (E.niveaux[p][l]?E.niveaux[p][l].stars:0);
     return `<div class="prog-ligne"><span style="font-size:24px">${P.emoji}</span>
       <span style="flex:1">${P.nom}</span>
-      <span style="color:${P.brut}">${prog.done}/10 · ${totalStars}⭐</span></div>`;
+      <span style="color:${P.brut}">${prog.done}/${prog.total} · ${totalStars}⭐</span></div>`;
   }).join("");
   const pctOK = E.totaux.posees ? Math.round(E.totaux.bonnes/E.totaux.posees*100) : 0;
   app.innerHTML = html`
@@ -1791,8 +1793,8 @@ function ecranProgres(){
     txt += `🔥 ${E.serie.n||0} jours d’affilée · 🎮 ${E.totaux.sessions} sessions · ✅ ${pctOK}% de réussite\n`;
     Object.keys(PARCOURS).forEach(p=>{
       const prog = progParcours(p);
-      let st=0; for(let l=1;l<=10;l++) st += (E.niveaux[p][l]?E.niveaux[p][l].stars:0);
-      txt += `${PARCOURS[p].emoji} ${PARCOURS[p].nom} : ${prog.done}/10 niveaux, ${st} étoiles\n`;
+      let st=0; for(let l=1;l<=prog.total;l++) st += (E.niveaux[p][l]?E.niveaux[p][l].stars:0);
+      txt += `${PARCOURS[p].emoji} ${PARCOURS[p].nom} : ${prog.done}/${prog.total} niveaux, ${st} étoiles\n`;
     });
     if(E.signales.length) txt += `⚠️ Questions signalées : ${E.signales.join(", ")}\n`;
     window.open("https://wa.me/?text="+encodeURIComponent(txt), "_blank");
