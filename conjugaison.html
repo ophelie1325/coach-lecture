@@ -1,0 +1,1321 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Mon Coach Conjugaison</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Baloo+2:wght@500;600;700;800&display=swap');
+:root{--bleu:#2563EB;--bleu-f:#1E40AF;--violet:#7C3AED;--violet-f:#5B21B6;--vert:#059669;--vert-p:#ECFDF5;
+--orange:#EA580C;--rouge:#DC2626;--rouge-p:#FEF2F2;--jaune:#D97706;--creme:#FAFAF8;--texte:#111827;--gris:#6B7280;}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{font-family:'Nunito',sans-serif;background:var(--creme);color:var(--texte);min-height:100%;overflow-x:hidden}
+.wrap{max-width:480px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column}
+.btn-ico{background:#EDE9FE;border:none;border-radius:14px;width:54px;height:54px;font-size:24px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:transform .1s}
+.btn-ico:active{transform:scale(.9)}
+.hidden{display:none!important}
+/* topbar */
+.topbar{display:flex;align-items:center;gap:10px;padding:14px 16px;position:sticky;top:0;background:var(--creme);z-index:10}
+.topbar .back{font-size:22px;color:var(--violet);font-weight:800;cursor:pointer;text-decoration:none}
+.topbar .titre{flex:1;font-family:'Baloo 2';font-weight:800;font-size:17px;color:var(--violet-f)}
+.barre{height:10px;background:#EDE9FE;border-radius:10px;overflow:hidden;flex:1}
+.barre-i{height:100%;background:linear-gradient(90deg,#7C3AED,#A78BFA);border-radius:10px;transition:width .3s}
+/* accueil */
+.acc-logo{font-size:46px;text-align:center;margin:14px 0 2px}
+.acc-titre{font-family:'Baloo 2';font-size:23px;font-weight:800;text-align:center;color:var(--violet-f)}
+.acc-salut{text-align:center;color:var(--gris);font-size:15px;margin-bottom:16px}
+.parcours-list{display:flex;flex-direction:column;gap:13px;padding:8px 16px 30px}
+.pcard{display:flex;align-items:center;gap:14px;background:#fff;border:2.5px solid #EDE9FE;border-radius:20px;padding:15px 17px;cursor:pointer;transition:transform .12s,box-shadow .12s;box-shadow:0 3px 10px rgba(0,0,0,.03)}
+.pcard:active{transform:scale(.98)}
+.pcard.lock{opacity:.5}
+.pcard-ico{width:54px;height:54px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:27px;flex-shrink:0;background:#EDE9FE}
+.pcard-txt{flex:1}
+.pcard-nom{font-family:'Baloo 2';font-size:17px;font-weight:800;color:var(--violet-f)}
+.pcard-sous{font-size:13px;color:var(--gris)}
+.pcard-etoiles{font-size:13px;margin-top:2px}
+.pcard-fleche{font-size:20px;color:#CBD5E1}
+/* chemin de niveaux */
+.niveaux{display:flex;flex-direction:column;gap:11px;padding:10px 16px 30px}
+.ncard{display:flex;align-items:center;gap:13px;background:#fff;border:2px solid #EDE9FE;border-radius:16px;padding:13px 15px;cursor:pointer;transition:transform .1s}
+.ncard:active{transform:scale(.98)}
+.ncard.lock{opacity:.45;cursor:default}
+.ncard.done{border-color:#A78BFA;background:#FBFAFF}
+.ncard-num{width:38px;height:38px;border-radius:12px;background:#EDE9FE;color:var(--violet-f);font-family:'Baloo 2';font-weight:800;font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ncard.done .ncard-num{background:var(--violet);color:#fff}
+.ncard-txt{flex:1}
+.ncard-titre{font-weight:800;font-size:15px}
+.ncard-et{font-size:13px;color:var(--jaune)}
+.ncard-lock-ico{font-size:18px;color:#CBD5E1}
+/* session */
+.session{flex:1;display:flex;flex-direction:column;padding:0 18px}
+.consigne{display:flex;align-items:center;gap:10px;background:#EDE9FE;border-radius:16px;padding:12px 15px;margin:6px 0 14px}
+.consigne-txt{flex:1;font-weight:700;font-size:15px;color:var(--violet-f)}
+.consigne .btn-ico{width:42px;height:42px;font-size:19px;background:#fff}
+.zone{flex:1;display:flex;flex-direction:column;justify-content:flex-start;gap:14px;padding-top:6px}
+.q-grande{font-family:'Baloo 2';font-size:23px;font-weight:700;text-align:center;line-height:1.5;padding:10px 6px}
+.q-grande .trou{display:inline-block;min-width:60px;border-bottom:3px dashed #A78BFA;color:#A78BFA;font-weight:800}
+.q-grande .rempli{color:var(--violet-f)}
+.q-audio{display:flex;gap:10px;justify-content:center}
+.choix{display:flex;flex-direction:column;gap:11px;margin-top:4px}
+.choix.ligne{flex-direction:row;flex-wrap:wrap;justify-content:center}
+.cbtn{background:#fff;border:2.5px solid #DDD6FE;border-radius:16px;padding:15px 18px;font-family:'Nunito';font-size:18px;font-weight:800;color:var(--texte);cursor:pointer;transition:all .12s;text-align:center}
+.choix.ligne .cbtn{flex:0 1 auto;min-width:90px}
+.cbtn:active{transform:scale(.97)}
+.cbtn .picto{font-size:24px;margin-right:6px}
+.cbtn.ok{background:var(--vert-p);border-color:var(--vert);color:var(--vert)}
+.cbtn.ko{background:var(--rouge-p);border-color:var(--rouge);color:var(--rouge)}
+.cbtn.audio{display:flex;align-items:center;justify-content:center;gap:10px}
+.cbtn.audio::before{content:"🔊";font-size:20px}
+.cbtn.dim{opacity:.4}
+/* mots à toucher (trouve le verbe/sujet) */
+.phrase-mots{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;padding:10px}
+.mot{background:#fff;border:2px solid #DDD6FE;border-radius:12px;padding:11px 15px;font-size:18px;font-weight:700;cursor:pointer;transition:all .1s}
+.mot:active{transform:scale(.95)}
+.mot.ok{background:var(--vert-p);border-color:var(--vert);color:var(--vert)}
+.mot.ko{background:var(--rouge-p);border-color:var(--rouge);color:var(--rouge)}
+/* étiquettes à remettre dans l'ordre */
+.ordre-zone{display:flex;flex-direction:column;gap:14px}
+.ordre-cible{min-height:56px;border:2.5px dashed #DDD6FE;border-radius:14px;display:flex;flex-wrap:wrap;gap:7px;padding:10px;align-items:center;justify-content:center}
+.ordre-source{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.etiq{background:#EDE9FE;border:2px solid #C4B5FD;border-radius:12px;padding:10px 14px;font-size:16px;font-weight:700;color:var(--violet-f);cursor:pointer;transition:transform .1s}
+.etiq:active{transform:scale(.95)}
+.etiq.placed{background:#fff}
+/* notion (mini-leçon) */
+.lecon{background:linear-gradient(135deg,#F5F3FF,#EDE9FE);border:2px solid #C4B5FD;border-radius:18px;padding:18px 18px 20px;text-align:center}
+.lecon-emoji{font-size:40px;margin-bottom:6px}
+.lecon-titre{font-family:'Baloo 2';font-size:19px;font-weight:800;color:var(--violet-f);margin-bottom:6px}
+.lecon-txt{font-size:15.5px;line-height:1.5;color:var(--texte)}
+.lecon-txt b{color:var(--violet-f)}
+.lecon-ex{margin-top:10px;background:#fff;border-radius:12px;padding:10px;font-size:15px;font-weight:700}
+.btn-suite{background:var(--violet);color:#fff;border:none;border-radius:16px;padding:15px;font-family:'Baloo 2';font-size:18px;font-weight:800;cursor:pointer;width:100%;margin-top:4px}
+.btn-suite:active{transform:scale(.98)}
+/* feedback */
+.feedback{text-align:center;font-family:'Baloo 2';font-size:18px;font-weight:800;min-height:26px;padding:6px}
+.feedback.bon{color:var(--vert)}
+.feedback.mauvais{color:var(--rouge)}
+.barre-bas{padding:14px 18px 22px}
+.btn-valider{background:var(--violet);color:#fff;border:none;border-radius:16px;padding:15px;font-family:'Baloo 2';font-size:18px;font-weight:800;cursor:pointer;width:100%}
+.btn-valider:active{transform:scale(.98)}
+.btn-valider:disabled{background:#CBD5E1}
+/* résultat */
+.resultat{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:30px 20px;text-align:center}
+.res-emoji{font-size:64px}
+.res-titre{font-family:'Baloo 2';font-size:26px;font-weight:800;color:var(--violet-f)}
+.res-score{font-size:18px;color:var(--gris)}
+.res-etoiles{font-size:40px;letter-spacing:6px}
+.res-btns{display:flex;flex-direction:column;gap:11px;width:100%;max-width:300px;margin-top:10px}
+/* clavier maison (mode avancé) */
+.clavier{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin-top:8px}
+.touche{background:#fff;border:2px solid #DDD6FE;border-radius:9px;width:30px;height:40px;font-size:17px;font-weight:700;cursor:pointer}
+.touche.large{width:auto;padding:0 14px}
+.saisie-box{border:2.5px solid #DDD6FE;border-radius:14px;min-height:48px;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;color:var(--violet-f);padding:8px;font-family:'Baloo 2'}
+/* réglages */
+.reglages{padding:16px;display:flex;flex-direction:column;gap:14px}
+.reg-card{background:#fff;border:2px solid #EDE9FE;border-radius:16px;padding:16px}
+.reg-titre{font-family:'Baloo 2';font-weight:800;font-size:16px;color:var(--violet-f);margin-bottom:10px}
+.toggle{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.toggle-label{font-size:15px;font-weight:700}
+.toggle-desc{font-size:12.5px;color:var(--gris);margin-top:2px}
+.switch{width:54px;height:30px;border-radius:30px;background:#CBD5E1;position:relative;cursor:pointer;transition:background .2s;flex-shrink:0}
+.switch.on{background:var(--violet)}
+.switch::after{content:"";position:absolute;width:24px;height:24px;border-radius:50%;background:#fff;top:3px;left:3px;transition:left .2s}
+.switch.on::after{left:27px}
+select{font-family:'Nunito';font-size:15px;font-weight:700;border:2px solid #DDD6FE;border-radius:10px;padding:8px;width:100%}
+.lien-pied{text-align:center;padding:16px;font-size:13px;color:var(--gris)}
+.lien-pied a{color:var(--violet);font-weight:700;cursor:pointer}
+.mode-oral-actif body, body.mode-oral .q-grande .txt-cache{visibility:hidden}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<script>
+
+const VERB = [
+  {"g": 3, "pron": false, "inf": "être", "infDit": "être", "pres": ["suis", "es", "est", "sommes", "êtes", "sont"], "fut": ["serai", "seras", "sera", "serons", "serez", "seront"], "cond": ["serais", "serais", "serait", "serions", "seriez", "seraient"], "imp": ["sois", "soyons", "soyez"], "pp": "été", "aux": "avoir", "oral": "il est/ils sont"},
+  {"g": 3, "pron": false, "inf": "avoir", "infDit": "avoir", "pres": ["ai", "as", "a", "avons", "avez", "ont"], "fut": ["aurai", "auras", "aura", "aurons", "aurez", "auront"], "cond": ["aurais", "aurais", "aurait", "aurions", "auriez", "auraient"], "imp": ["aie", "ayons", "ayez"], "pp": "eu", "aux": "avoir", "oral": "il a/ils ont"},
+  {"g": 1, "pron": false, "inf": "parler", "infDit": "parler", "pres": ["parle", "parles", "parle", "parlons", "parlez", "parlent"], "fut": ["parlerai", "parleras", "parlera", "parlerons", "parlerez", "parleront"], "cond": ["parlerais", "parlerais", "parlerait", "parlerions", "parleriez", "parleraient"], "imp": ["parle", "parlons", "parlez"], "pp": "parlé", "aux": "avoir"},
+  {"g": 1, "pron": false, "inf": "aimer", "infDit": "aimer", "pres": ["aime", "aimes", "aime", "aimons", "aimez", "aiment"], "fut": ["aimerai", "aimeras", "aimera", "aimerons", "aimerez", "aimeront"], "cond": ["aimerais", "aimerais", "aimerait", "aimerions", "aimeriez", "aimeraient"], "imp": ["aime", "aimons", "aimez"], "pp": "aimé", "aux": "avoir"},
+  {"g": 3, "pron": false, "inf": "aller", "infDit": "aller", "pres": ["vais", "vas", "va", "allons", "allez", "vont"], "fut": ["irai", "iras", "ira", "irons", "irez", "iront"], "cond": ["irais", "irais", "irait", "irions", "iriez", "iraient"], "imp": ["va", "allons", "allez"], "pp": "allé", "aux": "être", "oral": "il va/ils vont"},
+  {"g": 3, "pron": false, "inf": "faire", "infDit": "faire", "pres": ["fais", "fais", "fait", "faisons", "faites", "font"], "fut": ["ferai", "feras", "fera", "ferons", "ferez", "feront"], "cond": ["ferais", "ferais", "ferait", "ferions", "feriez", "feraient"], "imp": ["fais", "faisons", "faites"], "pp": "fait", "aux": "avoir", "oral": "il fait/ils font"},
+  {"g": 3, "pron": false, "inf": "venir", "infDit": "venir", "pres": ["viens", "viens", "vient", "venons", "venez", "viennent"], "fut": ["viendrai", "viendras", "viendra", "viendrons", "viendrez", "viendront"], "cond": ["viendrais", "viendrais", "viendrait", "viendrions", "viendriez", "viendraient"], "imp": ["viens", "venons", "venez"], "pp": "venu", "aux": "être", "oral": "il vient/ils viennent"},
+  {"g": 3, "pron": false, "inf": "prendre", "infDit": "prendre", "pres": ["prends", "prends", "prend", "prenons", "prenez", "prennent"], "fut": ["prendrai", "prendras", "prendra", "prendrons", "prendrez", "prendront"], "cond": ["prendrais", "prendrais", "prendrait", "prendrions", "prendriez", "prendraient"], "imp": ["prends", "prenons", "prenez"], "pp": "pris", "aux": "avoir", "oral": "il prend/ils prennent"},
+  {"g": 1, "pron": false, "inf": "habiter", "infDit": "habiter", "pres": ["habite", "habites", "habite", "habitons", "habitez", "habitent"], "fut": ["habiterai", "habiteras", "habitera", "habiterons", "habiterez", "habiteront"], "cond": ["habiterais", "habiterais", "habiterait", "habiterions", "habiteriez", "habiteraient"], "imp": ["habite", "habitons", "habitez"], "pp": "habité", "aux": "avoir"},
+  {"g": 1, "pron": false, "inf": "travailler", "infDit": "travailler", "pres": ["travaille", "travailles", "travaille", "travaillons", "travaillez", "travaillent"], "fut": ["travaillerai", "travailleras", "travaillera", "travaillerons", "travaillerez", "travailleront"], "cond": ["travaillerais", "travaillerais", "travaillerait", "travaillerions", "travailleriez", "travailleraient"], "imp": ["travaille", "travaillons", "travaillez"], "pp": "travaillé", "aux": "avoir"},
+  {"g": 1, "pron": false, "inf": "manger", "infDit": "manger", "pres": ["mange", "manges", "mange", "mangeons", "mangez", "mangent"], "fut": ["mangerai", "mangeras", "mangera", "mangerons", "mangerez", "mangeront"], "cond": ["mangerais", "mangerais", "mangerait", "mangerions", "mangeriez", "mangeraient"], "imp": ["mange", "mangeons", "mangez"], "pp": "mangé", "aux": "avoir"},
+  {"g": 1, "pron": false, "inf": "regarder", "infDit": "regarder", "pres": ["regarde", "regardes", "regarde", "regardons", "regardez", "regardent"], "fut": ["regarderai", "regarderas", "regardera", "regarderons", "regarderez", "regarderont"], "cond": ["regarderais", "regarderais", "regarderait", "regarderions", "regarderiez", "regarderaient"], "imp": ["regarde", "regardons", "regardez"], "pp": "regardé", "aux": "avoir"},
+  {"g": 2, "pron": false, "inf": "finir", "infDit": "finir", "pres": ["finis", "finis", "finit", "finissons", "finissez", "finissent"], "fut": ["finirai", "finiras", "finira", "finirons", "finirez", "finiront"], "cond": ["finirais", "finirais", "finirait", "finirions", "finiriez", "finiraient"], "imp": ["finis", "finissons", "finissez"], "pp": "fini", "aux": "avoir", "oral": "il finit/ils finissent"},
+  {"g": 2, "pron": false, "inf": "choisir", "infDit": "choisir", "pres": ["choisis", "choisis", "choisit", "choisissons", "choisissez", "choisissent"], "fut": ["choisirai", "choisiras", "choisira", "choisirons", "choisirez", "choisiront"], "cond": ["choisirais", "choisirais", "choisirait", "choisirions", "choisiriez", "choisiraient"], "imp": ["choisis", "choisissons", "choisissez"], "pp": "choisi", "aux": "avoir", "oral": "il choisit/ils choisissent"},
+  {"g": 3, "pron": false, "inf": "pouvoir", "infDit": "pouvoir", "pres": ["peux", "peux", "peut", "pouvons", "pouvez", "peuvent"], "fut": ["pourrai", "pourras", "pourra", "pourrons", "pourrez", "pourront"], "cond": ["pourrais", "pourrais", "pourrait", "pourrions", "pourriez", "pourraient"], "imp": ["peux", "pouvons", "pouvez"], "pp": "pu", "aux": "avoir", "oral": "il peut/ils peuvent"},
+  {"g": 3, "pron": false, "inf": "vouloir", "infDit": "vouloir", "pres": ["veux", "veux", "veut", "voulons", "voulez", "veulent"], "fut": ["voudrai", "voudras", "voudra", "voudrons", "voudrez", "voudront"], "cond": ["voudrais", "voudrais", "voudrait", "voudrions", "voudriez", "voudraient"], "imp": ["veux", "voulons", "voulez"], "pp": "voulu", "aux": "avoir", "oral": "il veut/ils veulent"},
+  {"g": 1, "pron": false, "inf": "écouter", "infDit": "écouter", "pres": ["écoute", "écoutes", "écoute", "écoutons", "écoutez", "écoutent"], "fut": ["écouterai", "écouteras", "écoutera", "écouterons", "écouterez", "écouteront"], "cond": ["écouterais", "écouterais", "écouterait", "écouterions", "écouteriez", "écouteraient"], "imp": ["écoute", "écoutons", "écoutez"], "pp": "écouté", "aux": "avoir"},
+  {"g": 1, "pron": false, "inf": "donner", "infDit": "donner", "pres": ["donne", "donnes", "donne", "donnons", "donnez", "donnent"], "fut": ["donnerai", "donneras", "donnera", "donnerons", "donnerez", "donneront"], "cond": ["donnerais", "donnerais", "donnerait", "donnerions", "donneriez", "donneraient"], "imp": ["donne", "donnons", "donnez"], "pp": "donné", "aux": "avoir"},
+  {"g": 1, "pron": false, "inf": "acheter", "infDit": "acheter", "pres": ["achète", "achètes", "achète", "achetons", "achetez", "achètent"], "fut": ["acheterai", "acheteras", "achetera", "acheterons", "acheterez", "acheteront"], "cond": ["acheterais", "acheterais", "acheterait", "acheterions", "acheteriez", "acheteraient"], "imp": ["achète", "achetons", "achetez"], "pp": "acheté", "aux": "avoir"},
+  {"g": 3, "pron": false, "inf": "dire", "infDit": "dire", "pres": ["dis", "dis", "dit", "disons", "dites", "disent"], "fut": ["dirai", "diras", "dira", "dirons", "direz", "diront"], "cond": ["dirais", "dirais", "dirait", "dirions", "diriez", "diraient"], "imp": ["dis", "disons", "dites"], "pp": "dit", "aux": "avoir", "oral": "il dit/ils disent"},
+  {"g": 3, "pron": false, "inf": "voir", "infDit": "voir", "pres": ["vois", "vois", "voit", "voyons", "voyez", "voient"], "fut": ["verrai", "verras", "verra", "verrons", "verrez", "verront"], "cond": ["verrais", "verrais", "verrait", "verrions", "verriez", "verraient"], "imp": ["vois", "voyons", "voyez"], "pp": "vu", "aux": "avoir", "oral": "il voit/ils voient"},
+  {"g": 3, "pron": false, "inf": "savoir", "infDit": "savoir", "pres": ["sais", "sais", "sait", "savons", "savez", "savent"], "fut": ["saurai", "sauras", "saura", "saurons", "saurez", "sauront"], "cond": ["saurais", "saurais", "saurait", "saurions", "sauriez", "sauraient"], "imp": ["sache", "sachons", "sachez"], "pp": "su", "aux": "avoir", "oral": "il sait/ils savent"},
+  {"g": 3, "pron": false, "inf": "devoir", "infDit": "devoir", "pres": ["dois", "dois", "doit", "devons", "devez", "doivent"], "fut": ["devrai", "devras", "devra", "devrons", "devrez", "devront"], "cond": ["devrais", "devrais", "devrait", "devrions", "devriez", "devraient"], "imp": ["dois", "devons", "devez"], "pp": "dû", "aux": "avoir", "oral": "il doit/ils doivent"},
+  {"g": 3, "pron": false, "inf": "mettre", "infDit": "mettre", "pres": ["mets", "mets", "met", "mettons", "mettez", "mettent"], "fut": ["mettrai", "mettras", "mettra", "mettrons", "mettrez", "mettront"], "cond": ["mettrais", "mettrais", "mettrait", "mettrions", "mettriez", "mettraient"], "imp": ["mets", "mettons", "mettez"], "pp": "mis", "aux": "avoir", "oral": "il met/ils mettent"},
+  {"g": 3, "pron": false, "inf": "dormir", "infDit": "dormir", "pres": ["dors", "dors", "dort", "dormons", "dormez", "dorment"], "fut": ["dormirai", "dormiras", "dormira", "dormirons", "dormirez", "dormiront"], "cond": ["dormirais", "dormirais", "dormirait", "dormirions", "dormiriez", "dormiraient"], "imp": ["dors", "dormons", "dormez"], "pp": "dormi", "aux": "avoir", "oral": "il dort/ils dorment"},
+  {"g": 3, "pron": false, "inf": "partir", "infDit": "partir", "pres": ["pars", "pars", "part", "partons", "partez", "partent"], "fut": ["partirai", "partiras", "partira", "partirons", "partirez", "partiront"], "cond": ["partirais", "partirais", "partirait", "partirions", "partiriez", "partiraient"], "imp": ["pars", "partons", "partez"], "pp": "parti", "aux": "être", "oral": "il part/ils partent"},
+  {"g": 3, "pron": false, "inf": "sortir", "infDit": "sortir", "pres": ["sors", "sors", "sort", "sortons", "sortez", "sortent"], "fut": ["sortirai", "sortiras", "sortira", "sortirons", "sortirez", "sortiront"], "cond": ["sortirais", "sortirais", "sortirait", "sortirions", "sortiriez", "sortiraient"], "imp": ["sors", "sortons", "sortez"], "pp": "sorti", "aux": "être", "oral": "il sort/ils sortent"},
+  {"g": 3, "pron": false, "inf": "ouvrir", "infDit": "ouvrir", "pres": ["ouvre", "ouvres", "ouvre", "ouvrons", "ouvrez", "ouvrent"], "fut": ["ouvrirai", "ouvriras", "ouvrira", "ouvrirons", "ouvrirez", "ouvriront"], "cond": ["ouvrirais", "ouvrirais", "ouvrirait", "ouvririons", "ouvririez", "ouvriraient"], "imp": ["ouvre", "ouvrons", "ouvrez"], "pp": "ouvert", "aux": "avoir"},
+  {"g": 3, "pron": false, "inf": "attendre", "infDit": "attendre", "pres": ["attends", "attends", "attend", "attendons", "attendez", "attendent"], "fut": ["attendrai", "attendras", "attendra", "attendrons", "attendrez", "attendront"], "cond": ["attendrais", "attendrais", "attendrait", "attendrions", "attendriez", "attendraient"], "imp": ["attends", "attendons", "attendez"], "pp": "attendu", "aux": "avoir", "oral": "il attend/ils attendent"},
+  {"g": 3, "pron": false, "inf": "lire", "infDit": "lire", "pres": ["lis", "lis", "lit", "lisons", "lisez", "lisent"], "fut": ["lirai", "liras", "lira", "lirons", "lirez", "liront"], "cond": ["lirais", "lirais", "lirait", "lirions", "liriez", "liraient"], "imp": ["lis", "lisons", "lisez"], "pp": "lu", "aux": "avoir", "oral": "il lit/ils lisent"},
+  {"g": 3, "pron": false, "inf": "écrire", "infDit": "écrire", "pres": ["écris", "écris", "écrit", "écrivons", "écrivez", "écrivent"], "fut": ["écrirai", "écriras", "écrira", "écrirons", "écrirez", "écriront"], "cond": ["écrirais", "écrirais", "écrirait", "écririons", "écririez", "écriraient"], "imp": ["écris", "écrivons", "écrivez"], "pp": "écrit", "aux": "avoir", "oral": "il écrit/ils écrivent"},
+  {"g": 3, "pron": false, "inf": "boire", "infDit": "boire", "pres": ["bois", "bois", "boit", "buvons", "buvez", "boivent"], "fut": ["boirai", "boiras", "boira", "boirons", "boirez", "boiront"], "cond": ["boirais", "boirais", "boirait", "boirions", "boiriez", "boiraient"], "imp": ["bois", "buvons", "buvez"], "pp": "bu", "aux": "avoir", "oral": "il boit/ils boivent"},
+  {"g": 3, "pron": false, "inf": "connaître", "infDit": "connaître", "pres": ["connais", "connais", "connaît", "connaissons", "connaissez", "connaissent"], "fut": ["connaîtrai", "connaîtras", "connaîtra", "connaîtrons", "connaîtrez", "connaîtront"], "cond": ["connaîtrais", "connaîtrais", "connaîtrait", "connaîtrions", "connaîtriez", "connaîtraient"], "imp": ["connais", "connaissons", "connaissez"], "pp": "connu", "aux": "avoir", "oral": "il connaît/ils connaissent"},
+  {"g": 1, "pron": false, "inf": "demander", "infDit": "demander", "pres": ["demande", "demandes", "demande", "demandons", "demandez", "demandent"], "fut": ["demanderai", "demanderas", "demandera", "demanderons", "demanderez", "demanderont"], "cond": ["demanderais", "demanderais", "demanderait", "demanderions", "demanderiez", "demanderaient"], "imp": ["demande", "demandons", "demandez"], "pp": "demandé", "aux": "avoir"},
+  {"g": 1, "pron": false, "inf": "trouver", "infDit": "trouver", "pres": ["trouve", "trouves", "trouve", "trouvons", "trouvez", "trouvent"], "fut": ["trouverai", "trouveras", "trouvera", "trouverons", "trouverez", "trouveront"], "cond": ["trouverais", "trouverais", "trouverait", "trouverions", "trouveriez", "trouveraient"], "imp": ["trouve", "trouvons", "trouvez"], "pp": "trouvé", "aux": "avoir"},
+  {"g": 1, "pron": false, "inf": "penser", "infDit": "penser", "pres": ["pense", "penses", "pense", "pensons", "pensez", "pensent"], "fut": ["penserai", "penseras", "pensera", "penserons", "penserez", "penseront"], "cond": ["penserais", "penserais", "penserait", "penserions", "penseriez", "penseraient"], "imp": ["pense", "pensons", "pensez"], "pp": "pensé", "aux": "avoir"},
+  {"g": 1, "pron": false, "inf": "rester", "infDit": "rester", "pres": ["reste", "restes", "reste", "restons", "restez", "restent"], "fut": ["resterai", "resteras", "restera", "resterons", "resterez", "resteront"], "cond": ["resterais", "resterais", "resterait", "resterions", "resteriez", "resteraient"], "imp": ["reste", "restons", "restez"], "pp": "resté", "aux": "être"},
+  {"g": 1, "pron": false, "inf": "arriver", "infDit": "arriver", "pres": ["arrive", "arrives", "arrive", "arrivons", "arrivez", "arrivent"], "fut": ["arriverai", "arriveras", "arrivera", "arriverons", "arriverez", "arriveront"], "cond": ["arriverais", "arriverais", "arriverait", "arriverions", "arriveriez", "arriveraient"], "imp": ["arrive", "arrivons", "arrivez"], "pp": "arrivé", "aux": "être"},
+  {"g": 1, "pron": false, "inf": "chercher", "infDit": "chercher", "pres": ["cherche", "cherches", "cherche", "cherchons", "cherchez", "cherchent"], "fut": ["chercherai", "chercheras", "cherchera", "chercherons", "chercherez", "chercheront"], "cond": ["chercherais", "chercherais", "chercherait", "chercherions", "chercheriez", "chercheraient"], "imp": ["cherche", "cherchons", "cherchez"], "pp": "cherché", "aux": "avoir"},
+  {"g": 1, "pron": false, "inf": "appeler", "infDit": "appeler", "pres": ["appelle", "appelles", "appelle", "appelons", "appelez", "appellent"], "fut": ["appelerai", "appeleras", "appelera", "appelerons", "appelerez", "appeleront"], "cond": ["appelerais", "appelerais", "appelerait", "appelerions", "appeleriez", "appeleraient"], "imp": ["appelle", "appelons", "appelez"], "pp": "appelé", "aux": "avoir"},
+  {"g": 3, "pron": false, "inf": "entendre", "infDit": "entendre", "pres": ["entends", "entends", "entend", "entendons", "entendez", "entendent"], "fut": ["entendrai", "entendras", "entendra", "entendrons", "entendrez", "entendront"], "cond": ["entendrais", "entendrais", "entendrait", "entendrions", "entendriez", "entendraient"], "imp": ["entends", "entendons", "entendez"], "pp": "entendu", "aux": "avoir", "oral": "il entend/ils entendent"},
+  {"g": 3, "pron": false, "inf": "comprendre", "infDit": "comprendre", "pres": ["comprends", "comprends", "comprend", "comprenons", "comprenez", "comprennent"], "fut": ["comprendrai", "comprendras", "comprendra", "comprendrons", "comprendrez", "comprendront"], "cond": ["comprendrais", "comprendrais", "comprendrait", "comprendrions", "comprendriez", "comprendraient"], "imp": ["comprends", "comprenons", "comprenez"], "pp": "compris", "aux": "avoir", "oral": "il comprend/ils comprennent"},
+  {"g": 3, "pron": false, "inf": "croire", "infDit": "croire", "pres": ["crois", "crois", "croit", "croyons", "croyez", "croient"], "fut": ["croirai", "croiras", "croira", "croirons", "croirez", "croiront"], "cond": ["croirais", "croirais", "croirait", "croirions", "croiriez", "croiraient"], "imp": ["crois", "croyons", "croyez"], "pp": "cru", "aux": "avoir", "oral": "il croit/ils croient"},
+  {"g": 3, "pron": false, "inf": "vivre", "infDit": "vivre", "pres": ["vis", "vis", "vit", "vivons", "vivez", "vivent"], "fut": ["vivrai", "vivras", "vivra", "vivrons", "vivrez", "vivront"], "cond": ["vivrais", "vivrais", "vivrait", "vivrions", "vivriez", "vivraient"], "imp": ["vis", "vivons", "vivez"], "pp": "vécu", "aux": "avoir", "oral": "il vit/ils vivent"},
+  {"g": 3, "pron": false, "inf": "tenir", "infDit": "tenir", "pres": ["tiens", "tiens", "tient", "tenons", "tenez", "tiennent"], "fut": ["tiendrai", "tiendras", "tiendra", "tiendrons", "tiendrez", "tiendront"], "cond": ["tiendrais", "tiendrais", "tiendrait", "tiendrions", "tiendriez", "tiendraient"], "imp": ["tiens", "tenons", "tenez"], "pp": "tenu", "aux": "avoir", "oral": "il tient/ils tiennent"},
+  {"g": 1, "pron": false, "inf": "montrer", "infDit": "montrer", "pres": ["montre", "montres", "montre", "montrons", "montrez", "montrent"], "fut": ["montrerai", "montreras", "montrera", "montrerons", "montrerez", "montreront"], "cond": ["montrerais", "montrerais", "montrerait", "montrerions", "montreriez", "montreraient"], "imp": ["montre", "montrons", "montrez"], "pp": "montré", "aux": "avoir"},
+  {"g": 1, "pron": false, "inf": "passer", "infDit": "passer", "pres": ["passe", "passes", "passe", "passons", "passez", "passent"], "fut": ["passerai", "passeras", "passera", "passerons", "passerez", "passeront"], "cond": ["passerais", "passerais", "passerait", "passerions", "passeriez", "passeraient"], "imp": ["passe", "passons", "passez"], "pp": "passé", "aux": "avoir"},
+  {"g": 1, "pron": false, "inf": "rentrer", "infDit": "rentrer", "pres": ["rentre", "rentres", "rentre", "rentrons", "rentrez", "rentrent"], "fut": ["rentrerai", "rentreras", "rentrera", "rentrerons", "rentrerez", "rentreront"], "cond": ["rentrerais", "rentrerais", "rentrerait", "rentrerions", "rentreriez", "rentreraient"], "imp": ["rentre", "rentrons", "rentrez"], "pp": "rentré", "aux": "être"},
+  {"g": 1, "pron": false, "inf": "laisser", "infDit": "laisser", "pres": ["laisse", "laisses", "laisse", "laissons", "laissez", "laissent"], "fut": ["laisserai", "laisseras", "laissera", "laisserons", "laisserez", "laisseront"], "cond": ["laisserais", "laisserais", "laisserait", "laisserions", "laisseriez", "laisseraient"], "imp": ["laisse", "laissons", "laissez"], "pp": "laissé", "aux": "avoir"},
+  {"g": 1, "pron": false, "inf": "jouer", "infDit": "jouer", "pres": ["joue", "joues", "joue", "jouons", "jouez", "jouent"], "fut": ["jouerai", "joueras", "jouera", "jouerons", "jouerez", "joueront"], "cond": ["jouerais", "jouerais", "jouerait", "jouerions", "joueriez", "joueraient"], "imp": ["joue", "jouons", "jouez"], "pp": "joué", "aux": "avoir"},
+  {"g": 3, "pron": false, "inf": "perdre", "infDit": "perdre", "pres": ["perds", "perds", "perd", "perdons", "perdez", "perdent"], "fut": ["perdrai", "perdras", "perdra", "perdrons", "perdrez", "perdront"], "cond": ["perdrais", "perdrais", "perdrait", "perdrions", "perdriez", "perdraient"], "imp": ["perds", "perdons", "perdez"], "pp": "perdu", "aux": "avoir", "oral": "il perd/ils perdent"},
+  {"g": 3, "pron": false, "inf": "rendre", "infDit": "rendre", "pres": ["rends", "rends", "rend", "rendons", "rendez", "rendent"], "fut": ["rendrai", "rendras", "rendra", "rendrons", "rendrez", "rendront"], "cond": ["rendrais", "rendrais", "rendrait", "rendrions", "rendriez", "rendraient"], "imp": ["rends", "rendons", "rendez"], "pp": "rendu", "aux": "avoir", "oral": "il rend/ils rendent"},
+  {"g": 3, "pron": false, "inf": "répondre", "infDit": "répondre", "pres": ["réponds", "réponds", "répond", "répondons", "répondez", "répondent"], "fut": ["répondrai", "répondras", "répondra", "répondrons", "répondrez", "répondront"], "cond": ["répondrais", "répondrais", "répondrait", "répondrions", "répondriez", "répondraient"], "imp": ["réponds", "répondons", "répondez"], "pp": "répondu", "aux": "avoir", "oral": "il répond/ils répondent"},
+  {"g": 3, "pron": false, "inf": "sentir", "infDit": "sentir", "pres": ["sens", "sens", "sent", "sentons", "sentez", "sentent"], "fut": ["sentirai", "sentiras", "sentira", "sentirons", "sentirez", "sentiront"], "cond": ["sentirais", "sentirais", "sentirait", "sentirions", "sentiriez", "sentiraient"], "imp": ["sens", "sentons", "sentez"], "pp": "senti", "aux": "avoir", "oral": "il sent/ils sentent"},
+  {"g": 1, "pron": true, "inf": "se laver", "infDit": "se laver", "pres": ["me lave", "te laves", "se lave", "nous lavons", "vous lavez", "se lavent"], "fut": ["laverai", "laveras", "lavera", "laverons", "laverez", "laveront"], "cond": ["laverais", "laverais", "laverait", "laverions", "laveriez", "laveraient"], "imp": ["te lave", "nous lavons", "vous lavez"], "pp": "lavé", "aux": "être"},
+  {"g": 1, "pron": true, "inf": "se lever", "infDit": "se lever", "pres": ["me lève", "te lèves", "se lève", "nous levons", "vous levez", "se lèvent"], "fut": ["leverai", "leveras", "levera", "leverons", "leverez", "leveront"], "cond": ["leverais", "leverais", "leverait", "leverions", "leveriez", "leveraient"], "imp": ["te lève", "nous levons", "vous levez"], "pp": "levé", "aux": "être"},
+  {"g": 1, "pron": true, "inf": "s'habiller", "infDit": "s'habiller", "pres": ["m'habille", "t'habilles", "s'habille", "nous habillons", "vous habillez", "s'habillent"], "fut": ["habillerai", "habilleras", "habillera", "habillerons", "habillerez", "habilleront"], "cond": ["habillerais", "habillerais", "habillerait", "habillerions", "habilleriez", "habilleraient"], "imp": ["t'habille", "nous habillons", "vous habillez"], "pp": "habillé", "aux": "être"},
+  {"g": 1, "pron": true, "inf": "se reposer", "infDit": "se reposer", "pres": ["me repose", "te reposes", "se repose", "nous reposons", "vous reposez", "se reposent"], "fut": ["reposerai", "reposeras", "reposera", "reposerons", "reposerez", "reposeront"], "cond": ["reposerais", "reposerais", "reposerait", "reposerions", "reposeriez", "reposeraient"], "imp": ["te repose", "nous reposons", "vous reposez"], "pp": "reposé", "aux": "être"},
+  {"g": 1, "pron": true, "inf": "se préparer", "infDit": "se préparer", "pres": ["me prépare", "te prépares", "se prépare", "nous préparons", "vous préparez", "se préparent"], "fut": ["préparerai", "prépareras", "préparera", "préparerons", "préparerez", "prépareront"], "cond": ["préparerais", "préparerais", "préparerait", "préparerions", "prépareriez", "prépareraient"], "imp": ["te prépare", "nous préparons", "vous préparez"], "pp": "préparé", "aux": "être"},
+  {"g": 1, "pron": true, "inf": "se dépêcher", "infDit": "se dépêcher", "pres": ["me dépêche", "te dépêches", "se dépêche", "nous dépêchons", "vous dépêchez", "se dépêchent"], "fut": ["dépêcherai", "dépêcheras", "dépêchera", "dépêcherons", "dépêcherez", "dépêcheront"], "cond": ["dépêcherais", "dépêcherais", "dépêcherait", "dépêcherions", "dépêcheriez", "dépêcheraient"], "imp": ["te dépêche", "nous dépêchons", "vous dépêchez"], "pp": "dépêché", "aux": "être"},
+  {"g": 1, "pron": true, "inf": "se coucher", "infDit": "se coucher", "pres": ["me couche", "te couches", "se couche", "nous couchons", "vous couchez", "se couchent"], "fut": ["coucherai", "coucheras", "couchera", "coucherons", "coucherez", "coucheront"], "cond": ["coucherais", "coucherais", "coucherait", "coucherions", "coucheriez", "coucheraient"], "imp": ["te couche", "nous couchons", "vous couchez"], "pp": "couché", "aux": "être"},
+  {"g": 1, "pron": true, "inf": "s'appeler", "infDit": "s'appeler", "pres": ["m'appelle", "t'appelles", "s'appelle", "nous appelons", "vous appelez", "s'appellent"], "fut": ["appelerai", "appeleras", "appelera", "appelerons", "appelerez", "appeleront"], "cond": ["appelerais", "appelerais", "appelerait", "appelerions", "appeleriez", "appeleraient"], "imp": ["t'appelle", "nous appelons", "vous appelez"], "pp": "appelé", "aux": "être"},
+  {"g": 1, "pron": false, "inf": "aider", "infDit": "aider", "pres": ["aide", "aides", "aide", "aidons", "aidez", "aident"], "fut": ["aiderai", "aideras", "aidera", "aiderons", "aiderez", "aideront"], "cond": ["aiderais", "aiderais", "aiderait", "aiderions", "aideriez", "aideraient"], "imp": ["aide", "aidons", "aidez"], "pp": "aidé", "aux": "avoir"},
+  {"g": 1, "pron": false, "inf": "porter", "infDit": "porter", "pres": ["porte", "portes", "porte", "portons", "portez", "portent"], "fut": ["porterai", "porteras", "portera", "porterons", "porterez", "porteront"], "cond": ["porterais", "porterais", "porterait", "porterions", "porteriez", "porteraient"], "imp": ["porte", "portons", "portez"], "pp": "porté", "aux": "avoir"},
+  {"g": 1, "pron": false, "inf": "commencer", "infDit": "commencer", "pres": ["commence", "commences", "commence", "commençons", "commencez", "commencent"], "fut": ["commencerai", "commenceras", "commencera", "commencerons", "commencerez", "commenceront"], "cond": ["commencerais", "commencerais", "commencerait", "commencerions", "commenceriez", "commenceraient"], "imp": ["commence", "commençons", "commencez"], "pp": "commencé", "aux": "avoir"},
+  {"g": 1, "pron": false, "inf": "payer", "infDit": "payer", "pres": ["paie", "paies", "paie", "payons", "payez", "paient"], "fut": ["payerai", "payeras", "payera", "payerons", "payerez", "payeront"], "cond": ["payerais", "payerais", "payerait", "payerions", "payeriez", "payeraient"], "imp": ["paie", "payons", "payez"], "pp": "payé", "aux": "avoir"},
+  {"g": 1, "pron": false, "inf": "essayer", "infDit": "essayer", "pres": ["essaie", "essaies", "essaie", "essayons", "essayez", "essaient"], "fut": ["essayerai", "essayeras", "essayera", "essayerons", "essayerez", "essayeront"], "cond": ["essayerais", "essayerais", "essayerait", "essayerions", "essayeriez", "essayeraient"], "imp": ["essaie", "essayons", "essayez"], "pp": "essayé", "aux": "avoir"},
+  {"g": 3, "pron": false, "inf": "apprendre", "infDit": "apprendre", "pres": ["apprends", "apprends", "apprend", "apprenons", "apprenez", "apprennent"], "fut": ["apprendrai", "apprendras", "apprendra", "apprendrons", "apprendrez", "apprendront"], "cond": ["apprendrais", "apprendrais", "apprendrait", "apprendrions", "apprendriez", "apprendraient"], "imp": ["apprends", "apprenons", "apprenez"], "pp": "appris", "aux": "avoir", "oral": "il apprend/ils apprennent"},
+  {"g": 3, "pron": false, "inf": "courir", "infDit": "courir", "pres": ["cours", "cours", "court", "courons", "courez", "courent"], "fut": ["courrai", "courras", "courra", "courrons", "courrez", "courront"], "cond": ["courrais", "courrais", "courrait", "courrions", "courriez", "courraient"], "imp": ["cours", "courons", "courez"], "pp": "couru", "aux": "avoir", "oral": "il court/ils courent"}
+];
+const VERB_ORDRE = ["être", "avoir", "parler", "aimer", "aller", "faire", "venir", "prendre", "habiter", "travailler", "manger", "regarder", "finir", "choisir", "pouvoir", "vouloir", "écouter", "donner", "acheter", "dire", "voir", "savoir", "devoir", "mettre", "dormir", "partir", "sortir", "ouvrir", "attendre", "lire", "écrire", "boire", "connaître", "demander", "trouver", "penser", "rester", "arriver", "chercher", "appeler", "entendre", "comprendre", "croire", "vivre", "tenir", "montrer", "passer", "rentrer", "laisser", "jouer", "perdre", "rendre", "répondre", "sentir", "se laver", "se lever", "s'habiller", "se reposer", "se préparer", "se dépêcher", "se coucher", "s'appeler", "aider", "porter", "commencer", "payer", "essayer", "apprendre", "courir"];
+const VERBI = {}; VERB.forEach(v=>VERBI[v.inf]=v);
+
+const D = {"sujets_pronom": [{"sujet": "Paul", "pron": "il", "n": 1}, {"sujet": "Marie", "pron": "elle", "n": 1}, {"sujet": "le voisin", "pron": "il", "n": 1}, {"sujet": "la dame", "pron": "elle", "n": 1}, {"sujet": "l'enfant", "pron": "il", "n": 1}, {"sujet": "le chat", "pron": "il", "n": 1}, {"sujet": "Paul et Marie", "pron": "ils", "n": 1}, {"sujet": "les enfants", "pron": "ils", "n": 1}, {"sujet": "les filles", "pron": "elles", "n": 1}, {"sujet": "Marie et Sophie", "pron": "elles", "n": 1}, {"sujet": "le père et la mère", "pron": "ils", "n": 1}, {"sujet": "les voisins", "pron": "ils", "n": 1}, {"sujet": "toi et moi", "pron": "nous", "n": 2}, {"sujet": "Paul et moi", "pron": "nous", "n": 2}, {"sujet": "toi et Marie", "pron": "vous", "n": 2}, {"sujet": "toi et lui", "pron": "vous", "n": 2}, {"sujet": "la dame et la fille", "pron": "elles", "n": 2}, {"sujet": "mon frère et moi", "pron": "nous", "n": 2}, {"sujet": "toi et tes amis", "pron": "vous", "n": 2}, {"sujet": "lui et elle", "pron": "ils", "n": 2}], "phrases_analyse": [{"mots": ["Le", "chat", "mange", "la", "souris"], "verbe": 2, "sujet": [0, 1], "objet": [3, 4]}, {"mots": ["La", "fille", "dort"], "verbe": 2, "sujet": [0, 1], "objet": []}, {"mots": ["Les", "enfants", "jouent", "au", "ballon"], "verbe": 2, "sujet": [0, 1], "objet": []}, {"mots": ["Paul", "mange", "une", "pomme"], "verbe": 1, "sujet": [0], "objet": [2, 3]}, {"mots": ["Le", "chien", "court"], "verbe": 2, "sujet": [0, 1], "objet": []}, {"mots": ["Marie", "regarde", "la", "télé"], "verbe": 1, "sujet": [0], "objet": [2, 3]}, {"mots": ["Les", "oiseaux", "chantent"], "verbe": 2, "sujet": [0, 1], "objet": []}, {"mots": ["Le", "bébé", "boit", "du", "lait"], "verbe": 2, "sujet": [0, 1], "objet": [3, 4]}, {"mots": ["Papa", "lit", "un", "livre"], "verbe": 1, "sujet": [0], "objet": [2, 3]}, {"mots": ["La", "voiture", "roule", "vite"], "verbe": 2, "sujet": [0, 1], "objet": []}, {"mots": ["Les", "élèves", "écoutent", "la", "maîtresse"], "verbe": 2, "sujet": [0, 1], "objet": [3, 4]}, {"mots": ["Le", "soleil", "brille"], "verbe": 2, "sujet": [0, 1], "objet": []}], "ordre": [{"bon": ["Le chat", "mange", "la souris"]}, {"bon": ["La fille", "regarde", "la télé"]}, {"bon": ["Paul", "mange", "une pomme"]}, {"bon": ["Le chien", "boit", "de l'eau"]}, {"bon": ["Les enfants", "écoutent", "la maîtresse"]}, {"bon": ["Marie", "ferme", "la porte"]}, {"bon": ["Le bébé", "mange", "une banane"]}, {"bon": ["Papa", "lave", "la voiture"]}], "pronom_sens": [{"pron": "je", "sens": "moi qui parle", "emoji": "🙋", "n": "sing"}, {"pron": "tu", "sens": "toi", "emoji": "👉", "n": "sing"}, {"pron": "il", "sens": "un garçon, un homme", "emoji": "👦", "n": "sing"}, {"pron": "elle", "sens": "une fille, une femme", "emoji": "👧", "n": "sing"}, {"pron": "on", "sens": "nous, ou les gens", "emoji": "👫", "n": "sing"}, {"pron": "nous", "sens": "moi + d'autres", "emoji": "👥", "n": "plur"}, {"pron": "vous", "sens": "toi + d'autres (ou politesse)", "emoji": "🙏", "n": "plur"}, {"pron": "ils", "sens": "plusieurs garçons (ou mixte)", "emoji": "👬", "n": "plur"}, {"pron": "elles", "sens": "plusieurs filles", "emoji": "👭", "n": "plur"}], "contextes": [{"v": "manger", "compl": "une pomme"}, {"v": "manger", "compl": "du pain"}, {"v": "travailler", "compl": "à l'usine"}, {"v": "habiter", "compl": "à Paris"}, {"v": "regarder", "compl": "la télé"}, {"v": "écouter", "compl": "la radio"}, {"v": "parler", "compl": "français"}, {"v": "aimer", "compl": "le café"}, {"v": "boire", "compl": "de l'eau"}, {"v": "lire", "compl": "un livre"}, {"v": "écrire", "compl": "une lettre"}, {"v": "dormir", "compl": "dans le lit"}, {"v": "partir", "compl": "au travail"}, {"v": "finir", "compl": "le travail"}, {"v": "prendre", "compl": "le bus"}, {"v": "faire", "compl": "la cuisine"}, {"v": "voir", "compl": "un ami"}, {"v": "venir", "compl": "à la maison"}], "imperatif_situ": [{"phrase": "___ la porte, s'il te plaît.", "v": "fermer", "rep": "Ferme"}, {"phrase": "___ le pain à la boulangerie.", "v": "acheter", "rep": "Achète"}, {"phrase": "___ bien la consigne.", "v": "écouter", "rep": "Écoute"}, {"phrase": "___ tes mains avant de manger.", "v": "laver", "rep": "Lave"}, {"phrase": "___ vite, le bus arrive !", "v": "venir", "rep": "Viens"}, {"phrase": "___ attention à la voiture !", "v": "faire", "rep": "Fais"}, {"phrase": "___ le livre à la page 10.", "v": "prendre", "rep": "Prends"}, {"phrase": "___ doucement, c'est dangereux.", "v": "aller", "rep": "Va"}], "politesse": [{"phrase": "___ un café, s'il vous plaît.", "rep": "Je voudrais", "d": ["Je veux", "Je voudrais", "J'ai voulu"]}, {"phrase": "___ m'aider, s'il vous plaît ?", "rep": "Pourriez-vous", "d": ["Pouvez-vous", "Pourriez-vous", "Avez-vous pu"]}, {"phrase": "___ une baguette, merci.", "rep": "J'aimerais", "d": ["Je veux", "J'aimerais", "J'aime"]}, {"phrase": "___ parler au directeur ?", "rep": "Pourrais-je", "d": ["Puis-je", "Pourrais-je", "Ai-je pu"]}, {"phrase": "Est-ce que tu ___ venir ?", "rep": "pourrais", "d": ["peux", "pourrais", "as pu"]}, {"phrase": "Nous ___ réserver une table.", "rep": "voudrions", "d": ["voulons", "voudrions", "avons voulu"]}]};
+
+const B = {
+ini:{
+ 1:{ titre:"C'est quoi un verbe ?", type:"notion", sousType:"verbe" },
+ 2:{ titre:"Trouve le verbe", type:"trouveMot", cible:"verbe" },
+ 3:{ titre:"C'est quoi un sujet ?", type:"notion", sousType:"sujet" },
+ 4:{ titre:"Trouve le sujet", type:"trouveMot", cible:"sujet" },
+ 5:{ titre:"C'est quoi un complément ?", type:"notion", sousType:"objet" },
+ 6:{ titre:"L'ordre des mots", type:"remettreOrdre" },
+ 7:{ titre:"C'est quoi un pronom ?", type:"notion", sousType:"pronom" },
+ 8:{ titre:"Les pronoms : singulier", type:"pronomSens", serie:"sing" },
+ 9:{ titre:"Les pronoms : pluriel", type:"pronomSens", serie:"plur" },
+ 10:{ titre:"Singulier ou pluriel ?", type:"singPlur" },
+ 11:{ titre:"Remplace par le pronom (1)", type:"remplacePronom", niveau:1 },
+ 12:{ titre:"Remplace par le pronom (2)", type:"remplacePronom", niveau:2 },
+ 13:{ titre:"Moi, je… 🌟", type:"moiJe" },
+ 14:{ titre:"🏆 Bilan initiation", type:"bilan", n:12 }
+},
+pres:{
+ 1:{ titre:"Le verbe ÊTRE", type:"associe", verbes:["être"], temps:"pres" },
+ 2:{ titre:"Le verbe AVOIR", type:"associe", verbes:["avoir"], temps:"pres" },
+ 3:{ titre:"1er groupe : la règle", type:"terminaison", verbes:["parler","aimer","habiter","travailler","manger","regarder","donner","écouter"], temps:"pres" },
+ 4:{ titre:"1er groupe : entraînement", type:"completePhrase", groupe:1, temps:"pres" },
+ 5:{ titre:"2e groupe (finir, choisir)", type:"terminaison", verbes:["finir","choisir"], temps:"pres" },
+ 6:{ titre:"aller, faire", type:"associe", verbes:["aller","faire"], temps:"pres" },
+ 7:{ titre:"prendre, venir, partir", type:"associe", verbes:["prendre","venir","partir"], temps:"pres" },
+ 8:{ titre:"pouvoir, vouloir, devoir", type:"associe", verbes:["pouvoir","vouloir","devoir"], temps:"pres" },
+ 9:{ titre:"Les verbes pronominaux (me, te, se)", type:"pronominal", temps:"pres" },
+ 10:{ titre:"Tout mélangé", type:"completePhrase", temps:"pres", mix:true },
+ 11:{ titre:"🏆 Bilan présent", type:"bilan", n:12 }
+},
+pc:{
+ 1:{ titre:"C'est quoi le passé composé ?", type:"notion", sousType:"pc" },
+ 2:{ titre:"Reconnaître : auxiliaire + participe", type:"reconnaitrePC" },
+ 3:{ titre:"Être ou avoir ? (1)", type:"choisirAux", niveau:1 },
+ 4:{ titre:"Être ou avoir ? (2)", type:"choisirAux", niveau:2 },
+ 5:{ titre:"Participes en -é (1er groupe)", type:"participe", groupe:1 },
+ 6:{ titre:"Participes en -i (2e groupe)", type:"participe", groupe:2 },
+ 7:{ titre:"Participes irréguliers (1)", type:"participe", irr:1 },
+ 8:{ titre:"Participes irréguliers (2)", type:"participe", irr:2 },
+ 9:{ titre:"Avec ÊTRE + accord", type:"accordEtre" },
+ 10:{ titre:"Les pronominaux au passé", type:"pcPronominal" },
+ 11:{ titre:"La négation", type:"negationPC" },
+ 12:{ titre:"Phrases complètes", type:"completePhrase", temps:"pc", mix:true },
+ 13:{ titre:"🏆 Bilan passé composé", type:"bilan", n:14 }
+},
+fp:{
+ 1:{ titre:"C'est quoi le futur proche ?", type:"notion", sousType:"fp" },
+ 2:{ titre:"Le verbe aller", type:"associe", verbes:["aller"], temps:"pres" },
+ 3:{ titre:"aller + infinitif", type:"construireFP" },
+ 4:{ titre:"Phrases à compléter", type:"completePhrase", temps:"fp", mix:true },
+ 5:{ titre:"Présent ou futur proche ?", type:"distinguer", t1:"pres", t2:"fp" },
+ 6:{ titre:"🏆 Bilan futur proche", type:"bilan", n:10 }
+},
+imp:{
+ 1:{ titre:"C'est quoi l'impératif ?", type:"notion", sousType:"imp" },
+ 2:{ titre:"tu / nous / vous", type:"imperatif3" },
+ 3:{ titre:"Verbes fréquents", type:"imperatifVerbe" },
+ 4:{ titre:"Situations du quotidien", type:"imperatifSituation" },
+ 5:{ titre:"🏆 Bilan impératif", type:"bilan", n:10 }
+},
+fs:{
+ 1:{ titre:"C'est quoi le futur simple ?", type:"notion", sousType:"fs" },
+ 2:{ titre:"Les terminaisons -rai -ras…", type:"terminaison", temps:"fut", futTerm:true },
+ 3:{ titre:"Verbes réguliers", type:"completePhrase", temps:"fut", groupe:1 },
+ 4:{ titre:"Verbes irréguliers", type:"associe", verbes:["être","avoir","aller","faire","venir","voir"], temps:"fut" },
+ 5:{ titre:"Phrases à compléter", type:"completePhrase", temps:"fut", mix:true },
+ 6:{ titre:"🏆 Bilan futur simple", type:"bilan", n:10 }
+},
+pr:{
+ 1:{ titre:"C'est quoi le passé récent ?", type:"notion", sousType:"pr" },
+ 2:{ titre:"Le verbe venir", type:"associe", verbes:["venir"], temps:"pres" },
+ 3:{ titre:"venir de + infinitif", type:"construirePR" },
+ 4:{ titre:"Passé composé ou passé récent ?", type:"distinguer", t1:"pc", t2:"pr" },
+ 5:{ titre:"🏆 Bilan passé récent", type:"bilan", n:10 }
+},
+cond:{
+ 1:{ titre:"À quoi sert le conditionnel ?", type:"notion", sousType:"cond" },
+ 2:{ titre:"Les formules de politesse", type:"politesse" },
+ 3:{ titre:"Les terminaisons -rais -rait…", type:"terminaison", temps:"cond", condTerm:true },
+ 4:{ titre:"Demander poliment", type:"completePhrase", temps:"cond", mix:true },
+ 5:{ titre:"🏆 Bilan conditionnel", type:"bilan", n:10 }
+}
+};
+/* ════════════ MON COACH CONJUGAISON — moteur ════════════ */
+const VERSION = "1.0";
+const PARCOURS = [
+  {id:"ini",  nom:"Comprendre la conjugaison", ico:"🌱", sous:"Les bases : verbe, sujet, pronoms"},
+  {id:"pres", nom:"Le Présent",        ico:"1️⃣", sous:"être, avoir, les 3 groupes"},
+  {id:"pc",   nom:"Le Passé composé",  ico:"2️⃣", sous:"hier : auxiliaire + participe"},
+  {id:"fp",   nom:"Le Futur proche",   ico:"3️⃣", sous:"bientôt : aller + infinitif"},
+  {id:"imp",  nom:"L'Impératif",       ico:"4️⃣", sous:"donner un ordre, un conseil"},
+  {id:"fs",   nom:"Le Futur simple",   ico:"5️⃣", sous:"plus tard : -rai -ras -ra"},
+  {id:"pr",   nom:"Le Passé récent",   ico:"6️⃣", sous:"venir de + infinitif"},
+  {id:"cond", nom:"Le Conditionnel",   ico:"7️⃣", sous:"politesse : je voudrais…"},
+];
+const PRONOMS6 = ["je","tu","il","nous","vous","ils"];
+const PRONOMS_AFF = ["je","tu","il / elle","nous","vous","ils / elles"];
+
+/* ─── État ─── */
+function lireCommun(){ try{ return JSON.parse(localStorage.getItem('maf_commun')||'{}'); }catch(e){ return {}; } }
+function ecrireCommun(o){ try{ const c=lireCommun(); localStorage.setItem('maf_commun', JSON.stringify(Object.assign(c,o))); }catch(e){} }
+
+const ETAT_DEFAUT = {
+  prenom:"", parcours:{}, vus:{}, serie:{n:0,dernier:""},
+  reglages:{ voix:"", modeOral:false }, demosVues:{}
+};
+let E = charger();
+function charger(){
+  let e;
+  try{ e = JSON.parse(localStorage.getItem('mcc_v1')) || {}; }catch(err){ e={}; }
+  e = Object.assign(JSON.parse(JSON.stringify(ETAT_DEFAUT)), e);
+  // prénom partagé entre coachs
+  const c = lireCommun();
+  if(c.prenom) e.prenom = c.prenom;
+  return e;
+}
+function sauver(){ try{ localStorage.setItem('mcc_v1', JSON.stringify(E)); }catch(err){} }
+
+/* ─── Voix (Web Speech) ─── */
+let VOIX = [];
+function chargerVoix(){
+  VOIX = (window.speechSynthesis ? speechSynthesis.getVoices() : []).filter(v=>v.lang && v.lang.startsWith('fr'));
+}
+if(window.speechSynthesis){ chargerVoix(); speechSynthesis.onvoiceschanged = chargerVoix; }
+function voixChoisie(){
+  if(E.reglages.voix){ const v = VOIX.find(v=>v.name===E.reglages.voix); if(v) return v; }
+  return VOIX[0] || null;
+}
+function parler(texte, opt){
+  return new Promise(res=>{
+    if(!window.speechSynthesis){ res(); return; }
+    try{ speechSynthesis.cancel(); }catch(e){}
+    const u = new SpeechSynthesisUtterance(texte);
+    const v = voixChoisie(); if(v) u.voice = v;
+    u.lang = 'fr-FR';
+    u.rate = (opt && opt.lent) ? 0.6 : 0.92;
+    u.onend = ()=>res(); u.onerror = ()=>res();
+    try{ speechSynthesis.speak(u); }catch(e){ res(); }
+  });
+}
+function attendre(ms){ return new Promise(r=>setTimeout(r,ms)); }
+
+/* ─── Utilitaires ─── */
+const $ = s => document.querySelector(s);
+function el(html){ const d=document.createElement('div'); d.innerHTML=html.trim(); return d.firstChild; }
+function melange(arr){ return [...arr].sort(()=>Math.random()-0.5); }
+function tire(arr, n){ return melange(arr).slice(0, n); }
+function html(strings, ...vals){ return strings.reduce((a,s,i)=>a+s+(vals[i]!==undefined?vals[i]:''),''); }
+
+/* anti-répétition : épuise la banque avant de répéter */
+function tirerSansRepeter(cle, items, n){
+  if(!E.vus[cle]) E.vus[cle]=[];
+  let vus = E.vus[cle];
+  const cles = items.map((x,i)=> x.__k!==undefined ? x.__k : i);
+  items.forEach((x,i)=>{ if(x.__k===undefined) x.__k=i; });
+  vus = vus.filter(k=>cles.includes(k));
+  let jamais = items.filter(x=>!vus.includes(x.__k));
+  let choisis;
+  if(jamais.length>=n){ choisis = tire(jamais,n); }
+  else { choisis=[...jamais]; vus=[]; const reste=items.filter(x=>!choisis.includes(x)); choisis=choisis.concat(tire(reste,n-choisis.length)); }
+  vus = vus.concat(choisis.map(x=>x.__k));
+  E.vus[cle]=vus; sauver();
+  return choisis;
+}
+
+/* ─── Conjugaison : helpers ─── */
+// forme conjuguée d'un verbe à un temps + personne (0..5)
+function conjugue(inf, temps, p){
+  const v = VERBI[inf]; if(!v) return "";
+  if(temps==="pres") return formeAvecPronom(v, v.pres[p], p);
+  if(temps==="fut")  return formeAvecPronom(v, v.fut[p], p);
+  if(temps==="cond") return formeAvecPronom(v, v.cond[p], p);
+  return v.pres[p];
+}
+// gère élision je->j' et pronominaux déjà inclus
+function formeAvecPronom(v, forme, p){
+  // pour les pronominaux, la forme contient déjà me/te/se...
+  return forme;
+}
+// pronom sujet affiché pour la personne p (gère je/j')
+function pronomSujet(p, forme){
+  const base = ["je","tu","il","nous","vous","ils"][p];
+  if(p===0 && /^[aeéèêiouh]/i.test(forme)) return "j'";
+  return base+" ";
+}
+// passé composé complet
+function passeCompose(inf, p){
+  const v = VERBI[inf]; if(!v) return "";
+  let pp = v.pp;
+  if(v.pron){
+    // pronom sujet + pronom réfléchi (avec élision) + être + participe accordé
+    const sujets=["je","tu","il","nous","vous","ils"];
+    const reflBruts=["me","te","se","nous","vous","se"];
+    const auxE = VERBI["être"].pres[p];
+    let refl = reflBruts[p];
+    // élision me/te/se devant voyelle de l'auxiliaire (suis, es, est, sommes, êtes, sont)
+    if((refl==="me"||refl==="te"||refl==="se") && /^[aeéèêiouhy]/i.test(auxE)){
+      refl = refl[0]+"'";
+    } else { refl = refl+" "; }
+    // accord : pluriel -> +s (nous, vous, ils). Masculin par défaut.
+    const ppA = (p>=3) ? pp+"s" : pp;
+    return sujets[p]+" "+refl+auxE+" "+ppA;
+  }
+  const auxConj = v.aux==="être" ? VERBI["être"].pres[p] : VERBI["avoir"].pres[p];
+  let pp2 = pp;
+  // accord avec être pour les non-pronominaux aussi au pluriel (ils sont allés)
+  if(v.aux==="être" && p>=3) pp2 = pp+"s";
+  const suj = pronomSujet(p, auxConj);
+  return suj+auxConj+" "+pp2;
+}
+
+/* ════════════ NAVIGATION / ÉCRANS ════════════ */
+let ECRAN = "accueil";
+let SESSION = null;
+
+function vue(html){ $("#app").innerHTML = html; }
+
+function ecranAccueil(){
+  ECRAN="accueil";
+  if(!E.prenom){
+    // pas de prénom : renvoyer au menu pour le saisir
+    location.href = "index.html"; return;
+  }
+  const cartes = PARCOURS.map((p,i)=>{
+    const prog = E.parcours[p.id] || {};
+    const faits = Object.keys(prog).filter(k=>prog[k]&&prog[k].stars>0).length;
+    const total = Object.keys(B[p.id]).length;
+    const etoiles = faits>0 ? `<div class="pcard-etoiles">⭐ ${faits}/${total} niveaux</div>` : '';
+    return `<div class="pcard" onclick="ecranParcours('${p.id}')">
+      <div class="pcard-ico">${p.ico}</div>
+      <div class="pcard-txt">
+        <div class="pcard-nom">${p.nom}</div>
+        <div class="pcard-sous">${p.sous}</div>
+        ${etoiles}
+      </div>
+      <div class="pcard-fleche">›</div>
+    </div>`;
+  }).join('');
+  vue(`
+    <div class="topbar">
+      <a class="back" href="index.html">◀</a>
+      <div class="titre">Mon Coach Conjugaison</div>
+      <button class="btn-ico" style="width:42px;height:42px;font-size:20px" onclick="ecranReglages()">⚙️</button>
+    </div>
+    <div class="acc-logo">🧩</div>
+    <div class="acc-titre">La Conjugaison</div>
+    <div class="acc-salut">Salut ${E.prenom} ! On s'entraîne ?</div>
+    <div class="parcours-list">${cartes}</div>
+    <div class="lien-pied">Mon Coach Conjugaison · v${VERSION} · 🔓 mode test</div>
+  `);
+}
+
+function ecranParcours(pid){
+  ECRAN="parcours";
+  const p = PARCOURS.find(x=>x.id===pid);
+  const prog = E.parcours[pid] || {};
+  const niveaux = Object.keys(B[pid]).map(k=>parseInt(k)).sort((a,b)=>a-b);
+  const cartes = niveaux.map(l=>{
+    const def = B[pid][l];
+    const st = (prog[l] && prog[l].stars) || 0;
+    const ouvert = true; // MODE TEST : tous ouverts
+    const done = st>0;
+    const etoiles = done ? '⭐'.repeat(st) : '';
+    return `<div class="ncard ${done?'done':''} ${ouvert?'':'lock'}" ${ouvert?`onclick="lancer('${pid}',${l})"`:''}>
+      <div class="ncard-num">${l}</div>
+      <div class="ncard-txt">
+        <div class="ncard-titre">${def.titre}</div>
+        ${etoiles?`<div class="ncard-et">${etoiles}</div>`:''}
+      </div>
+      ${ouvert?'<div class="pcard-fleche">›</div>':'<div class="ncard-lock-ico">🔒</div>'}
+    </div>`;
+  }).join('');
+  vue(`
+    <div class="topbar">
+      <span class="back" onclick="ecranAccueil()">◀</span>
+      <div class="titre">${p.ico} ${p.nom}</div>
+    </div>
+    <div class="niveaux">${cartes}</div>
+  `);
+}
+
+function ecranReglages(){
+  ECRAN="reglages";
+  const voixOpts = VOIX.map(v=>`<option value="${v.name}" ${E.reglages.voix===v.name?'selected':''}>${v.name}</option>`).join('');
+  vue(`
+    <div class="topbar">
+      <span class="back" onclick="ecranAccueil()">◀</span>
+      <div class="titre">⚙️ Réglages</div>
+    </div>
+    <div class="reglages">
+      <div class="reg-card">
+        <div class="toggle">
+          <div>
+            <div class="toggle-label">🗣️ Mode oral</div>
+            <div class="toggle-desc">Pour apprendre sans lire : tout est dit à voix haute, on écoute les réponses.</div>
+          </div>
+          <div class="switch ${E.reglages.modeOral?'on':''}" onclick="toggleOral(this)"></div>
+        </div>
+      </div>
+      <div class="reg-card">
+        <div class="reg-titre">🔊 La voix</div>
+        <select onchange="E.reglages.voix=this.value;sauver()">${voixOpts||'<option>Voix par défaut</option>'}</select>
+        <button class="btn-suite" style="margin-top:10px" onclick="parler('Bonjour ! Je suis ton coach de conjugaison.')">▶ Écouter la voix</button>
+      </div>
+      <div class="lien-pied">Mon Coach Conjugaison · v${VERSION}</div>
+    </div>
+  `);
+}
+function toggleOral(elt){ E.reglages.modeOral=!E.reglages.modeOral; elt.classList.toggle('on'); sauver(); }
+
+/* ════════════ SESSION ════════════ */
+function lancer(pid, lvl){
+  const def = B[pid][lvl];
+  // mini-leçon + démo avant les niveaux d'initiation (et notions)
+  if(def.type==="notion"){ return ecranNotion(pid, lvl); }
+  demarrerSession(pid, lvl);
+}
+
+function demarrerSession(pid, lvl){
+  const def = B[pid][lvl];
+  const qs = genQuestions(pid, lvl);
+  SESSION = { pid, lvl, def, qs, idx:0, bonnes:0, total:qs.length };
+  ECRAN="session";
+  afficherQuestion();
+}
+
+function genQuestions(pid, lvl){
+  const def = B[pid][lvl];
+  if(def.type==="bilan") return genBilan(pid, lvl, def.n||10);
+  if(def.type==="notion") return genNotionExo(def.sousType);
+  const n = NB_QUESTIONS[def.type] || 8;
+  return construireItems(pid, lvl, def, n);
+}
+
+// après une mini-leçon, un petit exercice de reconnaissance lié à la notion
+function genNotionExo(sous){
+  if(sous==="verbe"||sous==="sujet"||sous==="objet"){
+    const cible = sous==="objet"?"objet":sous;
+    return D.phrases_analyse.filter(ph=> (cible==="objet"?ph.objet.length:1)).slice(0,6).map((ph,i)=>({
+      type:"trouveMot", cible, mots:ph.mots,
+      bons: cible==="verbe"?[ph.verbe]:cible==="sujet"?ph.sujet:ph.objet, __k:i,
+      consigne: cible==="verbe"?"Touche le verbe (l'action).":cible==="sujet"?"Touche le sujet (qui fait l'action).":"Touche le complément (quoi ?)."
+    }));
+  }
+  if(sous==="pronom"){
+    return D.pronom_sens.slice(0,6).map((x,i)=>({type:"pronomSens", pron:x.pron, sens:x.sens, emoji:x.emoji,
+      distract: melange(D.pronom_sens.filter(y=>y.pron!==x.pron)).slice(0,2).map(y=>y.sens), __k:i}));
+  }
+  // notions de temps (pc, fp, imp, fs, pr, cond) : reconnaître une phrase à ce temps
+  const map={pc:"pc",fp:"fp",pr:"pr",fs:"fut",cond:"cond",imp:"imp"};
+  const tps=map[sous]||"pres";
+  const verbes = VERB_ORDRE.filter(v=>!VERBI[v].pron).slice(0,12);
+  return verbes.slice(0,6).map((inf,i)=>({type:"reconnaitreTemps", inf, temps:tps, p:Math.floor(Math.random()*6), __k:i,
+    consigne:"Est-ce que c'est bien le bon temps ? Touche OUI ou NON."}));
+}
+
+function genBilan(pid, lvl, n){
+  // pioche dans les niveaux précédents du même parcours
+  const dispo = [];
+  Object.keys(B[pid]).map(k=>parseInt(k)).filter(l=>l<lvl).forEach(l=>{
+    const def=B[pid][l];
+    if(def.type!=="bilan" && def.type!=="notion"){
+      const items = construireItems(pid, l, def, 3);
+      items.forEach(it=>dispo.push(it));
+    }
+  });
+  return tire(dispo, Math.min(n, dispo.length));
+}
+
+function afficherQuestion(){
+  const s = SESSION;
+  if(s.idx >= s.qs.length){ return ecranResultat(); }
+  const q = s.qs[s.idx];
+  const def = s.def;
+  const pct = Math.round((s.idx)/s.total*100);
+  const p = PARCOURS.find(x=>x.id===s.pid);
+  // squelette
+  vue(`
+    <div class="topbar">
+      <span class="back" onclick="quitterSession()">✕</span>
+      <div class="barre"><div class="barre-i" style="width:${pct}%"></div></div>
+      <span style="font-weight:800;color:var(--violet-f);font-size:14px">${s.idx+1}/${s.total}</span>
+    </div>
+    <div class="session">
+      <div class="consigne">
+        <button class="btn-ico" onclick="rejouerConsigne()">🔊</button>
+        <div class="consigne-txt" id="consigne-txt">${q.consigne||CONSIGNE_DEFAUT[q.type]||''}</div>
+      </div>
+      <div class="zone" id="zone"></div>
+    </div>
+    <div class="feedback" id="feedback"></div>
+    <div class="barre-bas hidden" id="barre-bas">
+      <button class="btn-valider" id="btn-suite" onclick="questionSuivante()">Continuer →</button>
+    </div>
+  `);
+  const zone = $("#zone");
+  // lire la consigne automatiquement
+  const ct = $("#consigne-txt").textContent;
+  if(ct) parler(ct);
+  // appeler le renderer
+  const r = RENDUS[q.type];
+  if(r){ r(q, zone); }
+  else { zone.innerHTML = `<div class="q-grande">⚠️ type inconnu : ${q.type}</div>`; }
+}
+
+function rejouerConsigne(){ const t=$("#consigne-txt"); if(t) parler(t.textContent); }
+
+function bonneReponse(){
+  SESSION.bonnes++;
+  const fb=$("#feedback"); fb.className="feedback bon"; fb.textContent = pick(["Bravo ! 🌟","Super ! 👏","Oui ! ✅","Parfait ! 🎉"]);
+}
+function mauvaiseReponse(corr){
+  const fb=$("#feedback"); fb.className="feedback mauvais"; fb.textContent = corr?("La réponse : "+corr):"Presque !";
+}
+function pick(a){ return a[Math.floor(Math.random()*a.length)]; }
+
+function finQuestion(ok, corr){
+  if(ok) bonneReponse(); else mauvaiseReponse(corr);
+  $("#barre-bas").classList.remove("hidden");
+}
+function questionSuivante(){ SESSION.idx++; afficherQuestion(); }
+function quitterSession(){ ecranParcours(SESSION.pid); }
+
+function ecranResultat(){
+  const s=SESSION; ECRAN="resultat";
+  const pct = s.total ? Math.round(s.bonnes/s.total*100) : 0;
+  let stars = pct>=90?3 : pct>=70?2 : pct>=50?1 : 0;
+  // enregistrer
+  if(!E.parcours[s.pid]) E.parcours[s.pid]={};
+  const prev = E.parcours[s.pid][s.lvl];
+  if(!prev || stars>prev.stars) E.parcours[s.pid][s.lvl]={stars};
+  // série
+  const auj = new Date().toDateString();
+  if(E.serie.dernier!==auj){ E.serie.n=(E.serie.dernier? E.serie.n:0)+1; E.serie.dernier=auj; }
+  sauver();
+  const emoji = stars>=3?"🏆":stars>=2?"🌟":stars>=1?"👍":"💪";
+  const msg = stars>=2?"Excellent travail !":stars>=1?"Bien joué !":"Continue, tu vas y arriver !";
+  vue(`
+    <div class="resultat">
+      <div class="res-emoji">${emoji}</div>
+      <div class="res-titre">${msg}</div>
+      <div class="res-etoiles">${'⭐'.repeat(stars)}${'☆'.repeat(3-stars)}</div>
+      <div class="res-score">${s.bonnes} / ${s.total} bonnes réponses</div>
+      <div class="res-btns">
+        <button class="btn-suite" onclick="lancer('${s.pid}',${s.lvl})">↺ Recommencer</button>
+        <button class="btn-suite" style="background:#EDE9FE;color:var(--violet-f)" onclick="ecranParcours('${s.pid}')">Continuer</button>
+      </div>
+    </div>
+  `);
+  parler(msg);
+}
+
+/* ════════════ CONSIGNES & PARAMÈTRES ════════════ */
+const NB_QUESTIONS = {
+  associe:6, terminaison:8, completePhrase:8, choisirAux:8, participe:8, accordEtre:6,
+  negationPC:6, construireFP:8, construirePR:8, distinguer:8, imperatif3:6, imperatifVerbe:8,
+  imperatifSituation:8, politesse:6, pronominal:6, reconnaitrePC:6, trouveMot:8, remettreOrdre:6,
+  pronomSens:8, singPlur:8, remplacePronom:8, moiJe:6, reconnaitreTemps:6
+};
+const CONSIGNE_DEFAUT = {
+  associe:"Choisis la bonne forme du verbe.",
+  terminaison:"Choisis la bonne terminaison.",
+  completePhrase:"Complète la phrase avec le bon verbe.",
+  choisirAux:"Être ou avoir ? Choisis le bon auxiliaire.",
+  participe:"Choisis le bon participe passé.",
+  accordEtre:"Attention à l'accord ! Choisis la bonne forme.",
+  negationPC:"Mets la phrase à la forme négative.",
+  construireFP:"Construis la phrase au futur proche.",
+  construirePR:"Construis la phrase au passé récent.",
+  distinguer:"À quel temps est la phrase ?",
+  imperatif3:"Choisis la bonne forme de l'ordre.",
+  imperatifVerbe:"Donne l'ordre avec le bon verbe.",
+  imperatifSituation:"Complète avec le bon ordre.",
+  politesse:"Choisis la formule la plus polie.",
+  pronominal:"Choisis le bon petit mot (me, te, se…).",
+  reconnaitrePC:"Trouve l'auxiliaire et le participe passé.",
+  trouveMot:"Touche le bon mot dans la phrase.",
+  remettreOrdre:"Remets les mots dans le bon ordre.",
+  pronomSens:"Qui se cache derrière le pronom ?",
+  singPlur:"Singulier ou pluriel ?",
+  remplacePronom:"Remplace le sujet par le bon pronom.",
+  moiJe:"Complète : après « moi », on dit « je » !",
+};
+
+/* ════════════ MINI-LEÇONS (notions) ════════════ */
+const LECONS = {
+  verbe:{emoji:"🏃",titre:"Le verbe",txt:"Le <b>verbe</b>, c'est <b>l'action</b> : ce que l'on fait. <b>manger, dormir, courir</b> sont des verbes.",ex:"Le chat <b>mange</b>. → « mange » est le verbe."},
+  sujet:{emoji:"🙋",titre:"Le sujet",txt:"Le <b>sujet</b>, c'est <b>qui fait l'action</b>. On demande : <b>qui ?</b>",ex:"<b>Le chat</b> mange. → Qui mange ? Le chat = le sujet."},
+  objet:{emoji:"🎯",titre:"Le complément",txt:"Le <b>complément</b> dit <b>sur quoi</b> porte l'action. On demande : <b>quoi ?</b>",ex:"Le chat mange <b>la souris</b>. → Mange quoi ? La souris."},
+  pronom:{emoji:"👤",titre:"Le pronom",txt:"Un <b>pronom</b> est un petit mot qui <b>remplace le sujet</b> : <b>je, tu, il, elle, on, nous, vous, ils, elles</b>.",ex:"Paul mange. → <b>Il</b> mange."},
+  pc:{emoji:"🕐",titre:"Le passé composé",txt:"Pour parler d'<b>hier</b>, du passé. Il a <b>deux morceaux</b> : <b>auxiliaire</b> (être ou avoir) + <b>participe passé</b>.",ex:"J'<b>ai mangé</b>. Je <b>suis allé</b>."},
+  fp:{emoji:"➡️",titre:"Le futur proche",txt:"Pour parler de <b>bientôt</b>. On utilise <b>aller</b> + le verbe à l'infinitif.",ex:"Je <b>vais manger</b>. Tu <b>vas partir</b>."},
+  imp:{emoji:"📢",titre:"L'impératif",txt:"Pour donner un <b>ordre</b> ou un <b>conseil</b>. Il n'y a <b>pas de pronom</b> (pas de je, tu, il).",ex:"<b>Mange</b> ! <b>Écoutez</b> ! <b>Viens</b> !"},
+  fs:{emoji:"📅",titre:"Le futur simple",txt:"Pour parler de <b>plus tard</b>. On ajoute les terminaisons <b>-rai, -ras, -ra, -rons, -rez, -ront</b>.",ex:"Demain, je <b>mangerai</b>. Tu <b>partiras</b>."},
+  pr:{emoji:"⏪",titre:"Le passé récent",txt:"Pour une action <b>juste finie</b>. On utilise <b>venir de</b> + l'infinitif.",ex:"Je <b>viens de manger</b>. (= j'ai fini il y a une minute)"},
+  cond:{emoji:"🙏",titre:"Le conditionnel",txt:"Pour demander <b>poliment</b> ou dire un <b>souhait</b>.",ex:"Je <b>voudrais</b> un café. <b>Pourriez-vous</b> m'aider ?"},
+};
+
+function ecranNotion(pid, lvl){
+  const def = B[pid][lvl];
+  const lec = LECONS[def.sousType];
+  ECRAN="notion";
+  vue(`
+    <div class="topbar">
+      <span class="back" onclick="ecranParcours('${pid}')">◀</span>
+      <div class="titre">${def.titre}</div>
+    </div>
+    <div class="session">
+      <div class="lecon">
+        <div class="lecon-emoji">${lec.emoji}</div>
+        <div class="lecon-titre">${lec.titre}</div>
+        <div class="lecon-txt">${lec.txt}</div>
+        <div class="lecon-ex">${lec.ex}</div>
+      </div>
+      <div class="q-audio" style="margin-top:16px">
+        <button class="btn-ico" onclick="parler('${lec.txt.replace(/<[^>]+>/g,'')} ${lec.ex.replace(/<[^>]+>/g,'')}')">🔊 Écouter</button>
+      </div>
+      <div style="flex:1"></div>
+    </div>
+    <div class="barre-bas">
+      <button class="btn-valider" onclick="demarrerSession('${pid}',${lvl})">J'ai compris, on s'entraîne →</button>
+    </div>
+  `);
+  parler(lec.txt.replace(/<[^>]+>/g,'')+" "+lec.ex.replace(/<[^>]+>/g,''));
+}
+
+/* ════════════ CONSTRUCTEURS D'ITEMS ════════════ */
+// Renvoie un tableau de questions {type, ...} selon le niveau
+function construireItems(pid, lvl, def, n){
+  const cle = pid+"-"+lvl;
+  const t = def.type;
+  let pool = [];
+
+  if(t==="trouveMot"){
+    pool = D.phrases_analyse.map((ph,i)=>({type:t, cible:def.cible, mots:ph.mots,
+      bons: def.cible==="verbe"?[ph.verbe]:def.cible==="sujet"?ph.sujet:ph.objet, __k:i}));
+  }
+  else if(t==="remettreOrdre"){
+    pool = D.ordre.map((o,i)=>({type:t, bon:o.bon, __k:i}));
+  }
+  else if(t==="pronomSens"){
+    const filt = D.pronom_sens.filter(x=> def.serie==="sing"?x.n==="sing":def.serie==="plur"?x.n==="plur":true);
+    pool = filt.map((x,i)=>({type:t, pron:x.pron, sens:x.sens, emoji:x.emoji,
+      distract: melange(D.pronom_sens.filter(y=>y.pron!==x.pron)).slice(0,2).map(y=>y.sens), __k:i}));
+  }
+  else if(t==="singPlur"){
+    pool = D.pronom_sens.map((x,i)=>({type:t, pron:x.pron, rep:x.n==="sing"?"singulier":"pluriel", emoji:x.emoji, __k:i}));
+  }
+  else if(t==="remplacePronom"){
+    const filt = D.sujets_pronom.filter(x=>x.n===(def.niveau||1));
+    pool = filt.map((x,i)=>({type:t, sujet:x.sujet, rep:x.pron,
+      distract: melange(["il","elle","ils","elles","nous","vous"].filter(p=>p!==x.pron)).slice(0,2), __k:i}));
+  }
+  else if(t==="moiJe"){
+    const verbes=["mange","travaille","parle","habite","écoute","regarde"];
+    pool = verbes.map((vf,i)=>({type:t, verbe:vf, __k:i}));
+  }
+  else if(t==="associe"){
+    // pour chaque verbe et chaque personne : choisir la bonne forme conjuguée
+    const temps = def.temps||"pres";
+    def.verbes.forEach(inf=>{
+      for(let p=0;p<6;p++){
+        pool.push({type:t, inf, temps, p});
+      }
+    });
+    pool = pool.map((x,i)=>(x.__k=i,x));
+  }
+  else if(t==="terminaison"){
+    const temps = def.temps||"pres";
+    let verbes = def.verbes;
+    if(def.futTerm || def.condTerm) verbes = ["parler","manger","habiter","travailler","aimer","regarder"];
+    verbes.forEach(inf=>{
+      for(let p=0;p<6;p++) pool.push({type:t, inf, temps, p, futTerm:def.futTerm, condTerm:def.condTerm});
+    });
+    pool = pool.map((x,i)=>(x.__k=i,x));
+  }
+  else if(t==="completePhrase"){
+    const temps = def.temps||"pres";
+    let verbes;
+    if(def.mix) verbes = VERB_ORDRE.filter(v=>!VERBI[v].pron).slice(0,30);
+    else if(def.groupe) verbes = VERB_ORDRE.filter(v=>VERBI[v].g===def.groupe && !VERBI[v].pron).slice(0,12);
+    else verbes = VERB_ORDRE.slice(0,20);
+    let i=0;
+    verbes.forEach(inf=>{
+      const ctx = pick(D.contextes.filter(c=>c.v===inf)) || pick(D.contextes);
+      const p = Math.floor(Math.random()*6);
+      pool.push({type:t, inf, temps, p, compl:ctx.compl, __k:i++});
+    });
+  }
+  else if(t==="choisirAux"){
+    // verbes avec être vs avoir
+    const etre = VERB_ORDRE.filter(v=>VERBI[v].aux==="être" && !VERBI[v].pron);
+    const avoir = VERB_ORDRE.filter(v=>VERBI[v].aux==="avoir").slice(0,20);
+    let cand = melange([...etre, ...etre, ...avoir]); // sur-représenter être (rares)
+    cand.slice(0,14).forEach((inf,i)=>{
+      const p=Math.floor(Math.random()*6);
+      pool.push({type:t, inf, p, rep:VERBI[inf].aux, __k:i});
+    });
+  }
+  else if(t==="participe"){
+    let verbes;
+    if(def.groupe===1) verbes = VERB_ORDRE.filter(v=>VERBI[v].g===1 && !VERBI[v].pron);
+    else if(def.groupe===2) verbes = VERB_ORDRE.filter(v=>VERBI[v].g===2);
+    else if(def.irr) verbes = VERB_ORDRE.filter(v=>VERBI[v].g===3 && VERBI[v].pp.slice(-1)!=="é" && !VERBI[v].pron);
+    else verbes = VERB_ORDRE;
+    verbes.forEach((inf,i)=>pool.push({type:t, inf, rep:VERBI[inf].pp, __k:i}));
+  }
+  else if(t==="accordEtre"){
+    const etre = VERB_ORDRE.filter(v=>VERBI[v].aux==="être" && !VERBI[v].pron);
+    let i=0;
+    etre.forEach(inf=>{
+      ["m","f","mp","fp"].forEach(genre=>pool.push({type:t, inf, genre, __k:i++}));
+    });
+  }
+  else if(t==="pcPronominal" || t==="pronominal"){
+    const prono = VERB_ORDRE.filter(v=>VERBI[v].pron);
+    prono.forEach((inf,i)=>{
+      for(let p=0;p<6;p++) pool.push({type:(t==="pronominal"?"pronominal":"pcPronominal"), inf, p, __k:i*6+p});
+    });
+  }
+  else if(t==="negationPC"){
+    const verbes = VERB_ORDRE.filter(v=>!VERBI[v].pron).slice(0,16);
+    verbes.forEach((inf,i)=>{ const p=Math.floor(Math.random()*6); pool.push({type:t, inf, p, __k:i}); });
+  }
+  else if(t==="reconnaitrePC"){
+    const verbes = VERB_ORDRE.filter(v=>!VERBI[v].pron).slice(0,16);
+    verbes.forEach((inf,i)=>{ const p=Math.floor(Math.random()*6); pool.push({type:t, inf, p, __k:i}); });
+  }
+  else if(t==="construireFP" || t==="construirePR"){
+    const verbes = VERB_ORDRE.filter(v=>!VERBI[v].pron).slice(0,20);
+    verbes.forEach((inf,i)=>{ const p=Math.floor(Math.random()*6); pool.push({type:t, inf, p, __k:i}); });
+  }
+  else if(t==="distinguer"){
+    const verbes = VERB_ORDRE.filter(v=>!VERBI[v].pron).slice(0,16);
+    verbes.forEach((inf,i)=>{
+      const p=Math.floor(Math.random()*6);
+      const temps = Math.random()<0.5?def.t1:def.t2;
+      pool.push({type:t, inf, p, temps, t1:def.t1, t2:def.t2, __k:i});
+    });
+  }
+  else if(t==="imperatif3"){
+    const verbes=["manger","écouter","regarder","fermer","parler","travailler"];
+    verbes.forEach((inf,i)=>{
+      const idx=Math.floor(Math.random()*3); // tu/nous/vous
+      pool.push({type:t, inf:(VERBI[inf]?inf:"manger"), idx, __k:i});
+    });
+    // fallback verbes existants
+    pool = pool.filter(x=>VERBI[x.inf]);
+    if(pool.length<6){
+      ["manger","écouter","regarder","parler","travailler","aimer"].forEach((inf,i)=>{
+        if(VERBI[inf]) pool.push({type:t, inf, idx:i%3, __k:100+i});
+      });
+    }
+  }
+  else if(t==="imperatifVerbe"){
+    const verbes=["venir","faire","prendre","aller","écouter","regarder","manger","parler"].filter(v=>VERBI[v]);
+    verbes.forEach((inf,i)=>{ const idx=Math.floor(Math.random()*3); pool.push({type:t, inf, idx, __k:i}); });
+  }
+  else if(t==="imperatifSituation"){
+    pool = D.imperatif_situ.map((s,i)=>({type:t, phrase:s.phrase, rep:s.rep,
+      distract: genDistractImp(s.rep), __k:i}));
+  }
+  else if(t==="politesse"){
+    pool = D.politesse.map((s,i)=>({type:t, phrase:s.phrase, rep:s.rep, opts:s.d, __k:i}));
+  }
+  else {
+    pool = [{type:t, __k:0}];
+  }
+
+  if(pool.length===0) pool=[{type:t,__k:0}];
+  return tirerSansRepeter(cle, pool, Math.min(n, pool.length));
+}
+
+function genDistractImp(bon){
+  // formes proches incorrectes
+  const base = bon.toLowerCase();
+  const opts = new Set();
+  if(base.endsWith("e")) opts.add(cap(base+"s")), opts.add(cap(base+"r"));
+  else opts.add(cap(base+"s"));
+  opts.delete(bon);
+  return [...opts].slice(0,2);
+}
+function cap(s){ return s.charAt(0).toUpperCase()+s.slice(1); }
+
+/* ════════════ RENDERERS ════════════ */
+// Helper : créer des boutons de choix (avec audio-cliquable + mode oral)
+function boutonsChoix(zone, options, repValeur, opts){
+  opts = opts || {};
+  const oral = E.reglages.modeOral || opts.forceAudio;
+  const cont = el(`<div class="choix ${opts.ligne?'ligne':''}"></div>`);
+  melange(options).forEach(opt=>{
+    const val = typeof opt==="object" ? opt.val : opt;
+    const label = typeof opt==="object" ? opt.label : opt;
+    const dire = typeof opt==="object" && opt.dire ? opt.dire : label;
+    const b = el(`<button class="cbtn ${oral?'audio':''}">${oral?'<span style="opacity:.55;font-size:14px">'+(opts.montrerTexteOral?label:'Proposition')+'</span>':label}</button>`);
+    b.onclick = ()=>{
+      if(b.dataset.fini) return;
+      // en mode oral, le 1er clic lit, le 2e valide ? Non : clic = écoute ; on choisit en re-cliquant ?
+      // Simplification : en mode oral, chaque bouton lit à voix haute ; un appui long/2e tap valide.
+      // Ici : on lit ET on valide au même clic mais on laisse réécouter avant via bouton dédié.
+      parler(dire);
+      if(opts.audioSeul){ return; } // ne valide pas, juste écoute
+      validerChoixBtn(b, val===repValeur, cont, repValeur, opts.corrLabel);
+    };
+    b.dataset.val = val;
+    b.dataset.dire = dire;
+    cont.appendChild(b);
+  });
+  zone.appendChild(cont);
+  return cont;
+}
+
+// mode oral avec écoute SANS validation immédiate : on ajoute un bouton "valider mon choix"
+function boutonsChoixOral(zone, options, repValeur, opts){
+  opts = opts||{};
+  let selection = null;
+  const cont = el(`<div class="choix ${opts.ligne?'ligne':''}"></div>`);
+  melange(options).forEach((opt,i)=>{
+    const val = typeof opt==="object"?opt.val:opt;
+    const dire = typeof opt==="object"&&opt.dire?opt.dire:(typeof opt==="object"?opt.label:opt);
+    const b = el(`<button class="cbtn audio">Proposition ${i+1}</button>`);
+    b.onclick = ()=>{
+      if(cont.dataset.fini) return;
+      parler(dire);
+      cont.querySelectorAll('.cbtn').forEach(x=>x.classList.remove('ok'));
+      b.style.borderColor = "var(--violet)";
+      selection = {b, val};
+    };
+    b.dataset.val=val; b.dataset.dire=dire;
+    cont.appendChild(b);
+  });
+  zone.appendChild(cont);
+  // bouton valider
+  const vb = el(`<button class="btn-valider" style="margin-top:12px">Je choisis celle-là ✓</button>`);
+  vb.onclick = ()=>{
+    if(!selection || cont.dataset.fini) return;
+    cont.dataset.fini="1";
+    validerChoixBtn(selection.b, selection.val===repValeur, cont, repValeur, opts.corrLabel);
+    vb.remove();
+  };
+  zone.appendChild(vb);
+  return cont;
+}
+
+function validerChoixBtn(btn, ok, cont, repValeur, corrLabel){
+  cont.dataset.fini="1";
+  cont.querySelectorAll('.cbtn').forEach(b=>{ b.dataset.fini="1"; b.style.borderColor=""; });
+  btn.classList.add(ok?"ok":"ko");
+  if(!ok){
+    const bon = [...cont.querySelectorAll('.cbtn')].find(b=>b.dataset.val===String(repValeur));
+    if(bon) bon.classList.add("ok");
+  }
+  finQuestion(ok, corrLabel || repValeur);
+}
+
+const RENDUS = {};
+
+// ── associe : choisir la bonne forme conjuguée pour pronom + verbe ──
+RENDUS.associe = (q, zone)=>{
+  const v = VERBI[q.inf];
+  const forme = q.temps==="fut" ? v.fut[q.p] : q.temps==="cond" ? v.cond[q.p] : v.pres[q.p];
+  const pron = v.pron ? "" : pronomSujet(q.p, forme);
+  const phrase = v.pron ? `(${q.inf}) ` : pron;
+  // distracteurs : autres formes du même verbe
+  const autres = (q.temps==="fut"?v.fut:q.temps==="cond"?v.cond:v.pres).filter((f,i)=>i!==q.p);
+  const options = [forme, ...melange(autres).slice(0,2)];
+  zone.appendChild(el(`<div class="q-grande">${v.pron?'':'<span class="rempli">'+pron+'</span>'}<span class="trou">?</span>${v.pron?'<br><span style="font-size:16px;color:var(--gris)">verbe : '+q.inf+'</span>':''}</div>`));
+  const dire = (v.pron? q.inf+" : " : pron) ;
+  const opts = E.reglages.modeOral
+    ? boutonsChoixOral(zone, options.map(f=>({val:f,label:f,dire:(v.pron?'':pron)+f})), forme, {ligne:true})
+    : boutonsChoix(zone, options.map(f=>({val:f,label:f,dire:(v.pron?'':pron)+f})), forme, {ligne:true});
+  parler((v.pron?q.inf:pronAudio(q.p))); 
+};
+function pronAudio(p){ return ["je","tu","il","nous","vous","ils"][p]; }
+
+// ── terminaison : choisir la terminaison ──
+RENDUS.terminaison = (q, zone)=>{
+  const v = VERBI[q.inf];
+  let formes, forme;
+  if(q.futTerm){ formes=v.fut; } else if(q.condTerm){ formes=v.cond; } else { formes = q.temps==="fut"?v.fut:v.pres; }
+  forme = formes[q.p];
+  const pron = pronomSujet(q.p, forme);
+  // séparer radical / terminaison (heuristique : on montre le radical, choisir la fin)
+  const term = terminaisonDe(q.inf, forme, q.temps||"pres", q.p, q.futTerm||q.condTerm);
+  const radical = forme.slice(0, forme.length-term.t.length);
+  const options = melange([term.t, ...term.faux]);
+  zone.appendChild(el(`<div class="q-grande"><span class="rempli">${pron}${radical}</span><span class="trou">${'·'.repeat(Math.max(1,term.t.length))}</span></div>`));
+  (E.reglages.modeOral?boutonsChoixOral:boutonsChoix)(zone, options, term.t, {ligne:true, corrLabel:forme});
+  parler(pron+forme);
+};
+function terminaisonDe(inf, forme, temps, p, special){
+  // renvoie {t: terminaison correcte, faux:[...]}
+  if(special){ // futur ou conditionnel : terminaisons fixes
+    const fut=["ai","as","a","ons","ez","ont"], cond=["ais","ais","ait","ions","iez","aient"];
+    const set = forme.endsWith("ais")||forme.endsWith("ait")||forme.endsWith("aient")||forme.endsWith("ions")||forme.endsWith("iez")?cond:fut;
+    const t = set[p];
+    const faux = melange(set.filter(x=>x!==t)).slice(0,2);
+    return {t, faux};
+  }
+  // présent : terminaisons par groupe
+  const g = VERBI[inf].g;
+  let term;
+  if(g===1){ term=["e","es","e","ons","ez","ent"][p]; return {t:term, faux:melange(["e","es","ent","ons","ez"].filter(x=>x!==term)).slice(0,2)}; }
+  if(g===2){ term=["is","is","it","issons","issez","issent"][p]; return {t:term, faux:melange(["is","it","issons","issent","s"].filter(x=>x!==term)).slice(0,2)}; }
+  // g3 : on prend les 2-3 dernières lettres
+  term = ["s","s","t","ons","ez","ent"][p];
+  if(!forme.endsWith(term)) term = forme.slice(-2);
+  return {t:term, faux:melange(["s","t","ons","ez","ent","x"].filter(x=>x!==term)).slice(0,2)};
+}
+
+// ── completePhrase : phrase à trou avec le verbe ──
+RENDUS.completePhrase = (q, zone)=>{
+  const v=VERBI[q.inf];
+  let forme;
+  if(q.temps==="pres") forme=v.pres[q.p];
+  else if(q.temps==="fut") forme=v.fut[q.p];
+  else if(q.temps==="cond") forme=v.cond[q.p];
+  else if(q.temps==="pc") forme=ppComplet(q.inf,q.p);
+  else if(q.temps==="fp") forme="va".replace('va',VERBI["aller"].pres[q.p])+" "+v.infDit;
+  else forme=v.pres[q.p];
+  const pron = pronomSujet(q.p, (q.temps==="fp"?VERBI["aller"].pres[q.p]:forme));
+  const compl = q.compl||"";
+  const options = genFormesProches(q.inf, q.temps||"pres", q.p, forme);
+  zone.appendChild(el(`<div class="q-grande"><span class="rempli">${cap(pron)}</span><span class="trou">?</span> <span class="rempli">${compl}</span>.</div>`));
+  (E.reglages.modeOral?boutonsChoixOral:boutonsChoix)(zone, options, forme, {ligne:true, corrLabel:forme});
+  parler(cap(pron)+forme+" "+compl);
+};
+function ppComplet(inf,p){
+  const v=VERBI[inf];
+  const aux = v.aux==="être"?VERBI["être"].pres[p]:VERBI["avoir"].pres[p];
+  return aux+" "+v.pp;
+}
+function genFormesProches(inf, temps, p, bonne){
+  const v=VERBI[inf];
+  let set;
+  if(temps==="pres") set=v.pres; else if(temps==="fut") set=v.fut; else if(temps==="cond") set=v.cond;
+  else if(temps==="pc") set=[0,1,2,3,4,5].map(i=>ppComplet(inf,i));
+  else if(temps==="fp") set=[0,1,2,3,4,5].map(i=>VERBI["aller"].pres[i]+" "+v.infDit);
+  else set=v.pres;
+  const autres = set.filter((f,i)=>i!==p && f!==bonne);
+  return [bonne, ...melange([...new Set(autres)]).slice(0,2)];
+}
+
+// ── choisirAux : être ou avoir ? ──
+RENDUS.choisirAux = (q, zone)=>{
+  const v=VERBI[q.inf];
+  const pron = ["je","tu","il","nous","vous","ils"][q.p];
+  const pronAff = pronomSujet(q.p, "x");
+  zone.appendChild(el(`<div class="q-grande"><span class="rempli">${cap(pronAff)}</span><span class="trou">?</span> <span class="rempli">${v.pp}</span>.<br><span style="font-size:15px;color:var(--gris)">(${q.inf})</span></div>`));
+  const auxEtre = VERBI["être"].pres[q.p], auxAvoir = VERBI["avoir"].pres[q.p];
+  const options = [{val:"être",label:"ÊTRE",dire:cap(pronomSujet(q.p,auxEtre))+auxEtre+" "+v.pp},
+                   {val:"avoir",label:"AVOIR",dire:cap(pronomSujet(q.p,auxAvoir))+auxAvoir+" "+v.pp}];
+  (E.reglages.modeOral?boutonsChoixOral:boutonsChoix)(zone, options, q.rep, {ligne:true});
+  parler("Avec quel auxiliaire ? "+q.inf);
+};
+
+// ── participe : choisir le participe passé ──
+RENDUS.participe = (q, zone)=>{
+  const v=VERBI[q.inf];
+  zone.appendChild(el(`<div class="q-grande">${q.inf}<br>→ j'ai / je suis <span class="trou">?</span></div>`));
+  const faux = genPPFaux(q.inf, v.pp);
+  const options = [v.pp, ...faux];
+  (E.reglages.modeOral?boutonsChoixOral:boutonsChoix)(zone, options, v.pp, {ligne:true});
+  parler(q.inf+"... participe passé ?");
+};
+function genPPFaux(inf, pp){
+  const base = inf.replace(/er$|ir$|re$|oir$/,"");
+  const cand = new Set([base+"é", base+"i", base+"u", base+"is", base+"it"]);
+  cand.delete(pp);
+  return melange([...cand]).slice(0,2);
+}
+
+// ── reconnaitrePC : trouver auxiliaire + participe ──
+RENDUS.reconnaitrePC = (q, zone)=>{
+  const v=VERBI[q.inf];
+  const aux = v.aux==="être"?VERBI["être"].pres[q.p]:VERBI["avoir"].pres[q.p];
+  const pron = pronomSujet(q.p, aux);
+  const phrase = cap(pron)+aux+" "+v.pp;
+  zone.appendChild(el(`<div class="q-grande">${phrase}</div><div style="text-align:center;color:var(--gris);font-size:15px">Touche l'<b>auxiliaire</b></div>`));
+  const cont = el(`<div class="phrase-mots"></div>`);
+  [aux, v.pp].forEach(mot=>{
+    const m=el(`<div class="mot">${mot}</div>`);
+    m.onclick=()=>{ if(cont.dataset.fini)return; cont.dataset.fini="1";
+      const ok = mot===aux; m.classList.add(ok?"ok":"ko");
+      if(!ok){ [...cont.children].find(x=>x.textContent===aux).classList.add("ok"); }
+      finQuestion(ok, aux);
+    };
+    cont.appendChild(m);
+  });
+  zone.appendChild(cont);
+  parler(phrase+". Touche l'auxiliaire.");
+};
+
+// ── accordEtre : il est allé / elle est allée ──
+RENDUS.accordEtre = (q, zone)=>{
+  const v=VERBI[q.inf];
+  const map={m:{pron:"il",fin:""},f:{pron:"elle",fin:"e"},mp:{pron:"ils",fin:"s"},fp:{pron:"elles",fin:"es"}};
+  const g=map[q.genre];
+  const aux = g.pron==="il"||g.pron==="elle"?"est":"sont";
+  const bonPP = v.pp+g.fin;
+  zone.appendChild(el(`<div class="q-grande"><span class="rempli">${g.pron} ${aux}</span> <span class="trou">?</span></div>`));
+  const options=[v.pp, v.pp+"e", v.pp+"s", v.pp+"es"].filter((x,i,a)=>a.indexOf(x)===i);
+  (E.reglages.modeOral?boutonsChoixOral:boutonsChoix)(zone, options, bonPP, {ligne:true});
+  parler(g.pron+" "+aux+" "+bonPP);
+};
+
+// ── negationPC : mettre à la négative ──
+RENDUS.negationPC = (q, zone)=>{
+  const v=VERBI[q.inf];
+  const aux = v.aux==="être"?VERBI["être"].pres[q.p]:VERBI["avoir"].pres[q.p];
+  const pron=pronomSujet(q.p,aux);
+  const phrase=cap(pron)+aux+" "+v.pp;
+  const neg = cap(pron)+"n'"+aux+" pas "+v.pp;
+  const negFausse1 = cap(pron)+aux+" pas "+v.pp;
+  const negFausse2 = cap(pron)+"ne pas "+aux+" "+v.pp;
+  zone.appendChild(el(`<div class="q-grande" style="font-size:18px">${phrase}<br>→ à la forme négative ?</div>`));
+  (E.reglages.modeOral?boutonsChoixOral:boutonsChoix)(zone, [neg,negFausse1,negFausse2], neg, {corrLabel:neg});
+  parler(phrase+". À la forme négative ?");
+};
+
+// ── construireFP / construirePR ──
+RENDUS.construireFP = (q, zone)=>{ construireSemiAux(q, zone, "fp"); };
+RENDUS.construirePR = (q, zone)=>{ construireSemiAux(q, zone, "pr"); };
+function construireSemiAux(q, zone, mode){
+  const v=VERBI[q.inf];
+  const semi = mode==="fp"?VERBI["aller"].pres[q.p]:(VERBI["venir"].pres[q.p]+" de");
+  const pron=pronomSujet(q.p, mode==="fp"?VERBI["aller"].pres[q.p]:VERBI["venir"].pres[q.p]);
+  const bonne = semi+" "+v.infDit;
+  // distracteurs
+  const f1 = semi+" "+v.pres[q.p];
+  const f2 = (mode==="fp"?VERBI["aller"].pres[(q.p+1)%6]:VERBI["venir"].pres[(q.p+1)%6]+" de")+" "+v.infDit;
+  zone.appendChild(el(`<div class="q-grande"><span class="rempli">${cap(pron)}</span><span class="trou">?</span></div><div style="text-align:center;color:var(--gris);font-size:15px">verbe : ${q.inf}</div>`));
+  (E.reglages.modeOral?boutonsChoixOral:boutonsChoix)(zone, [bonne,f1,f2], bonne, {corrLabel:cap(pron)+bonne});
+  parler(cap(pron)+bonne);
+}
+
+// ── distinguer : à quel temps ? ──
+RENDUS.distinguer = (q, zone)=>{
+  const v=VERBI[q.inf];
+  let phrase, rep;
+  const pron=pronomSujet(q.p,"x");
+  const noms={pres:"présent",fp:"futur proche",pc:"passé composé",pr:"passé récent",fut:"futur"};
+  if(q.temps==="pres"){ phrase=cap(pron)+v.pres[q.p]; rep="pres"; }
+  else if(q.temps==="fp"){ phrase=cap(pron)+VERBI["aller"].pres[q.p]+" "+v.infDit; rep="fp"; }
+  else if(q.temps==="pc"){ phrase=cap(pron)+ppComplet(q.inf,q.p); rep="pc"; }
+  else if(q.temps==="pr"){ phrase=cap(pron)+VERBI["venir"].pres[q.p]+" de "+v.infDit; rep="pr"; }
+  zone.appendChild(el(`<div class="q-grande">${phrase}</div>`));
+  const options=[{val:q.t1,label:noms[q.t1]},{val:q.t2,label:noms[q.t2]}];
+  (E.reglages.modeOral?boutonsChoixOral:boutonsChoix)(zone, options, rep, {ligne:true, corrLabel:noms[rep]});
+  parler(phrase);
+};
+
+// ── pronominal (présent) : choisir me/te/se… ──
+RENDUS.pronominal = (q, zone)=>{
+  const v=VERBI[q.inf];
+  const forme=v.pres[q.p]; // contient déjà me/te/se
+  const refl=["me","te","se","nous","vous","se"][q.p];
+  const pronBase=["je","tu","il","nous","vous","ils"][q.p];
+  // on enlève le pronom réfléchi de la forme pour faire le trou
+  const verbeSeul = forme.replace(/^(m'|me |t'|te |s'|se |nous |vous )/,"");
+  zone.appendChild(el(`<div class="q-grande"><span class="rempli">${pronBase}</span> <span class="trou">?</span> <span class="rempli">${verbeSeul}</span></div>`));
+  const options=melange(["me","te","se","nous","vous"]);
+  const reflAff = refl;
+  (E.reglages.modeOral?boutonsChoixOral:boutonsChoix)(zone, options, reflAff, {ligne:true, corrLabel:forme});
+  parler(pronBase+" "+forme);
+};
+RENDUS.pcPronominal = (q, zone)=>{
+  const v=VERBI[q.inf];
+  const pc=passeCompose(q.inf,q.p);
+  const pronBase=["je","tu","il","nous","vous","ils"][q.p];
+  // choisir le bon auxiliaire (toujours être)
+  zone.appendChild(el(`<div class="q-grande" style="font-size:19px">${cap(pc)}</div><div style="text-align:center;color:var(--gris);font-size:14px">Les verbes pronominaux utilisent toujours…</div>`));
+  (E.reglages.modeOral?boutonsChoixOral:boutonsChoix)(zone, [{val:"être",label:"ÊTRE"},{val:"avoir",label:"AVOIR"}], "être", {ligne:true});
+  parler(cap(pc));
+};
+
+// ── imperatif ──
+RENDUS.imperatif3 = (q, zone)=>{
+  const v=VERBI[q.inf];
+  const formes=v.imp; // [tu,nous,vous]
+  const labels=["(à un ami)","(à nous)","(à plusieurs / poli)"];
+  const bonne=formes[q.idx];
+  zone.appendChild(el(`<div class="q-grande">Donne l'ordre ${labels[q.idx]} :<br><span style="font-size:17px;color:var(--gris)">verbe : ${q.inf}</span></div>`));
+  (E.reglages.modeOral?boutonsChoixOral:boutonsChoix)(zone, melange([...new Set(formes)]), bonne, {ligne:true});
+  parler("L'ordre, "+labels[q.idx]+", avec le verbe "+q.inf);
+};
+RENDUS.imperatifVerbe = RENDUS.imperatif3;
+RENDUS.imperatifSituation = (q, zone)=>{
+  zone.appendChild(el(`<div class="q-grande" style="font-size:19px">${q.phrase.replace("___",'<span class="trou">?</span>')}</div>`));
+  (E.reglages.modeOral?boutonsChoixOral:boutonsChoix)(zone, [q.rep, ...q.distract], q.rep, {ligne:true, corrLabel:q.rep});
+  parler(q.phrase.replace("___","..."));
+};
+
+// ── politesse ──
+RENDUS.politesse = (q, zone)=>{
+  zone.appendChild(el(`<div class="q-grande" style="font-size:19px">${q.phrase.replace("___",'<span class="trou">?</span>')}</div>`));
+  (E.reglages.modeOral?boutonsChoixOral:boutonsChoix)(zone, q.opts, q.rep, {corrLabel:q.rep});
+  parler(q.phrase.replace("___","..."));
+};
+
+// ── trouveMot : toucher le verbe/sujet ──
+RENDUS.trouveMot = (q, zone)=>{
+  const cont=el(`<div class="phrase-mots"></div>`);
+  q.mots.forEach((mot,i)=>{
+    const m=el(`<div class="mot">${mot}</div>`);
+    m.onclick=()=>{ if(cont.dataset.fini)return; cont.dataset.fini="1";
+      const ok=q.bons.includes(i);
+      m.classList.add(ok?"ok":"ko");
+      if(!ok){ q.bons.forEach(bi=>cont.children[bi].classList.add("ok")); }
+      finQuestion(ok, q.mots.filter((w,wi)=>q.bons.includes(wi)).join(" "));
+    };
+    cont.appendChild(m);
+  });
+  zone.appendChild(cont);
+  parler(q.mots.join(" "));
+};
+
+// ── remettreOrdre : étiquettes ──
+RENDUS.remettreOrdre = (q, zone)=>{
+  const cible=el(`<div class="ordre-cible"></div>`);
+  const source=el(`<div class="ordre-source"></div>`);
+  let placed=[];
+  melange(q.bon).forEach(txt=>{
+    const e=el(`<div class="etiq">${txt}</div>`);
+    e.onclick=()=>{
+      if(e.classList.contains('placed'))return;
+      e.classList.add('placed');
+      const c=e.cloneNode(true); c.classList.add('in-cible');
+      c.onclick=()=>{ c.remove(); e.classList.remove('placed'); placed=placed.filter(x=>x!==txt); };
+      cible.appendChild(c); placed.push(txt);
+      if(placed.length===q.bon.length){
+        const ok=placed.join(" ")===q.bon.join(" ");
+        cible.style.borderColor = ok?"var(--vert)":"var(--rouge)";
+        finQuestion(ok, q.bon.join(" "));
+      }
+    };
+    source.appendChild(e);
+  });
+  zone.appendChild(cible); zone.appendChild(source);
+  parler("Remets les mots dans le bon ordre.");
+};
+
+// ── pronomSens : qui se cache derrière ──
+RENDUS.pronomSens = (q, zone)=>{
+  zone.appendChild(el(`<div class="q-grande">${q.emoji} <span class="rempli">${q.pron}</span> = ?</div>`));
+  (E.reglages.modeOral?boutonsChoixOral:boutonsChoix)(zone, [q.sens,...q.distract], q.sens, {corrLabel:q.sens});
+  parler(q.pron+"... c'est qui ?");
+};
+// ── singPlur ──
+RENDUS.singPlur = (q, zone)=>{
+  zone.appendChild(el(`<div class="q-grande">${q.emoji} <span class="rempli">${q.pron}</span></div>`));
+  (E.reglages.modeOral?boutonsChoixOral:boutonsChoix)(zone, ["singulier","pluriel"], q.rep, {ligne:true});
+  parler(q.pron+". Singulier ou pluriel ?");
+};
+// ── remplacePronom ──
+RENDUS.remplacePronom = (q, zone)=>{
+  zone.appendChild(el(`<div class="q-grande"><span class="rempli">${q.sujet}</span> → <span class="trou">?</span></div>`));
+  (E.reglages.modeOral?boutonsChoixOral:boutonsChoix)(zone, [q.rep,...q.distract], q.rep, {ligne:true});
+  parler(q.sujet+"... on remplace par quel pronom ?");
+};
+// ── moiJe ──
+RENDUS.moiJe = (q, zone)=>{
+  zone.appendChild(el(`<div class="q-grande">Moi, <span class="trou">?</span> ${q.verbe}.</div>`));
+  (E.reglages.modeOral?boutonsChoixOral:boutonsChoix)(zone, ["je","moi","mon"], "je", {ligne:true, corrLabel:"je"});
+  parler("Moi... "+q.verbe+". Quel petit mot ?");
+};
+
+/* ════════════ DÉMARRAGE ════════════ */
+window.addEventListener('DOMContentLoaded', ()=>{
+  if(window.speechSynthesis) chargerVoix();
+  ecranAccueil();
+});
+// au cas où DOMContentLoaded est déjà passé
+if(document.readyState!=="loading"){ if(window.speechSynthesis) chargerVoix(); ecranAccueil(); }
+
+// ── reconnaitreTemps : la phrase est-elle au temps annoncé ? (OUI/NON) ──
+RENDUS.reconnaitreTemps = (q, zone)=>{
+  const v=VERBI[q.inf];
+  const pron=pronomSujet(q.p,"x");
+  const noms={pres:"présent",fut:"futur",pc:"passé composé",fp:"futur proche",pr:"passé récent",cond:"conditionnel",imp:"impératif"};
+  // 50% du temps on montre la BONNE forme au temps q.temps, 50% une AUTRE forme
+  const correct = Math.random()<0.6;
+  let phrase, rep;
+  if(correct){
+    phrase = formeAuTemps(q.inf, q.temps, q.p, pron);
+    rep="oui";
+  } else {
+    // montrer un autre temps
+    const autres=["pres","pc","fp","fut","pr"].filter(t=>t!==q.temps);
+    const t2=pick(autres);
+    phrase=formeAuTemps(q.inf, t2, q.p, pron);
+    rep="non";
+  }
+  zone.appendChild(el(`<div class="q-grande">${phrase}</div><div style="text-align:center;color:var(--gris);font-size:15px">C'est bien le <b>${noms[q.temps]}</b> ?</div>`));
+  (E.reglages.modeOral?boutonsChoixOral:boutonsChoix)(zone, [{val:"oui",label:"✅ OUI"},{val:"non",label:"❌ NON"}], rep, {ligne:true});
+  parler(phrase);
+};
+function formeAuTemps(inf, t, p, pron){
+  const v=VERBI[inf];
+  if(t==="pres") return cap(pron)+v.pres[p];
+  if(t==="fut") return cap(pron)+v.fut[p];
+  if(t==="cond") return cap(pron)+v.cond[p];
+  if(t==="pc") return cap(pronomSujet(p, v.aux==="être"?VERBI["être"].pres[p]:VERBI["avoir"].pres[p]))+ppComplet(inf,p);
+  if(t==="fp") return cap(pronomSujet(p,VERBI["aller"].pres[p]))+VERBI["aller"].pres[p]+" "+v.infDit;
+  if(t==="pr") return cap(pronomSujet(p,VERBI["venir"].pres[p]))+VERBI["venir"].pres[p]+" de "+v.infDit;
+  return cap(pron)+v.pres[p];
+}
+
+
+</script>
+</body>
+</html>
