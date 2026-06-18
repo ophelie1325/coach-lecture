@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Mon Coach Dictées</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Baloo+2:wght@500;600;700;800&display=swap');
+:root{--bleu:#2563EB;--bleu-f:#1E40AF;--violet:#7C3AED;--violet-f:#5B21B6;--vert:#059669;--vert-f:#047857;--orange:#EA580C;--rose:#DB2777;--creme:#FAFAF8;--texte:#111827;--gris:#6B7280;--rouge:#DC2626}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{font-family:'Nunito',sans-serif;background:linear-gradient(160deg,#EFF6FF,#F5F3FF 60%,#FFF7ED);color:var(--texte);min-height:100%;display:flex;flex-direction:column;align-items:center;padding:0;overflow-x:hidden}
+#app{width:100%;max-width:480px;flex:1;display:flex;flex-direction:column;padding:14px 16px 26px}
+.bandeau{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.retour{font-size:22px;color:var(--violet);cursor:pointer;font-weight:800;background:#fff;border:2px solid #EDE9FE;border-radius:12px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.retour:active{transform:scale(.93)}
+.titre-h{font-family:'Baloo 2';font-size:19px;font-weight:800;color:var(--violet-f);flex:1}
+.test-badge{font-size:11px;font-weight:800;background:#FEF3C7;color:#B45309;border-radius:20px;padding:3px 10px}
+h1{font-family:'Baloo 2';font-size:26px;font-weight:800;text-align:center;margin:10px 0 4px;background:linear-gradient(120deg,#7C3AED,#DB2777);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.logo{font-size:50px;text-align:center;margin-top:14px}
+.accroche{color:var(--gris);font-size:15px;text-align:center;margin-bottom:18px}
+.niv-cecrl{display:flex;flex-direction:column;gap:13px;margin-top:6px}
+.cec{display:flex;align-items:center;gap:14px;background:#fff;border:2.5px solid #EDE9FE;border-radius:20px;padding:16px 18px;cursor:pointer;transition:transform .12s}
+.cec:active{transform:scale(.97)}
+.cec .pic{width:54px;height:54px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;font-family:'Baloo 2';flex-shrink:0;color:#fff}
+.cec.a1 .pic{background:var(--bleu)} .cec.a2 .pic{background:var(--vert)} .cec.b1 .pic{background:var(--violet)} .cec.b2 .pic{background:var(--orange)}
+.cec .nom{font-family:'Baloo 2';font-size:18px;font-weight:800}
+.cec .desc{font-size:13px;color:var(--gris);margin-top:1px}
+.cec.sel{box-shadow:0 0 0 3px rgba(124,58,237,.25)}
+.parc-tete{background:#fff;border:2.5px solid #EDE9FE;border-radius:20px;padding:16px 18px;margin-bottom:14px;display:flex;align-items:center;gap:14px}
+.parc-tete .pic{font-size:34px}
+.parc-tete .nom{font-family:'Baloo 2';font-size:19px;font-weight:800;color:var(--violet-f)}
+.parc-tete .sous{font-size:13px;color:var(--gris)}
+.chip-niveau{font-size:12px;font-weight:800;border-radius:20px;padding:3px 11px;color:#fff;cursor:pointer}
+.niveaux{display:flex;flex-direction:column;gap:11px}
+.niv-row{display:flex;align-items:center;gap:13px;background:#fff;border:2.5px solid #EDE9FE;border-radius:18px;padding:13px 16px;cursor:pointer;transition:transform .12s}
+.niv-row:active{transform:scale(.97)}
+.niv-row.lock{opacity:.5}
+.niv-pic{width:46px;height:46px;border-radius:13px;background:#F5F3FF;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.niv-txt{flex:1}
+.niv-nom{font-family:'Baloo 2';font-size:16px;font-weight:800}
+.niv-mode{font-size:12.5px;color:var(--gris)}
+.niv-fl{font-size:20px;color:#CBD5E1;font-weight:800}
+.zone-jeu{background:#fff;border:2.5px solid #EDE9FE;border-radius:20px;padding:18px 16px;margin-top:4px;display:flex;flex-direction:column;gap:14px}
+.consigne{font-size:15px;color:var(--violet-f);font-weight:700;text-align:center;line-height:1.4}
+.btn-ecoute{align-self:center;background:var(--violet);color:#fff;border:none;border-radius:16px;padding:12px 22px;font-family:'Baloo 2';font-size:17px;font-weight:800;cursor:pointer;display:flex;align-items:center;gap:8px}
+.btn-ecoute:active{transform:scale(.95)}
+.btn-ecoute.lent{background:#EDE9FE;color:var(--violet-f)}
+.ecoutes{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.zone-phrase{min-height:54px;border:2.5px dashed #DDD6FE;border-radius:14px;padding:10px;display:flex;flex-wrap:wrap;gap:7px;align-content:flex-start;background:#FCFBFF}
+.etiq{background:#EDE9FE;color:var(--violet-f);border:2px solid #DDD6FE;border-radius:11px;padding:8px 13px;font-size:16px;font-weight:700;cursor:pointer;font-family:'Nunito'}
+.etiq:active{transform:scale(.94)}
+.etiq.placee{background:var(--violet);color:#fff;border-color:var(--violet)}
+.banque-etiq{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.phrase-trous{font-size:18px;line-height:2;text-align:center;font-weight:600}
+.trou{display:inline-block;min-width:62px;border-bottom:3px solid var(--violet);margin:0 3px;padding:0 4px;text-align:center;color:var(--violet-f);font-weight:800;cursor:pointer}
+.trou.actif{background:#EDE9FE;border-radius:6px 6px 0 0}
+.trou.ok{color:var(--vert-f);border-color:var(--vert)}
+.trou.ko{color:var(--rouge);border-color:var(--rouge)}
+.saisie{min-height:56px;border:2.5px solid #DDD6FE;border-radius:14px;padding:12px;font-size:18px;font-weight:600;background:#FCFBFF;line-height:1.5;word-break:break-word}
+.saisie .curseur{display:inline-block;width:2px;height:22px;background:var(--violet);animation:cli .8s steps(1) infinite;vertical-align:middle}
+@keyframes cli{50%{opacity:0}}
+.clavier{display:flex;flex-direction:column;gap:6px;margin-top:2px}
+.clav-row{display:flex;gap:5px;justify-content:center}
+.touche{background:#fff;border:2px solid #E5E7EB;border-radius:9px;min-width:30px;height:44px;flex:1;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:700;cursor:pointer;font-family:'Nunito';color:var(--texte)}
+.touche:active{transform:scale(.92);background:#EDE9FE}
+.touche.sp{flex:0 0 auto;padding:0 12px;background:#F5F3FF;color:var(--violet-f);font-size:15px;font-weight:800}
+.touche.espace{flex:1.4}
+.touche.eff{background:#FEF2F2;color:var(--rouge)}
+.touche.acc{background:#F0FDF4;color:var(--vert-f);font-size:16px}
+.btn-valider{background:var(--vert);color:#fff;border:none;border-radius:16px;padding:13px;font-family:'Baloo 2';font-size:18px;font-weight:800;cursor:pointer;margin-top:4px}
+.btn-valider:active{transform:scale(.97)}
+.btn-valider:disabled{opacity:.4}
+.feedback{text-align:center;font-family:'Baloo 2';font-size:18px;font-weight:800;min-height:26px;padding:6px}
+.feedback.bon{color:var(--vert-f)} .feedback.mauvais{color:var(--rouge)}
+.correction{background:#F0FDF4;border:2px solid #BBF7D0;border-radius:12px;padding:10px 13px;font-size:15px;text-align:center;color:#166534}
+.correction .att{font-weight:800}
+.progress-barre{height:9px;background:#EDE9FE;border-radius:10px;overflow:hidden;margin-bottom:4px}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--violet),var(--rose));transition:width .3s}
+.compte{font-size:13px;color:var(--gris);text-align:center}
+.resultat{background:#fff;border:2.5px solid #EDE9FE;border-radius:22px;padding:26px 20px;text-align:center;margin-top:20px}
+.resultat .big{font-size:54px}
+.resultat h2{font-family:'Baloo 2';font-size:23px;color:var(--violet-f);margin:8px 0}
+.resultat .score{font-size:17px;color:var(--gris);margin-bottom:16px}
+.btn-rejouer{background:var(--violet);color:#fff;border:none;border-radius:16px;padding:13px 24px;font-family:'Baloo 2';font-size:17px;font-weight:800;cursor:pointer;margin:5px}
+.btn-suite{background:var(--vert);color:#fff;border:none;border-radius:16px;padding:13px 24px;font-family:'Baloo 2';font-size:17px;font-weight:800;cursor:pointer;margin:5px}
+.reglages{background:#fff;border:2.5px solid #EDE9FE;border-radius:20px;padding:18px;margin-top:6px;display:flex;flex-direction:column;gap:16px}
+.reg-bloc label{font-family:'Baloo 2';font-size:15px;font-weight:800;color:var(--violet-f);display:block;margin-bottom:8px}
+.seg{display:flex;gap:7px;flex-wrap:wrap}
+.seg button{flex:1;min-width:60px;background:#F5F3FF;border:2px solid #EDE9FE;border-radius:12px;padding:9px;font-family:'Nunito';font-weight:700;font-size:14px;cursor:pointer}
+.seg button.on{background:var(--violet);color:#fff;border-color:var(--violet)}
+.pied{margin-top:auto;padding-top:18px;font-size:12px;color:#B6B6B6;text-align:center}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+const DATA = {"ordre": ["Lina", "Marco", "Yuki", "Karim", "Elena", "David", "Fatou", "Tomas", "Sara", "Hugo", "Mei", "Ahmed"], "profils": {"Lina": {"nat": "italienne", "metier": "infirmière", "ville": "Lyon"}, "Marco": {"nat": "brésilien", "metier": "cuisinier", "ville": "Bordeaux"}, "Yuki": {"nat": "japonaise", "metier": "graphiste", "ville": "Paris"}, "Karim": {"nat": "marocain", "metier": "électricien", "ville": "Marseille"}, "Elena": {"nat": "roumaine", "metier": "coiffeuse", "ville": "Nantes"}, "David": {"nat": "français", "metier": "chauffeur de bus", "ville": "Lille"}, "Fatou": {"nat": "sénégalaise", "metier": "aide-soignante", "ville": "Toulouse"}, "Tomas": {"nat": "polonais", "metier": "mécanicien", "ville": "Strasbourg"}, "Sara": {"nat": "tunisienne", "metier": "vendeuse", "ville": "Montpellier"}, "Hugo": {"nat": "français", "metier": "boulanger", "ville": "Rennes"}, "Mei": {"nat": "chinoise", "metier": "professeure", "ville": "Grenoble"}, "Ahmed": {"nat": "égyptien", "metier": "jardinier", "ville": "Nice"}}, "textes": {"Lina": {"A1": {"texte": "Je m'appelle Lina. J'ai 30 ans. Je suis italienne. J'habite à Lyon. Je parle italien et français. Je suis infirmière. J'aime la musique. Je n'aime pas le froid. Je fais du vélo.", "phrases": [{"t": "Je m'appelle Lina.", "mots": ["Je", "m'appelle", "Lina."], "trous": [1, 2]}, {"t": "J'ai 30 ans.", "mots": ["J'ai", "30", "ans."], "trous": [0]}, {"t": "Je suis italienne.", "mots": ["Je", "suis", "italienne."], "trous": [1, 2]}, {"t": "J'habite à Lyon.", "mots": ["J'habite", "à", "Lyon."], "trous": [0, 2]}, {"t": "Je parle italien et français.", "mots": ["Je", "parle", "italien", "et", "français."], "trous": [1, 2, 4]}, {"t": "Je suis infirmière.", "mots": ["Je", "suis", "infirmière."], "trous": [1, 2]}, {"t": "J'aime la musique.", "mots": ["J'aime", "la", "musique."], "trous": [0, 2]}, {"t": "Je n'aime pas le froid.", "mots": ["Je", "n'aime", "pas", "le", "froid."], "trous": [1, 4]}, {"t": "Je fais du vélo.", "mots": ["Je", "fais", "du", "vélo."], "trous": [1, 3]}]}, "A2": {"texte": "Je m'appelle Lina et j'ai 30 ans. Je suis italienne, mais j'habite à Lyon. Je parle italien et français. Je travaille comme infirmière. J'aime beaucoup la musique, mais je n'aime pas le froid. Pendant mon temps libre, je fais du vélo.", "phrases": [{"t": "Je m'appelle Lina et j'ai 30 ans.", "mots": ["Je", "m'appelle", "Lina", "et", "j'ai", "30", "ans."], "trous": [1, 2, 4]}, {"t": "Je suis italienne, mais j'habite à Lyon.", "mots": ["Je", "suis", "italienne,", "mais", "j'habite", "à", "Lyon."], "trous": [1, 2, 4, 6]}, {"t": "Je parle italien et français.", "mots": ["Je", "parle", "italien", "et", "français."], "trous": [1, 2, 4]}, {"t": "Je travaille comme infirmière.", "mots": ["Je", "travaille", "comme", "infirmière."], "trous": [1, 3]}, {"t": "J'aime beaucoup la musique, mais je n'aime pas le froid.", "mots": ["J'aime", "beaucoup", "la", "musique,", "mais", "je", "n'aime", "pas", "le", "froid."], "trous": [0, 1, 3, 6, 9]}, {"t": "Pendant mon temps libre, je fais du vélo.", "mots": ["Pendant", "mon", "temps", "libre,", "je", "fais", "du", "vélo."], "trous": [0, 2, 3, 5, 7]}]}, "B1": {"texte": "Je m'appelle Lina et j'ai 30 ans. Je suis italienne et j'habite à Lyon depuis 5 ans. Je parle italien et français. Je travaille comme infirmière. J'ai choisi ce métier parce que j'aime aider les gens. J'aime aussi la musique, mais je n'aime pas le froid. Le week-end, je fais du vélo.", "phrases": [{"t": "Je m'appelle Lina et j'ai 30 ans.", "mots": ["Je", "m'appelle", "Lina", "et", "j'ai", "30", "ans."], "trous": [1, 2, 4]}, {"t": "Je suis italienne et j'habite à Lyon depuis 5 ans.", "mots": ["Je", "suis", "italienne", "et", "j'habite", "à", "Lyon", "depuis", "5", "ans."], "trous": [1, 2, 4, 6, 7]}, {"t": "Je parle italien et français.", "mots": ["Je", "parle", "italien", "et", "français."], "trous": [1, 2, 4]}, {"t": "Je travaille comme infirmière.", "mots": ["Je", "travaille", "comme", "infirmière."], "trous": [1, 3]}, {"t": "J'ai choisi ce métier parce que j'aime aider les gens.", "mots": ["J'ai", "choisi", "ce", "métier", "parce", "que", "j'aime", "aider", "les", "gens."], "trous": [0, 1, 3, 4, 6, 7, 9]}, {"t": "J'aime aussi la musique, mais je n'aime pas le froid.", "mots": ["J'aime", "aussi", "la", "musique,", "mais", "je", "n'aime", "pas", "le", "froid."], "trous": [0, 1, 3, 6, 9]}, {"t": "Le week-end, je fais du vélo.", "mots": ["Le", "week-end,", "je", "fais", "du", "vélo."], "trous": [1, 3, 5]}]}, "B2": {"texte": "Je m'appelle Lina, j'ai 30 ans et je suis italienne. Je me suis installée à Lyon il y a 5 ans. Je parle italien et français. Je travaille comme infirmière, un métier que j'ai choisi parce que j'aime aider les gens. En dehors du travail, j'adore la musique et je fais du vélo dès que je peux. Ce que j'aime le moins, c'est le froid, mais je reste positive.", "phrases": [{"t": "Je m'appelle Lina, j'ai 30 ans et je suis italienne.", "mots": ["Je", "m'appelle", "Lina,", "j'ai", "30", "ans", "et", "je", "suis", "italienne."], "trous": [1, 2, 3, 8, 9]}, {"t": "Je me suis installée à Lyon il y a 5 ans.", "mots": ["Je", "me", "suis", "installée", "à", "Lyon", "il", "y", "a", "5", "ans."], "trous": [2, 3, 5]}, {"t": "Je parle italien et français.", "mots": ["Je", "parle", "italien", "et", "français."], "trous": [1, 2, 4]}, {"t": "Je travaille comme infirmière, un métier que j'ai choisi parce que j'aime aider les gens.", "mots": ["Je", "travaille", "comme", "infirmière,", "un", "métier", "que", "j'ai", "choisi", "parce", "que", "j'aime", "aider", "les", "gens."], "trous": [1, 3, 5, 7, 8, 9, 11, 12, 14]}, {"t": "En dehors du travail, j'adore la musique et je fais du vélo dès que je peux.", "mots": ["En", "dehors", "du", "travail,", "j'adore", "la", "musique", "et", "je", "fais", "du", "vélo", "dès", "que", "je", "peux."], "trous": [1, 3, 4, 6, 9, 11, 15]}, {"t": "Ce que j'aime le moins, c'est le froid, mais je reste positive.", "mots": ["Ce", "que", "j'aime", "le", "moins,", "c'est", "le", "froid,", "mais", "je", "reste", "positive."], "trous": [2, 4, 7, 10, 11]}]}}, "Marco": {"A1": {"texte": "Je m'appelle Marco. J'ai 27 ans. Je suis brésilien. J'habite à Bordeaux. Je parle portugais, espagnol et français. Je suis cuisinier. J'aime le sport. Je n'aime pas le bruit. Je fais du foot.", "phrases": [{"t": "Je m'appelle Marco.", "mots": ["Je", "m'appelle", "Marco."], "trous": [1, 2]}, {"t": "J'ai 27 ans.", "mots": ["J'ai", "27", "ans."], "trous": [0]}, {"t": "Je suis brésilien.", "mots": ["Je", "suis", "brésilien."], "trous": [1, 2]}, {"t": "J'habite à Bordeaux.", "mots": ["J'habite", "à", "Bordeaux."], "trous": [0, 2]}, {"t": "Je parle portugais, espagnol et français.", "mots": ["Je", "parle", "portugais,", "espagnol", "et", "français."], "trous": [1, 2, 3, 5]}, {"t": "Je suis cuisinier.", "mots": ["Je", "suis", "cuisinier."], "trous": [1, 2]}, {"t": "J'aime le sport.", "mots": ["J'aime", "le", "sport."], "trous": [0, 2]}, {"t": "Je n'aime pas le bruit.", "mots": ["Je", "n'aime", "pas", "le", "bruit."], "trous": [1, 4]}, {"t": "Je fais du foot.", "mots": ["Je", "fais", "du", "foot."], "trous": [1, 3]}]}, "A2": {"texte": "Je m'appelle Marco et j'ai 27 ans. Je suis brésilien, mais j'habite à Bordeaux. Je parle portugais, espagnol et français. Je travaille comme cuisinier. J'aime beaucoup le sport, mais je n'aime pas le bruit. Pendant mon temps libre, je fais du foot.", "phrases": [{"t": "Je m'appelle Marco et j'ai 27 ans.", "mots": ["Je", "m'appelle", "Marco", "et", "j'ai", "27", "ans."], "trous": [1, 2, 4]}, {"t": "Je suis brésilien, mais j'habite à Bordeaux.", "mots": ["Je", "suis", "brésilien,", "mais", "j'habite", "à", "Bordeaux."], "trous": [1, 2, 4, 6]}, {"t": "Je parle portugais, espagnol et français.", "mots": ["Je", "parle", "portugais,", "espagnol", "et", "français."], "trous": [1, 2, 3, 5]}, {"t": "Je travaille comme cuisinier.", "mots": ["Je", "travaille", "comme", "cuisinier."], "trous": [1, 3]}, {"t": "J'aime beaucoup le sport, mais je n'aime pas le bruit.", "mots": ["J'aime", "beaucoup", "le", "sport,", "mais", "je", "n'aime", "pas", "le", "bruit."], "trous": [0, 1, 3, 6, 9]}, {"t": "Pendant mon temps libre, je fais du foot.", "mots": ["Pendant", "mon", "temps", "libre,", "je", "fais", "du", "foot."], "trous": [0, 2, 3, 5, 7]}]}, "B1": {"texte": "Je m'appelle Marco et j'ai 27 ans. Je suis brésilien et j'habite à Bordeaux depuis 3 ans. Je parle portugais, espagnol et français. Je travaille comme cuisinier. J'ai choisi ce métier parce que j'adore préparer de bons plats. J'aime aussi le sport, mais je n'aime pas le bruit. Le week-end, je fais du foot.", "phrases": [{"t": "Je m'appelle Marco et j'ai 27 ans.", "mots": ["Je", "m'appelle", "Marco", "et", "j'ai", "27", "ans."], "trous": [1, 2, 4]}, {"t": "Je suis brésilien et j'habite à Bordeaux depuis 3 ans.", "mots": ["Je", "suis", "brésilien", "et", "j'habite", "à", "Bordeaux", "depuis", "3", "ans."], "trous": [1, 2, 4, 6, 7]}, {"t": "Je parle portugais, espagnol et français.", "mots": ["Je", "parle", "portugais,", "espagnol", "et", "français."], "trous": [1, 2, 3, 5]}, {"t": "Je travaille comme cuisinier.", "mots": ["Je", "travaille", "comme", "cuisinier."], "trous": [1, 3]}, {"t": "J'ai choisi ce métier parce que j'adore préparer de bons plats.", "mots": ["J'ai", "choisi", "ce", "métier", "parce", "que", "j'adore", "préparer", "de", "bons", "plats."], "trous": [0, 1, 3, 4, 6, 7, 9, 10]}, {"t": "J'aime aussi le sport, mais je n'aime pas le bruit.", "mots": ["J'aime", "aussi", "le", "sport,", "mais", "je", "n'aime", "pas", "le", "bruit."], "trous": [0, 1, 3, 6, 9]}, {"t": "Le week-end, je fais du foot.", "mots": ["Le", "week-end,", "je", "fais", "du", "foot."], "trous": [1, 3, 5]}]}, "B2": {"texte": "Je m'appelle Marco, j'ai 27 ans et je suis brésilien. Je me suis installé à Bordeaux il y a 3 ans. Je parle portugais, espagnol et français. Je travaille comme cuisinier, un métier que j'ai choisi parce que j'adore préparer de bons plats. En dehors du travail, j'adore le sport et je fais du foot dès que je peux. Ce que j'aime le moins, c'est le bruit, mais je reste positif.", "phrases": [{"t": "Je m'appelle Marco, j'ai 27 ans et je suis brésilien.", "mots": ["Je", "m'appelle", "Marco,", "j'ai", "27", "ans", "et", "je", "suis", "brésilien."], "trous": [1, 2, 3, 8, 9]}, {"t": "Je me suis installé à Bordeaux il y a 3 ans.", "mots": ["Je", "me", "suis", "installé", "à", "Bordeaux", "il", "y", "a", "3", "ans."], "trous": [2, 3, 5]}, {"t": "Je parle portugais, espagnol et français.", "mots": ["Je", "parle", "portugais,", "espagnol", "et", "français."], "trous": [1, 2, 3, 5]}, {"t": "Je travaille comme cuisinier, un métier que j'ai choisi parce que j'adore préparer de bons plats.", "mots": ["Je", "travaille", "comme", "cuisinier,", "un", "métier", "que", "j'ai", "choisi", "parce", "que", "j'adore", "préparer", "de", "bons", "plats."], "trous": [1, 3, 5, 7, 8, 9, 11, 12, 14, 15]}, {"t": "En dehors du travail, j'adore le sport et je fais du foot dès que je peux.", "mots": ["En", "dehors", "du", "travail,", "j'adore", "le", "sport", "et", "je", "fais", "du", "foot", "dès", "que", "je", "peux."], "trous": [1, 3, 4, 6, 9, 11, 15]}, {"t": "Ce que j'aime le moins, c'est le bruit, mais je reste positif.", "mots": ["Ce", "que", "j'aime", "le", "moins,", "c'est", "le", "bruit,", "mais", "je", "reste", "positif."], "trous": [2, 4, 7, 10, 11]}]}}, "Yuki": {"A1": {"texte": "Je m'appelle Yuki. J'ai 24 ans. Je suis japonaise. J'habite à Paris. Je parle japonais, anglais et français. Je suis graphiste. J'aime le dessin. Je n'aime pas se lever tôt. Je fais de la photo.", "phrases": [{"t": "Je m'appelle Yuki.", "mots": ["Je", "m'appelle", "Yuki."], "trous": [1, 2]}, {"t": "J'ai 24 ans.", "mots": ["J'ai", "24", "ans."], "trous": [0]}, {"t": "Je suis japonaise.", "mots": ["Je", "suis", "japonaise."], "trous": [1, 2]}, {"t": "J'habite à Paris.", "mots": ["J'habite", "à", "Paris."], "trous": [0, 2]}, {"t": "Je parle japonais, anglais et français.", "mots": ["Je", "parle", "japonais,", "anglais", "et", "français."], "trous": [1, 2, 3, 5]}, {"t": "Je suis graphiste.", "mots": ["Je", "suis", "graphiste."], "trous": [1, 2]}, {"t": "J'aime le dessin.", "mots": ["J'aime", "le", "dessin."], "trous": [0, 2]}, {"t": "Je n'aime pas se lever tôt.", "mots": ["Je", "n'aime", "pas", "se", "lever", "tôt."], "trous": [1, 4]}, {"t": "Je fais de la photo.", "mots": ["Je", "fais", "de", "la", "photo."], "trous": [1, 4]}]}, "A2": {"texte": "Je m'appelle Yuki et j'ai 24 ans. Je suis japonaise, mais j'habite à Paris. Je parle japonais, anglais et français. Je travaille comme graphiste. J'aime beaucoup le dessin, mais je n'aime pas se lever tôt. Pendant mon temps libre, je fais de la photo.", "phrases": [{"t": "Je m'appelle Yuki et j'ai 24 ans.", "mots": ["Je", "m'appelle", "Yuki", "et", "j'ai", "24", "ans."], "trous": [1, 2, 4]}, {"t": "Je suis japonaise, mais j'habite à Paris.", "mots": ["Je", "suis", "japonaise,", "mais", "j'habite", "à", "Paris."], "trous": [1, 2, 4, 6]}, {"t": "Je parle japonais, anglais et français.", "mots": ["Je", "parle", "japonais,", "anglais", "et", "français."], "trous": [1, 2, 3, 5]}, {"t": "Je travaille comme graphiste.", "mots": ["Je", "travaille", "comme", "graphiste."], "trous": [1, 3]}, {"t": "J'aime beaucoup le dessin, mais je n'aime pas se lever tôt.", "mots": ["J'aime", "beaucoup", "le", "dessin,", "mais", "je", "n'aime", "pas", "se", "lever", "tôt."], "trous": [0, 1, 3, 6, 9]}, {"t": "Pendant mon temps libre, je fais de la photo.", "mots": ["Pendant", "mon", "temps", "libre,", "je", "fais", "de", "la", "photo."], "trous": [0, 2, 3, 5, 8]}]}, "B1": {"texte": "Je m'appelle Yuki et j'ai 24 ans. Je suis japonaise et j'habite à Paris depuis 4 ans. Je parle japonais, anglais et français. Je travaille comme graphiste. J'ai choisi ce métier parce que j'aime créer des images. J'aime aussi le dessin, mais je n'aime pas se lever tôt. Le week-end, je fais de la photo.", "phrases": [{"t": "Je m'appelle Yuki et j'ai 24 ans.", "mots": ["Je", "m'appelle", "Yuki", "et", "j'ai", "24", "ans."], "trous": [1, 2, 4]}, {"t": "Je suis japonaise et j'habite à Paris depuis 4 ans.", "mots": ["Je", "suis", "japonaise", "et", "j'habite", "à", "Paris", "depuis", "4", "ans."], "trous": [1, 2, 4, 6, 7]}, {"t": "Je parle japonais, anglais et français.", "mots": ["Je", "parle", "japonais,", "anglais", "et", "français."], "trous": [1, 2, 3, 5]}, {"t": "Je travaille comme graphiste.", "mots": ["Je", "travaille", "comme", "graphiste."], "trous": [1, 3]}, {"t": "J'ai choisi ce métier parce que j'aime créer des images.", "mots": ["J'ai", "choisi", "ce", "métier", "parce", "que", "j'aime", "créer", "des", "images."], "trous": [0, 1, 3, 4, 6, 7, 9]}, {"t": "J'aime aussi le dessin, mais je n'aime pas se lever tôt.", "mots": ["J'aime", "aussi", "le", "dessin,", "mais", "je", "n'aime", "pas", "se", "lever", "tôt."], "trous": [0, 1, 3, 6, 9]}, {"t": "Le week-end, je fais de la photo.", "mots": ["Le", "week-end,", "je", "fais", "de", "la", "photo."], "trous": [1, 3, 6]}]}, "B2": {"texte": "Je m'appelle Yuki, j'ai 24 ans et je suis japonaise. Je me suis installée à Paris il y a 4 ans. Je parle japonais, anglais et français. Je travaille comme graphiste, un métier que j'ai choisi parce que j'aime créer des images. En dehors du travail, j'adore le dessin et je fais de la photo dès que je peux. Ce que j'aime le moins, c'est se lever tôt, mais je reste positive.", "phrases": [{"t": "Je m'appelle Yuki, j'ai 24 ans et je suis japonaise.", "mots": ["Je", "m'appelle", "Yuki,", "j'ai", "24", "ans", "et", "je", "suis", "japonaise."], "trous": [1, 2, 3, 8, 9]}, {"t": "Je me suis installée à Paris il y a 4 ans.", "mots": ["Je", "me", "suis", "installée", "à", "Paris", "il", "y", "a", "4", "ans."], "trous": [2, 3, 5]}, {"t": "Je parle japonais, anglais et français.", "mots": ["Je", "parle", "japonais,", "anglais", "et", "français."], "trous": [1, 2, 3, 5]}, {"t": "Je travaille comme graphiste, un métier que j'ai choisi parce que j'aime créer des images.", "mots": ["Je", "travaille", "comme", "graphiste,", "un", "métier", "que", "j'ai", "choisi", "parce", "que", "j'aime", "créer", "des", "images."], "trous": [1, 3, 5, 7, 8, 9, 11, 12, 14]}, {"t": "En dehors du travail, j'adore le dessin et je fais de la photo dès que je peux.", "mots": ["En", "dehors", "du", "travail,", "j'adore", "le", "dessin", "et", "je", "fais", "de", "la", "photo", "dès", "que", "je", "peux."], "trous": [1, 3, 4, 6, 9, 12, 16]}, {"t": "Ce que j'aime le moins, c'est se lever tôt, mais je reste positive.", "mots": ["Ce", "que", "j'aime", "le", "moins,", "c'est", "se", "lever", "tôt,", "mais", "je", "reste", "positive."], "trous": [2, 4, 7, 11, 12]}]}}, "Karim": {"A1": {"texte": "Je m'appelle Karim. J'ai 35 ans. Je suis marocain. J'habite à Marseille. Je parle arabe et français. Je suis électricien. J'aime la mer. Je n'aime pas les embouteillages. Je fais de la pêche.", "phrases": [{"t": "Je m'appelle Karim.", "mots": ["Je", "m'appelle", "Karim."], "trous": [1, 2]}, {"t": "J'ai 35 ans.", "mots": ["J'ai", "35", "ans."], "trous": [0]}, {"t": "Je suis marocain.", "mots": ["Je", "suis", "marocain."], "trous": [1, 2]}, {"t": "J'habite à Marseille.", "mots": ["J'habite", "à", "Marseille."], "trous": [0, 2]}, {"t": "Je parle arabe et français.", "mots": ["Je", "parle", "arabe", "et", "français."], "trous": [1, 2, 4]}, {"t": "Je suis électricien.", "mots": ["Je", "suis", "électricien."], "trous": [1, 2]}, {"t": "J'aime la mer.", "mots": ["J'aime", "la", "mer."], "trous": [0]}, {"t": "Je n'aime pas les embouteillages.", "mots": ["Je", "n'aime", "pas", "les", "embouteillages."], "trous": [1, 4]}, {"t": "Je fais de la pêche.", "mots": ["Je", "fais", "de", "la", "pêche."], "trous": [1, 4]}]}, "A2": {"texte": "Je m'appelle Karim et j'ai 35 ans. Je suis marocain, mais j'habite à Marseille. Je parle arabe et français. Je travaille comme électricien. J'aime beaucoup la mer, mais je n'aime pas les embouteillages. Pendant mon temps libre, je fais de la pêche.", "phrases": [{"t": "Je m'appelle Karim et j'ai 35 ans.", "mots": ["Je", "m'appelle", "Karim", "et", "j'ai", "35", "ans."], "trous": [1, 2, 4]}, {"t": "Je suis marocain, mais j'habite à Marseille.", "mots": ["Je", "suis", "marocain,", "mais", "j'habite", "à", "Marseille."], "trous": [1, 2, 4, 6]}, {"t": "Je parle arabe et français.", "mots": ["Je", "parle", "arabe", "et", "français."], "trous": [1, 2, 4]}, {"t": "Je travaille comme électricien.", "mots": ["Je", "travaille", "comme", "électricien."], "trous": [1, 3]}, {"t": "J'aime beaucoup la mer, mais je n'aime pas les embouteillages.", "mots": ["J'aime", "beaucoup", "la", "mer,", "mais", "je", "n'aime", "pas", "les", "embouteillages."], "trous": [0, 1, 6, 9]}, {"t": "Pendant mon temps libre, je fais de la pêche.", "mots": ["Pendant", "mon", "temps", "libre,", "je", "fais", "de", "la", "pêche."], "trous": [0, 2, 3, 5, 8]}]}, "B1": {"texte": "Je m'appelle Karim et j'ai 35 ans. Je suis marocain et j'habite à Marseille depuis 10 ans. Je parle arabe et français. Je travaille comme électricien. J'ai choisi ce métier parce que j'aime réparer et bricoler. J'aime aussi la mer, mais je n'aime pas les embouteillages. Le week-end, je fais de la pêche.", "phrases": [{"t": "Je m'appelle Karim et j'ai 35 ans.", "mots": ["Je", "m'appelle", "Karim", "et", "j'ai", "35", "ans."], "trous": [1, 2, 4]}, {"t": "Je suis marocain et j'habite à Marseille depuis 10 ans.", "mots": ["Je", "suis", "marocain", "et", "j'habite", "à", "Marseille", "depuis", "10", "ans."], "trous": [1, 2, 4, 6, 7]}, {"t": "Je parle arabe et français.", "mots": ["Je", "parle", "arabe", "et", "français."], "trous": [1, 2, 4]}, {"t": "Je travaille comme électricien.", "mots": ["Je", "travaille", "comme", "électricien."], "trous": [1, 3]}, {"t": "J'ai choisi ce métier parce que j'aime réparer et bricoler.", "mots": ["J'ai", "choisi", "ce", "métier", "parce", "que", "j'aime", "réparer", "et", "bricoler."], "trous": [0, 1, 3, 4, 6, 7, 9]}, {"t": "J'aime aussi la mer, mais je n'aime pas les embouteillages.", "mots": ["J'aime", "aussi", "la", "mer,", "mais", "je", "n'aime", "pas", "les", "embouteillages."], "trous": [0, 1, 6, 9]}, {"t": "Le week-end, je fais de la pêche.", "mots": ["Le", "week-end,", "je", "fais", "de", "la", "pêche."], "trous": [1, 3, 6]}]}, "B2": {"texte": "Je m'appelle Karim, j'ai 35 ans et je suis marocain. Je me suis installé à Marseille il y a 10 ans. Je parle arabe et français. Je travaille comme électricien, un métier que j'ai choisi parce que j'aime réparer et bricoler. En dehors du travail, j'adore la mer et je fais de la pêche dès que je peux. Ce que j'aime le moins, c'est les embouteillages, mais je reste positif.", "phrases": [{"t": "Je m'appelle Karim, j'ai 35 ans et je suis marocain.", "mots": ["Je", "m'appelle", "Karim,", "j'ai", "35", "ans", "et", "je", "suis", "marocain."], "trous": [1, 2, 3, 8, 9]}, {"t": "Je me suis installé à Marseille il y a 10 ans.", "mots": ["Je", "me", "suis", "installé", "à", "Marseille", "il", "y", "a", "10", "ans."], "trous": [2, 3, 5]}, {"t": "Je parle arabe et français.", "mots": ["Je", "parle", "arabe", "et", "français."], "trous": [1, 2, 4]}, {"t": "Je travaille comme électricien, un métier que j'ai choisi parce que j'aime réparer et bricoler.", "mots": ["Je", "travaille", "comme", "électricien,", "un", "métier", "que", "j'ai", "choisi", "parce", "que", "j'aime", "réparer", "et", "bricoler."], "trous": [1, 3, 5, 7, 8, 9, 11, 12, 14]}, {"t": "En dehors du travail, j'adore la mer et je fais de la pêche dès que je peux.", "mots": ["En", "dehors", "du", "travail,", "j'adore", "la", "mer", "et", "je", "fais", "de", "la", "pêche", "dès", "que", "je", "peux."], "trous": [1, 3, 4, 9, 12, 16]}, {"t": "Ce que j'aime le moins, c'est les embouteillages, mais je reste positif.", "mots": ["Ce", "que", "j'aime", "le", "moins,", "c'est", "les", "embouteillages,", "mais", "je", "reste", "positif."], "trous": [2, 4, 7, 10, 11]}]}}, "Elena": {"A1": {"texte": "Je m'appelle Elena. J'ai 29 ans. Je suis roumaine. J'habite à Nantes. Je parle roumain et français. Je suis coiffeuse. J'aime la danse. Je n'aime pas la pluie. Je fais de la couture.", "phrases": [{"t": "Je m'appelle Elena.", "mots": ["Je", "m'appelle", "Elena."], "trous": [1, 2]}, {"t": "J'ai 29 ans.", "mots": ["J'ai", "29", "ans."], "trous": [0]}, {"t": "Je suis roumaine.", "mots": ["Je", "suis", "roumaine."], "trous": [1, 2]}, {"t": "J'habite à Nantes.", "mots": ["J'habite", "à", "Nantes."], "trous": [0, 2]}, {"t": "Je parle roumain et français.", "mots": ["Je", "parle", "roumain", "et", "français."], "trous": [1, 2, 4]}, {"t": "Je suis coiffeuse.", "mots": ["Je", "suis", "coiffeuse."], "trous": [1, 2]}, {"t": "J'aime la danse.", "mots": ["J'aime", "la", "danse."], "trous": [0, 2]}, {"t": "Je n'aime pas la pluie.", "mots": ["Je", "n'aime", "pas", "la", "pluie."], "trous": [1, 4]}, {"t": "Je fais de la couture.", "mots": ["Je", "fais", "de", "la", "couture."], "trous": [1, 4]}]}, "A2": {"texte": "Je m'appelle Elena et j'ai 29 ans. Je suis roumaine, mais j'habite à Nantes. Je parle roumain et français. Je travaille comme coiffeuse. J'aime beaucoup la danse, mais je n'aime pas la pluie. Pendant mon temps libre, je fais de la couture.", "phrases": [{"t": "Je m'appelle Elena et j'ai 29 ans.", "mots": ["Je", "m'appelle", "Elena", "et", "j'ai", "29", "ans."], "trous": [1, 2, 4]}, {"t": "Je suis roumaine, mais j'habite à Nantes.", "mots": ["Je", "suis", "roumaine,", "mais", "j'habite", "à", "Nantes."], "trous": [1, 2, 4, 6]}, {"t": "Je parle roumain et français.", "mots": ["Je", "parle", "roumain", "et", "français."], "trous": [1, 2, 4]}, {"t": "Je travaille comme coiffeuse.", "mots": ["Je", "travaille", "comme", "coiffeuse."], "trous": [1, 3]}, {"t": "J'aime beaucoup la danse, mais je n'aime pas la pluie.", "mots": ["J'aime", "beaucoup", "la", "danse,", "mais", "je", "n'aime", "pas", "la", "pluie."], "trous": [0, 1, 3, 6, 9]}, {"t": "Pendant mon temps libre, je fais de la couture.", "mots": ["Pendant", "mon", "temps", "libre,", "je", "fais", "de", "la", "couture."], "trous": [0, 2, 3, 5, 8]}]}, "B1": {"texte": "Je m'appelle Elena et j'ai 29 ans. Je suis roumaine et j'habite à Nantes depuis 6 ans. Je parle roumain et français. Je travaille comme coiffeuse. J'ai choisi ce métier parce que j'aime rendre les gens beaux. J'aime aussi la danse, mais je n'aime pas la pluie. Le week-end, je fais de la couture.", "phrases": [{"t": "Je m'appelle Elena et j'ai 29 ans.", "mots": ["Je", "m'appelle", "Elena", "et", "j'ai", "29", "ans."], "trous": [1, 2, 4]}, {"t": "Je suis roumaine et j'habite à Nantes depuis 6 ans.", "mots": ["Je", "suis", "roumaine", "et", "j'habite", "à", "Nantes", "depuis", "6", "ans."], "trous": [1, 2, 4, 6, 7]}, {"t": "Je parle roumain et français.", "mots": ["Je", "parle", "roumain", "et", "français."], "trous": [1, 2, 4]}, {"t": "Je travaille comme coiffeuse.", "mots": ["Je", "travaille", "comme", "coiffeuse."], "trous": [1, 3]}, {"t": "J'ai choisi ce métier parce que j'aime rendre les gens beaux.", "mots": ["J'ai", "choisi", "ce", "métier", "parce", "que", "j'aime", "rendre", "les", "gens", "beaux."], "trous": [0, 1, 3, 4, 6, 7, 9, 10]}, {"t": "J'aime aussi la danse, mais je n'aime pas la pluie.", "mots": ["J'aime", "aussi", "la", "danse,", "mais", "je", "n'aime", "pas", "la", "pluie."], "trous": [0, 1, 3, 6, 9]}, {"t": "Le week-end, je fais de la couture.", "mots": ["Le", "week-end,", "je", "fais", "de", "la", "couture."], "trous": [1, 3, 6]}]}, "B2": {"texte": "Je m'appelle Elena, j'ai 29 ans et je suis roumaine. Je me suis installée à Nantes il y a 6 ans. Je parle roumain et français. Je travaille comme coiffeuse, un métier que j'ai choisi parce que j'aime rendre les gens beaux. En dehors du travail, j'adore la danse et je fais de la couture dès que je peux. Ce que j'aime le moins, c'est la pluie, mais je reste positive.", "phrases": [{"t": "Je m'appelle Elena, j'ai 29 ans et je suis roumaine.", "mots": ["Je", "m'appelle", "Elena,", "j'ai", "29", "ans", "et", "je", "suis", "roumaine."], "trous": [1, 2, 3, 8, 9]}, {"t": "Je me suis installée à Nantes il y a 6 ans.", "mots": ["Je", "me", "suis", "installée", "à", "Nantes", "il", "y", "a", "6", "ans."], "trous": [2, 3, 5]}, {"t": "Je parle roumain et français.", "mots": ["Je", "parle", "roumain", "et", "français."], "trous": [1, 2, 4]}, {"t": "Je travaille comme coiffeuse, un métier que j'ai choisi parce que j'aime rendre les gens beaux.", "mots": ["Je", "travaille", "comme", "coiffeuse,", "un", "métier", "que", "j'ai", "choisi", "parce", "que", "j'aime", "rendre", "les", "gens", "beaux."], "trous": [1, 3, 5, 7, 8, 9, 11, 12, 14, 15]}, {"t": "En dehors du travail, j'adore la danse et je fais de la couture dès que je peux.", "mots": ["En", "dehors", "du", "travail,", "j'adore", "la", "danse", "et", "je", "fais", "de", "la", "couture", "dès", "que", "je", "peux."], "trous": [1, 3, 4, 6, 9, 12, 16]}, {"t": "Ce que j'aime le moins, c'est la pluie, mais je reste positive.", "mots": ["Ce", "que", "j'aime", "le", "moins,", "c'est", "la", "pluie,", "mais", "je", "reste", "positive."], "trous": [2, 4, 7, 10, 11]}]}}, "David": {"A1": {"texte": "Je m'appelle David. J'ai 41 ans. Je suis français. J'habite à Lille. Je parle français et anglais. Je suis chauffeur de bus. J'aime la lecture. Je n'aime pas les retards. Je fais du jardinage.", "phrases": [{"t": "Je m'appelle David.", "mots": ["Je", "m'appelle", "David."], "trous": [1, 2]}, {"t": "J'ai 41 ans.", "mots": ["J'ai", "41", "ans."], "trous": [0]}, {"t": "Je suis français.", "mots": ["Je", "suis", "français."], "trous": [1, 2]}, {"t": "J'habite à Lille.", "mots": ["J'habite", "à", "Lille."], "trous": [0, 2]}, {"t": "Je parle français et anglais.", "mots": ["Je", "parle", "français", "et", "anglais."], "trous": [1, 2, 4]}, {"t": "Je suis chauffeur de bus.", "mots": ["Je", "suis", "chauffeur", "de", "bus."], "trous": [1, 2]}, {"t": "J'aime la lecture.", "mots": ["J'aime", "la", "lecture."], "trous": [0, 2]}, {"t": "Je n'aime pas les retards.", "mots": ["Je", "n'aime", "pas", "les", "retards."], "trous": [1, 4]}, {"t": "Je fais du jardinage.", "mots": ["Je", "fais", "du", "jardinage."], "trous": [1, 3]}]}, "A2": {"texte": "Je m'appelle David et j'ai 41 ans. Je suis français et j'habite à Lille. Je parle français et anglais. Je travaille comme chauffeur de bus. J'aime beaucoup la lecture, mais je n'aime pas les retards. Pendant mon temps libre, je fais du jardinage.", "phrases": [{"t": "Je m'appelle David et j'ai 41 ans.", "mots": ["Je", "m'appelle", "David", "et", "j'ai", "41", "ans."], "trous": [1, 2, 4]}, {"t": "Je suis français et j'habite à Lille.", "mots": ["Je", "suis", "français", "et", "j'habite", "à", "Lille."], "trous": [1, 2, 4, 6]}, {"t": "Je parle français et anglais.", "mots": ["Je", "parle", "français", "et", "anglais."], "trous": [1, 2, 4]}, {"t": "Je travaille comme chauffeur de bus.", "mots": ["Je", "travaille", "comme", "chauffeur", "de", "bus."], "trous": [1, 3]}, {"t": "J'aime beaucoup la lecture, mais je n'aime pas les retards.", "mots": ["J'aime", "beaucoup", "la", "lecture,", "mais", "je", "n'aime", "pas", "les", "retards."], "trous": [0, 1, 3, 6, 9]}, {"t": "Pendant mon temps libre, je fais du jardinage.", "mots": ["Pendant", "mon", "temps", "libre,", "je", "fais", "du", "jardinage."], "trous": [0, 2, 3, 5, 7]}]}, "B1": {"texte": "Je m'appelle David et j'ai 41 ans. Je suis français et j'habite à Lille. Je parle français et anglais. Je travaille comme chauffeur de bus. J'ai choisi ce métier parce que j'aime conduire et rencontrer des gens. J'aime aussi la lecture, mais je n'aime pas les retards. Le week-end, je fais du jardinage.", "phrases": [{"t": "Je m'appelle David et j'ai 41 ans.", "mots": ["Je", "m'appelle", "David", "et", "j'ai", "41", "ans."], "trous": [1, 2, 4]}, {"t": "Je suis français et j'habite à Lille.", "mots": ["Je", "suis", "français", "et", "j'habite", "à", "Lille."], "trous": [1, 2, 4, 6]}, {"t": "Je parle français et anglais.", "mots": ["Je", "parle", "français", "et", "anglais."], "trous": [1, 2, 4]}, {"t": "Je travaille comme chauffeur de bus.", "mots": ["Je", "travaille", "comme", "chauffeur", "de", "bus."], "trous": [1, 3]}, {"t": "J'ai choisi ce métier parce que j'aime conduire et rencontrer des gens.", "mots": ["J'ai", "choisi", "ce", "métier", "parce", "que", "j'aime", "conduire", "et", "rencontrer", "des", "gens."], "trous": [0, 1, 3, 4, 6, 7, 9, 11]}, {"t": "J'aime aussi la lecture, mais je n'aime pas les retards.", "mots": ["J'aime", "aussi", "la", "lecture,", "mais", "je", "n'aime", "pas", "les", "retards."], "trous": [0, 1, 3, 6, 9]}, {"t": "Le week-end, je fais du jardinage.", "mots": ["Le", "week-end,", "je", "fais", "du", "jardinage."], "trous": [1, 3, 5]}]}, "B2": {"texte": "Je m'appelle David, j'ai 41 ans et je suis français. J'habite à Lille depuis toujours. Je parle français et anglais. Je travaille comme chauffeur de bus, un métier que j'ai choisi parce que j'aime conduire et rencontrer des gens. En dehors du travail, j'adore la lecture et je fais du jardinage dès que je peux. Ce que j'aime le moins, c'est les retards, mais je reste positif.", "phrases": [{"t": "Je m'appelle David, j'ai 41 ans et je suis français.", "mots": ["Je", "m'appelle", "David,", "j'ai", "41", "ans", "et", "je", "suis", "français."], "trous": [1, 2, 3, 8, 9]}, {"t": "J'habite à Lille depuis toujours.", "mots": ["J'habite", "à", "Lille", "depuis", "toujours."], "trous": [0, 2, 3, 4]}, {"t": "Je parle français et anglais.", "mots": ["Je", "parle", "français", "et", "anglais."], "trous": [1, 2, 4]}, {"t": "Je travaille comme chauffeur de bus, un métier que j'ai choisi parce que j'aime conduire et rencontrer des gens.", "mots": ["Je", "travaille", "comme", "chauffeur", "de", "bus,", "un", "métier", "que", "j'ai", "choisi", "parce", "que", "j'aime", "conduire", "et", "rencontrer", "des", "gens."], "trous": [1, 3, 7, 9, 10, 11, 13, 14, 16, 18]}, {"t": "En dehors du travail, j'adore la lecture et je fais du jardinage dès que je peux.", "mots": ["En", "dehors", "du", "travail,", "j'adore", "la", "lecture", "et", "je", "fais", "du", "jardinage", "dès", "que", "je", "peux."], "trous": [1, 3, 4, 6, 9, 11, 15]}, {"t": "Ce que j'aime le moins, c'est les retards, mais je reste positif.", "mots": ["Ce", "que", "j'aime", "le", "moins,", "c'est", "les", "retards,", "mais", "je", "reste", "positif."], "trous": [2, 4, 7, 10, 11]}]}}, "Fatou": {"A1": {"texte": "Je m'appelle Fatou. J'ai 26 ans. Je suis sénégalaise. J'habite à Toulouse. Je parle wolof et français. Je suis aide-soignante. J'aime la cuisine. Je n'aime pas le stress. Je fais du chant.", "phrases": [{"t": "Je m'appelle Fatou.", "mots": ["Je", "m'appelle", "Fatou."], "trous": [1, 2]}, {"t": "J'ai 26 ans.", "mots": ["J'ai", "26", "ans."], "trous": [0]}, {"t": "Je suis sénégalaise.", "mots": ["Je", "suis", "sénégalaise."], "trous": [1, 2]}, {"t": "J'habite à Toulouse.", "mots": ["J'habite", "à", "Toulouse."], "trous": [0, 2]}, {"t": "Je parle wolof et français.", "mots": ["Je", "parle", "wolof", "et", "français."], "trous": [1, 2, 4]}, {"t": "Je suis aide-soignante.", "mots": ["Je", "suis", "aide-soignante."], "trous": [1, 2]}, {"t": "J'aime la cuisine.", "mots": ["J'aime", "la", "cuisine."], "trous": [0, 2]}, {"t": "Je n'aime pas le stress.", "mots": ["Je", "n'aime", "pas", "le", "stress."], "trous": [1, 4]}, {"t": "Je fais du chant.", "mots": ["Je", "fais", "du", "chant."], "trous": [1, 3]}]}, "A2": {"texte": "Je m'appelle Fatou et j'ai 26 ans. Je suis sénégalaise, mais j'habite à Toulouse. Je parle wolof et français. Je travaille comme aide-soignante. J'aime beaucoup la cuisine, mais je n'aime pas le stress. Pendant mon temps libre, je fais du chant.", "phrases": [{"t": "Je m'appelle Fatou et j'ai 26 ans.", "mots": ["Je", "m'appelle", "Fatou", "et", "j'ai", "26", "ans."], "trous": [1, 2, 4]}, {"t": "Je suis sénégalaise, mais j'habite à Toulouse.", "mots": ["Je", "suis", "sénégalaise,", "mais", "j'habite", "à", "Toulouse."], "trous": [1, 2, 4, 6]}, {"t": "Je parle wolof et français.", "mots": ["Je", "parle", "wolof", "et", "français."], "trous": [1, 2, 4]}, {"t": "Je travaille comme aide-soignante.", "mots": ["Je", "travaille", "comme", "aide-soignante."], "trous": [1, 3]}, {"t": "J'aime beaucoup la cuisine, mais je n'aime pas le stress.", "mots": ["J'aime", "beaucoup", "la", "cuisine,", "mais", "je", "n'aime", "pas", "le", "stress."], "trous": [0, 1, 3, 6, 9]}, {"t": "Pendant mon temps libre, je fais du chant.", "mots": ["Pendant", "mon", "temps", "libre,", "je", "fais", "du", "chant."], "trous": [0, 2, 3, 5, 7]}]}, "B1": {"texte": "Je m'appelle Fatou et j'ai 26 ans. Je suis sénégalaise et j'habite à Toulouse depuis 2 ans. Je parle wolof et français. Je travaille comme aide-soignante. J'ai choisi ce métier parce que j'aime prendre soin des personnes âgées. J'aime aussi la cuisine, mais je n'aime pas le stress. Le week-end, je fais du chant.", "phrases": [{"t": "Je m'appelle Fatou et j'ai 26 ans.", "mots": ["Je", "m'appelle", "Fatou", "et", "j'ai", "26", "ans."], "trous": [1, 2, 4]}, {"t": "Je suis sénégalaise et j'habite à Toulouse depuis 2 ans.", "mots": ["Je", "suis", "sénégalaise", "et", "j'habite", "à", "Toulouse", "depuis", "2", "ans."], "trous": [1, 2, 4, 6, 7]}, {"t": "Je parle wolof et français.", "mots": ["Je", "parle", "wolof", "et", "français."], "trous": [1, 2, 4]}, {"t": "Je travaille comme aide-soignante.", "mots": ["Je", "travaille", "comme", "aide-soignante."], "trous": [1, 3]}, {"t": "J'ai choisi ce métier parce que j'aime prendre soin des personnes âgées.", "mots": ["J'ai", "choisi", "ce", "métier", "parce", "que", "j'aime", "prendre", "soin", "des", "personnes", "âgées."], "trous": [0, 1, 3, 4, 6, 7, 8, 10, 11]}, {"t": "J'aime aussi la cuisine, mais je n'aime pas le stress.", "mots": ["J'aime", "aussi", "la", "cuisine,", "mais", "je", "n'aime", "pas", "le", "stress."], "trous": [0, 1, 3, 6, 9]}, {"t": "Le week-end, je fais du chant.", "mots": ["Le", "week-end,", "je", "fais", "du", "chant."], "trous": [1, 3, 5]}]}, "B2": {"texte": "Je m'appelle Fatou, j'ai 26 ans et je suis sénégalaise. Je me suis installée à Toulouse il y a 2 ans. Je parle wolof et français. Je travaille comme aide-soignante, un métier que j'ai choisi parce que j'aime prendre soin des personnes âgées. En dehors du travail, j'adore la cuisine et je fais du chant dès que je peux. Ce que j'aime le moins, c'est le stress, mais je reste positive.", "phrases": [{"t": "Je m'appelle Fatou, j'ai 26 ans et je suis sénégalaise.", "mots": ["Je", "m'appelle", "Fatou,", "j'ai", "26", "ans", "et", "je", "suis", "sénégalaise."], "trous": [1, 2, 3, 8, 9]}, {"t": "Je me suis installée à Toulouse il y a 2 ans.", "mots": ["Je", "me", "suis", "installée", "à", "Toulouse", "il", "y", "a", "2", "ans."], "trous": [2, 3, 5]}, {"t": "Je parle wolof et français.", "mots": ["Je", "parle", "wolof", "et", "français."], "trous": [1, 2, 4]}, {"t": "Je travaille comme aide-soignante, un métier que j'ai choisi parce que j'aime prendre soin des personnes âgées.", "mots": ["Je", "travaille", "comme", "aide-soignante,", "un", "métier", "que", "j'ai", "choisi", "parce", "que", "j'aime", "prendre", "soin", "des", "personnes", "âgées."], "trous": [1, 3, 5, 7, 8, 9, 11, 12, 13, 15, 16]}, {"t": "En dehors du travail, j'adore la cuisine et je fais du chant dès que je peux.", "mots": ["En", "dehors", "du", "travail,", "j'adore", "la", "cuisine", "et", "je", "fais", "du", "chant", "dès", "que", "je", "peux."], "trous": [1, 3, 4, 6, 9, 11, 15]}, {"t": "Ce que j'aime le moins, c'est le stress, mais je reste positive.", "mots": ["Ce", "que", "j'aime", "le", "moins,", "c'est", "le", "stress,", "mais", "je", "reste", "positive."], "trous": [2, 4, 7, 10, 11]}]}}, "Tomas": {"A1": {"texte": "Je m'appelle Tomas. J'ai 33 ans. Je suis polonais. J'habite à Strasbourg. Je parle polonais, allemand et français. Je suis mécanicien. J'aime les voitures. Je n'aime pas le désordre. Je fais du cyclisme.", "phrases": [{"t": "Je m'appelle Tomas.", "mots": ["Je", "m'appelle", "Tomas."], "trous": [1, 2]}, {"t": "J'ai 33 ans.", "mots": ["J'ai", "33", "ans."], "trous": [0]}, {"t": "Je suis polonais.", "mots": ["Je", "suis", "polonais."], "trous": [1, 2]}, {"t": "J'habite à Strasbourg.", "mots": ["J'habite", "à", "Strasbourg."], "trous": [0, 2]}, {"t": "Je parle polonais, allemand et français.", "mots": ["Je", "parle", "polonais,", "allemand", "et", "français."], "trous": [1, 2, 3, 5]}, {"t": "Je suis mécanicien.", "mots": ["Je", "suis", "mécanicien."], "trous": [1, 2]}, {"t": "J'aime les voitures.", "mots": ["J'aime", "les", "voitures."], "trous": [0, 2]}, {"t": "Je n'aime pas le désordre.", "mots": ["Je", "n'aime", "pas", "le", "désordre."], "trous": [1, 4]}, {"t": "Je fais du cyclisme.", "mots": ["Je", "fais", "du", "cyclisme."], "trous": [1, 3]}]}, "A2": {"texte": "Je m'appelle Tomas et j'ai 33 ans. Je suis polonais, mais j'habite à Strasbourg. Je parle polonais, allemand et français. Je travaille comme mécanicien. J'aime beaucoup les voitures, mais je n'aime pas le désordre. Pendant mon temps libre, je fais du cyclisme.", "phrases": [{"t": "Je m'appelle Tomas et j'ai 33 ans.", "mots": ["Je", "m'appelle", "Tomas", "et", "j'ai", "33", "ans."], "trous": [1, 2, 4]}, {"t": "Je suis polonais, mais j'habite à Strasbourg.", "mots": ["Je", "suis", "polonais,", "mais", "j'habite", "à", "Strasbourg."], "trous": [1, 2, 4, 6]}, {"t": "Je parle polonais, allemand et français.", "mots": ["Je", "parle", "polonais,", "allemand", "et", "français."], "trous": [1, 2, 3, 5]}, {"t": "Je travaille comme mécanicien.", "mots": ["Je", "travaille", "comme", "mécanicien."], "trous": [1, 3]}, {"t": "J'aime beaucoup les voitures, mais je n'aime pas le désordre.", "mots": ["J'aime", "beaucoup", "les", "voitures,", "mais", "je", "n'aime", "pas", "le", "désordre."], "trous": [0, 1, 3, 6, 9]}, {"t": "Pendant mon temps libre, je fais du cyclisme.", "mots": ["Pendant", "mon", "temps", "libre,", "je", "fais", "du", "cyclisme."], "trous": [0, 2, 3, 5, 7]}]}, "B1": {"texte": "Je m'appelle Tomas et j'ai 33 ans. Je suis polonais et j'habite à Strasbourg depuis 8 ans. Je parle polonais, allemand et français. Je travaille comme mécanicien. J'ai choisi ce métier parce que j'aime comprendre comment marchent les moteurs. J'aime aussi les voitures, mais je n'aime pas le désordre. Le week-end, je fais du cyclisme.", "phrases": [{"t": "Je m'appelle Tomas et j'ai 33 ans.", "mots": ["Je", "m'appelle", "Tomas", "et", "j'ai", "33", "ans."], "trous": [1, 2, 4]}, {"t": "Je suis polonais et j'habite à Strasbourg depuis 8 ans.", "mots": ["Je", "suis", "polonais", "et", "j'habite", "à", "Strasbourg", "depuis", "8", "ans."], "trous": [1, 2, 4, 6, 7]}, {"t": "Je parle polonais, allemand et français.", "mots": ["Je", "parle", "polonais,", "allemand", "et", "français."], "trous": [1, 2, 3, 5]}, {"t": "Je travaille comme mécanicien.", "mots": ["Je", "travaille", "comme", "mécanicien."], "trous": [1, 3]}, {"t": "J'ai choisi ce métier parce que j'aime comprendre comment marchent les moteurs.", "mots": ["J'ai", "choisi", "ce", "métier", "parce", "que", "j'aime", "comprendre", "comment", "marchent", "les", "moteurs."], "trous": [0, 1, 3, 4, 6, 7, 8, 9, 11]}, {"t": "J'aime aussi les voitures, mais je n'aime pas le désordre.", "mots": ["J'aime", "aussi", "les", "voitures,", "mais", "je", "n'aime", "pas", "le", "désordre."], "trous": [0, 1, 3, 6, 9]}, {"t": "Le week-end, je fais du cyclisme.", "mots": ["Le", "week-end,", "je", "fais", "du", "cyclisme."], "trous": [1, 3, 5]}]}, "B2": {"texte": "Je m'appelle Tomas, j'ai 33 ans et je suis polonais. Je me suis installé à Strasbourg il y a 8 ans. Je parle polonais, allemand et français. Je travaille comme mécanicien, un métier que j'ai choisi parce que j'aime comprendre comment marchent les moteurs. En dehors du travail, j'adore les voitures et je fais du cyclisme dès que je peux. Ce que j'aime le moins, c'est le désordre, mais je reste positif.", "phrases": [{"t": "Je m'appelle Tomas, j'ai 33 ans et je suis polonais.", "mots": ["Je", "m'appelle", "Tomas,", "j'ai", "33", "ans", "et", "je", "suis", "polonais."], "trous": [1, 2, 3, 8, 9]}, {"t": "Je me suis installé à Strasbourg il y a 8 ans.", "mots": ["Je", "me", "suis", "installé", "à", "Strasbourg", "il", "y", "a", "8", "ans."], "trous": [2, 3, 5]}, {"t": "Je parle polonais, allemand et français.", "mots": ["Je", "parle", "polonais,", "allemand", "et", "français."], "trous": [1, 2, 3, 5]}, {"t": "Je travaille comme mécanicien, un métier que j'ai choisi parce que j'aime comprendre comment marchent les moteurs.", "mots": ["Je", "travaille", "comme", "mécanicien,", "un", "métier", "que", "j'ai", "choisi", "parce", "que", "j'aime", "comprendre", "comment", "marchent", "les", "moteurs."], "trous": [1, 3, 5, 7, 8, 9, 11, 12, 13, 14, 16]}, {"t": "En dehors du travail, j'adore les voitures et je fais du cyclisme dès que je peux.", "mots": ["En", "dehors", "du", "travail,", "j'adore", "les", "voitures", "et", "je", "fais", "du", "cyclisme", "dès", "que", "je", "peux."], "trous": [1, 3, 4, 6, 9, 11, 15]}, {"t": "Ce que j'aime le moins, c'est le désordre, mais je reste positif.", "mots": ["Ce", "que", "j'aime", "le", "moins,", "c'est", "le", "désordre,", "mais", "je", "reste", "positif."], "trous": [2, 4, 7, 10, 11]}]}}, "Sara": {"A1": {"texte": "Je m'appelle Sara. J'ai 22 ans. Je suis tunisienne. J'habite à Montpellier. Je parle arabe, français et anglais. Je suis vendeuse. J'aime la mode. Je n'aime pas l'hiver. Je fais de la natation.", "phrases": [{"t": "Je m'appelle Sara.", "mots": ["Je", "m'appelle", "Sara."], "trous": [1, 2]}, {"t": "J'ai 22 ans.", "mots": ["J'ai", "22", "ans."], "trous": [0]}, {"t": "Je suis tunisienne.", "mots": ["Je", "suis", "tunisienne."], "trous": [1, 2]}, {"t": "J'habite à Montpellier.", "mots": ["J'habite", "à", "Montpellier."], "trous": [0, 2]}, {"t": "Je parle arabe, français et anglais.", "mots": ["Je", "parle", "arabe,", "français", "et", "anglais."], "trous": [1, 2, 3, 5]}, {"t": "Je suis vendeuse.", "mots": ["Je", "suis", "vendeuse."], "trous": [1, 2]}, {"t": "J'aime la mode.", "mots": ["J'aime", "la", "mode."], "trous": [0, 2]}, {"t": "Je n'aime pas l'hiver.", "mots": ["Je", "n'aime", "pas", "l'hiver."], "trous": [1, 3]}, {"t": "Je fais de la natation.", "mots": ["Je", "fais", "de", "la", "natation."], "trous": [1, 4]}]}, "A2": {"texte": "Je m'appelle Sara et j'ai 22 ans. Je suis tunisienne, mais j'habite à Montpellier. Je parle arabe, français et anglais. Je travaille comme vendeuse. J'aime beaucoup la mode, mais je n'aime pas l'hiver. Pendant mon temps libre, je fais de la natation.", "phrases": [{"t": "Je m'appelle Sara et j'ai 22 ans.", "mots": ["Je", "m'appelle", "Sara", "et", "j'ai", "22", "ans."], "trous": [1, 2, 4]}, {"t": "Je suis tunisienne, mais j'habite à Montpellier.", "mots": ["Je", "suis", "tunisienne,", "mais", "j'habite", "à", "Montpellier."], "trous": [1, 2, 4, 6]}, {"t": "Je parle arabe, français et anglais.", "mots": ["Je", "parle", "arabe,", "français", "et", "anglais."], "trous": [1, 2, 3, 5]}, {"t": "Je travaille comme vendeuse.", "mots": ["Je", "travaille", "comme", "vendeuse."], "trous": [1, 3]}, {"t": "J'aime beaucoup la mode, mais je n'aime pas l'hiver.", "mots": ["J'aime", "beaucoup", "la", "mode,", "mais", "je", "n'aime", "pas", "l'hiver."], "trous": [0, 1, 3, 6, 8]}, {"t": "Pendant mon temps libre, je fais de la natation.", "mots": ["Pendant", "mon", "temps", "libre,", "je", "fais", "de", "la", "natation."], "trous": [0, 2, 3, 5, 8]}]}, "B1": {"texte": "Je m'appelle Sara et j'ai 22 ans. Je suis tunisienne et j'habite à Montpellier depuis 3 ans. Je parle arabe, français et anglais. Je travaille comme vendeuse. J'ai choisi ce métier parce que j'aime le contact avec les clients. J'aime aussi la mode, mais je n'aime pas l'hiver. Le week-end, je fais de la natation.", "phrases": [{"t": "Je m'appelle Sara et j'ai 22 ans.", "mots": ["Je", "m'appelle", "Sara", "et", "j'ai", "22", "ans."], "trous": [1, 2, 4]}, {"t": "Je suis tunisienne et j'habite à Montpellier depuis 3 ans.", "mots": ["Je", "suis", "tunisienne", "et", "j'habite", "à", "Montpellier", "depuis", "3", "ans."], "trous": [1, 2, 4, 6, 7]}, {"t": "Je parle arabe, français et anglais.", "mots": ["Je", "parle", "arabe,", "français", "et", "anglais."], "trous": [1, 2, 3, 5]}, {"t": "Je travaille comme vendeuse.", "mots": ["Je", "travaille", "comme", "vendeuse."], "trous": [1, 3]}, {"t": "J'ai choisi ce métier parce que j'aime le contact avec les clients.", "mots": ["J'ai", "choisi", "ce", "métier", "parce", "que", "j'aime", "le", "contact", "avec", "les", "clients."], "trous": [0, 1, 3, 4, 6, 8, 11]}, {"t": "J'aime aussi la mode, mais je n'aime pas l'hiver.", "mots": ["J'aime", "aussi", "la", "mode,", "mais", "je", "n'aime", "pas", "l'hiver."], "trous": [0, 1, 3, 6, 8]}, {"t": "Le week-end, je fais de la natation.", "mots": ["Le", "week-end,", "je", "fais", "de", "la", "natation."], "trous": [1, 3, 6]}]}, "B2": {"texte": "Je m'appelle Sara, j'ai 22 ans et je suis tunisienne. Je me suis installée à Montpellier il y a 3 ans. Je parle arabe, français et anglais. Je travaille comme vendeuse, un métier que j'ai choisi parce que j'aime le contact avec les clients. En dehors du travail, j'adore la mode et je fais de la natation dès que je peux. Ce que j'aime le moins, c'est l'hiver, mais je reste positive.", "phrases": [{"t": "Je m'appelle Sara, j'ai 22 ans et je suis tunisienne.", "mots": ["Je", "m'appelle", "Sara,", "j'ai", "22", "ans", "et", "je", "suis", "tunisienne."], "trous": [1, 2, 3, 8, 9]}, {"t": "Je me suis installée à Montpellier il y a 3 ans.", "mots": ["Je", "me", "suis", "installée", "à", "Montpellier", "il", "y", "a", "3", "ans."], "trous": [2, 3, 5]}, {"t": "Je parle arabe, français et anglais.", "mots": ["Je", "parle", "arabe,", "français", "et", "anglais."], "trous": [1, 2, 3, 5]}, {"t": "Je travaille comme vendeuse, un métier que j'ai choisi parce que j'aime le contact avec les clients.", "mots": ["Je", "travaille", "comme", "vendeuse,", "un", "métier", "que", "j'ai", "choisi", "parce", "que", "j'aime", "le", "contact", "avec", "les", "clients."], "trous": [1, 3, 5, 7, 8, 9, 11, 13, 16]}, {"t": "En dehors du travail, j'adore la mode et je fais de la natation dès que je peux.", "mots": ["En", "dehors", "du", "travail,", "j'adore", "la", "mode", "et", "je", "fais", "de", "la", "natation", "dès", "que", "je", "peux."], "trous": [1, 3, 4, 6, 9, 12, 16]}, {"t": "Ce que j'aime le moins, c'est l'hiver, mais je reste positive.", "mots": ["Ce", "que", "j'aime", "le", "moins,", "c'est", "l'hiver,", "mais", "je", "reste", "positive."], "trous": [2, 4, 6, 9, 10]}]}}, "Hugo": {"A1": {"texte": "Je m'appelle Hugo. J'ai 38 ans. Je suis français. J'habite à Rennes. Je parle français et espagnol. Je suis boulanger. J'aime le pain chaud. Je n'aime pas les nuits courtes. Je fais de la course à pied.", "phrases": [{"t": "Je m'appelle Hugo.", "mots": ["Je", "m'appelle", "Hugo."], "trous": [1, 2]}, {"t": "J'ai 38 ans.", "mots": ["J'ai", "38", "ans."], "trous": [0]}, {"t": "Je suis français.", "mots": ["Je", "suis", "français."], "trous": [1, 2]}, {"t": "J'habite à Rennes.", "mots": ["J'habite", "à", "Rennes."], "trous": [0, 2]}, {"t": "Je parle français et espagnol.", "mots": ["Je", "parle", "français", "et", "espagnol."], "trous": [1, 2, 4]}, {"t": "Je suis boulanger.", "mots": ["Je", "suis", "boulanger."], "trous": [1, 2]}, {"t": "J'aime le pain chaud.", "mots": ["J'aime", "le", "pain", "chaud."], "trous": [0, 2, 3]}, {"t": "Je n'aime pas les nuits courtes.", "mots": ["Je", "n'aime", "pas", "les", "nuits", "courtes."], "trous": [1, 4, 5]}, {"t": "Je fais de la course à pied.", "mots": ["Je", "fais", "de", "la", "course", "à", "pied."], "trous": [1, 4, 6]}]}, "A2": {"texte": "Je m'appelle Hugo et j'ai 38 ans. Je suis français et j'habite à Rennes. Je parle français et espagnol. Je travaille comme boulanger. J'aime beaucoup le pain chaud, mais je n'aime pas les nuits courtes. Pendant mon temps libre, je fais de la course à pied.", "phrases": [{"t": "Je m'appelle Hugo et j'ai 38 ans.", "mots": ["Je", "m'appelle", "Hugo", "et", "j'ai", "38", "ans."], "trous": [1, 2, 4]}, {"t": "Je suis français et j'habite à Rennes.", "mots": ["Je", "suis", "français", "et", "j'habite", "à", "Rennes."], "trous": [1, 2, 4, 6]}, {"t": "Je parle français et espagnol.", "mots": ["Je", "parle", "français", "et", "espagnol."], "trous": [1, 2, 4]}, {"t": "Je travaille comme boulanger.", "mots": ["Je", "travaille", "comme", "boulanger."], "trous": [1, 3]}, {"t": "J'aime beaucoup le pain chaud, mais je n'aime pas les nuits courtes.", "mots": ["J'aime", "beaucoup", "le", "pain", "chaud,", "mais", "je", "n'aime", "pas", "les", "nuits", "courtes."], "trous": [0, 1, 3, 4, 7, 10, 11]}, {"t": "Pendant mon temps libre, je fais de la course à pied.", "mots": ["Pendant", "mon", "temps", "libre,", "je", "fais", "de", "la", "course", "à", "pied."], "trous": [0, 2, 3, 5, 8, 10]}]}, "B1": {"texte": "Je m'appelle Hugo et j'ai 38 ans. Je suis français et j'habite à Rennes. Je parle français et espagnol. Je travaille comme boulanger. J'ai choisi ce métier parce que j'aime le travail bien fait. J'aime aussi le pain chaud, mais je n'aime pas les nuits courtes. Le week-end, je fais de la course à pied.", "phrases": [{"t": "Je m'appelle Hugo et j'ai 38 ans.", "mots": ["Je", "m'appelle", "Hugo", "et", "j'ai", "38", "ans."], "trous": [1, 2, 4]}, {"t": "Je suis français et j'habite à Rennes.", "mots": ["Je", "suis", "français", "et", "j'habite", "à", "Rennes."], "trous": [1, 2, 4, 6]}, {"t": "Je parle français et espagnol.", "mots": ["Je", "parle", "français", "et", "espagnol."], "trous": [1, 2, 4]}, {"t": "Je travaille comme boulanger.", "mots": ["Je", "travaille", "comme", "boulanger."], "trous": [1, 3]}, {"t": "J'ai choisi ce métier parce que j'aime le travail bien fait.", "mots": ["J'ai", "choisi", "ce", "métier", "parce", "que", "j'aime", "le", "travail", "bien", "fait."], "trous": [0, 1, 3, 4, 6, 8, 9, 10]}, {"t": "J'aime aussi le pain chaud, mais je n'aime pas les nuits courtes.", "mots": ["J'aime", "aussi", "le", "pain", "chaud,", "mais", "je", "n'aime", "pas", "les", "nuits", "courtes."], "trous": [0, 1, 3, 4, 7, 10, 11]}, {"t": "Le week-end, je fais de la course à pied.", "mots": ["Le", "week-end,", "je", "fais", "de", "la", "course", "à", "pied."], "trous": [1, 3, 6, 8]}]}, "B2": {"texte": "Je m'appelle Hugo, j'ai 38 ans et je suis français. J'habite à Rennes depuis toujours. Je parle français et espagnol. Je travaille comme boulanger, un métier que j'ai choisi parce que j'aime le travail bien fait. En dehors du travail, j'adore le pain chaud et je fais de la course à pied dès que je peux. Ce que j'aime le moins, c'est les nuits courtes, mais je reste positif.", "phrases": [{"t": "Je m'appelle Hugo, j'ai 38 ans et je suis français.", "mots": ["Je", "m'appelle", "Hugo,", "j'ai", "38", "ans", "et", "je", "suis", "français."], "trous": [1, 2, 3, 8, 9]}, {"t": "J'habite à Rennes depuis toujours.", "mots": ["J'habite", "à", "Rennes", "depuis", "toujours."], "trous": [0, 2, 3, 4]}, {"t": "Je parle français et espagnol.", "mots": ["Je", "parle", "français", "et", "espagnol."], "trous": [1, 2, 4]}, {"t": "Je travaille comme boulanger, un métier que j'ai choisi parce que j'aime le travail bien fait.", "mots": ["Je", "travaille", "comme", "boulanger,", "un", "métier", "que", "j'ai", "choisi", "parce", "que", "j'aime", "le", "travail", "bien", "fait."], "trous": [1, 3, 5, 7, 8, 9, 11, 13, 14, 15]}, {"t": "En dehors du travail, j'adore le pain chaud et je fais de la course à pied dès que je peux.", "mots": ["En", "dehors", "du", "travail,", "j'adore", "le", "pain", "chaud", "et", "je", "fais", "de", "la", "course", "à", "pied", "dès", "que", "je", "peux."], "trous": [1, 3, 4, 6, 7, 10, 13, 15, 19]}, {"t": "Ce que j'aime le moins, c'est les nuits courtes, mais je reste positif.", "mots": ["Ce", "que", "j'aime", "le", "moins,", "c'est", "les", "nuits", "courtes,", "mais", "je", "reste", "positif."], "trous": [2, 4, 7, 8, 11, 12]}]}}, "Mei": {"A1": {"texte": "Je m'appelle Mei. J'ai 31 ans. Je suis chinoise. J'habite à Grenoble. Je parle chinois, anglais et français. Je suis professeure. J'aime les voyages. Je n'aime pas le mensonge. Je fais de la montagne.", "phrases": [{"t": "Je m'appelle Mei.", "mots": ["Je", "m'appelle", "Mei."], "trous": [1]}, {"t": "J'ai 31 ans.", "mots": ["J'ai", "31", "ans."], "trous": [0]}, {"t": "Je suis chinoise.", "mots": ["Je", "suis", "chinoise."], "trous": [1, 2]}, {"t": "J'habite à Grenoble.", "mots": ["J'habite", "à", "Grenoble."], "trous": [0, 2]}, {"t": "Je parle chinois, anglais et français.", "mots": ["Je", "parle", "chinois,", "anglais", "et", "français."], "trous": [1, 2, 3, 5]}, {"t": "Je suis professeure.", "mots": ["Je", "suis", "professeure."], "trous": [1, 2]}, {"t": "J'aime les voyages.", "mots": ["J'aime", "les", "voyages."], "trous": [0, 2]}, {"t": "Je n'aime pas le mensonge.", "mots": ["Je", "n'aime", "pas", "le", "mensonge."], "trous": [1, 4]}, {"t": "Je fais de la montagne.", "mots": ["Je", "fais", "de", "la", "montagne."], "trous": [1, 4]}]}, "A2": {"texte": "Je m'appelle Mei et j'ai 31 ans. Je suis chinoise, mais j'habite à Grenoble. Je parle chinois, anglais et français. Je travaille comme professeure. J'aime beaucoup les voyages, mais je n'aime pas le mensonge. Pendant mon temps libre, je fais de la montagne.", "phrases": [{"t": "Je m'appelle Mei et j'ai 31 ans.", "mots": ["Je", "m'appelle", "Mei", "et", "j'ai", "31", "ans."], "trous": [1, 4]}, {"t": "Je suis chinoise, mais j'habite à Grenoble.", "mots": ["Je", "suis", "chinoise,", "mais", "j'habite", "à", "Grenoble."], "trous": [1, 2, 4, 6]}, {"t": "Je parle chinois, anglais et français.", "mots": ["Je", "parle", "chinois,", "anglais", "et", "français."], "trous": [1, 2, 3, 5]}, {"t": "Je travaille comme professeure.", "mots": ["Je", "travaille", "comme", "professeure."], "trous": [1, 3]}, {"t": "J'aime beaucoup les voyages, mais je n'aime pas le mensonge.", "mots": ["J'aime", "beaucoup", "les", "voyages,", "mais", "je", "n'aime", "pas", "le", "mensonge."], "trous": [0, 1, 3, 6, 9]}, {"t": "Pendant mon temps libre, je fais de la montagne.", "mots": ["Pendant", "mon", "temps", "libre,", "je", "fais", "de", "la", "montagne."], "trous": [0, 2, 3, 5, 8]}]}, "B1": {"texte": "Je m'appelle Mei et j'ai 31 ans. Je suis chinoise et j'habite à Grenoble depuis 7 ans. Je parle chinois, anglais et français. Je travaille comme professeure. J'ai choisi ce métier parce que j'aime transmettre et expliquer. J'aime aussi les voyages, mais je n'aime pas le mensonge. Le week-end, je fais de la montagne.", "phrases": [{"t": "Je m'appelle Mei et j'ai 31 ans.", "mots": ["Je", "m'appelle", "Mei", "et", "j'ai", "31", "ans."], "trous": [1, 4]}, {"t": "Je suis chinoise et j'habite à Grenoble depuis 7 ans.", "mots": ["Je", "suis", "chinoise", "et", "j'habite", "à", "Grenoble", "depuis", "7", "ans."], "trous": [1, 2, 4, 6, 7]}, {"t": "Je parle chinois, anglais et français.", "mots": ["Je", "parle", "chinois,", "anglais", "et", "français."], "trous": [1, 2, 3, 5]}, {"t": "Je travaille comme professeure.", "mots": ["Je", "travaille", "comme", "professeure."], "trous": [1, 3]}, {"t": "J'ai choisi ce métier parce que j'aime transmettre et expliquer.", "mots": ["J'ai", "choisi", "ce", "métier", "parce", "que", "j'aime", "transmettre", "et", "expliquer."], "trous": [0, 1, 3, 4, 6, 7, 9]}, {"t": "J'aime aussi les voyages, mais je n'aime pas le mensonge.", "mots": ["J'aime", "aussi", "les", "voyages,", "mais", "je", "n'aime", "pas", "le", "mensonge."], "trous": [0, 1, 3, 6, 9]}, {"t": "Le week-end, je fais de la montagne.", "mots": ["Le", "week-end,", "je", "fais", "de", "la", "montagne."], "trous": [1, 3, 6]}]}, "B2": {"texte": "Je m'appelle Mei, j'ai 31 ans et je suis chinoise. Je me suis installée à Grenoble il y a 7 ans. Je parle chinois, anglais et français. Je travaille comme professeure, un métier que j'ai choisi parce que j'aime transmettre et expliquer. En dehors du travail, j'adore les voyages et je fais de la montagne dès que je peux. Ce que j'aime le moins, c'est le mensonge, mais je reste positive.", "phrases": [{"t": "Je m'appelle Mei, j'ai 31 ans et je suis chinoise.", "mots": ["Je", "m'appelle", "Mei,", "j'ai", "31", "ans", "et", "je", "suis", "chinoise."], "trous": [1, 3, 8, 9]}, {"t": "Je me suis installée à Grenoble il y a 7 ans.", "mots": ["Je", "me", "suis", "installée", "à", "Grenoble", "il", "y", "a", "7", "ans."], "trous": [2, 3, 5]}, {"t": "Je parle chinois, anglais et français.", "mots": ["Je", "parle", "chinois,", "anglais", "et", "français."], "trous": [1, 2, 3, 5]}, {"t": "Je travaille comme professeure, un métier que j'ai choisi parce que j'aime transmettre et expliquer.", "mots": ["Je", "travaille", "comme", "professeure,", "un", "métier", "que", "j'ai", "choisi", "parce", "que", "j'aime", "transmettre", "et", "expliquer."], "trous": [1, 3, 5, 7, 8, 9, 11, 12, 14]}, {"t": "En dehors du travail, j'adore les voyages et je fais de la montagne dès que je peux.", "mots": ["En", "dehors", "du", "travail,", "j'adore", "les", "voyages", "et", "je", "fais", "de", "la", "montagne", "dès", "que", "je", "peux."], "trous": [1, 3, 4, 6, 9, 12, 16]}, {"t": "Ce que j'aime le moins, c'est le mensonge, mais je reste positive.", "mots": ["Ce", "que", "j'aime", "le", "moins,", "c'est", "le", "mensonge,", "mais", "je", "reste", "positive."], "trous": [2, 4, 7, 10, 11]}]}}, "Ahmed": {"A1": {"texte": "Je m'appelle Ahmed. J'ai 28 ans. Je suis égyptien. J'habite à Nice. Je parle arabe et français. Je suis jardinier. J'aime les plantes. Je n'aime pas la poussière. Je fais du dessin.", "phrases": [{"t": "Je m'appelle Ahmed.", "mots": ["Je", "m'appelle", "Ahmed."], "trous": [1, 2]}, {"t": "J'ai 28 ans.", "mots": ["J'ai", "28", "ans."], "trous": [0]}, {"t": "Je suis égyptien.", "mots": ["Je", "suis", "égyptien."], "trous": [1, 2]}, {"t": "J'habite à Nice.", "mots": ["J'habite", "à", "Nice."], "trous": [0, 2]}, {"t": "Je parle arabe et français.", "mots": ["Je", "parle", "arabe", "et", "français."], "trous": [1, 2, 4]}, {"t": "Je suis jardinier.", "mots": ["Je", "suis", "jardinier."], "trous": [1, 2]}, {"t": "J'aime les plantes.", "mots": ["J'aime", "les", "plantes."], "trous": [0, 2]}, {"t": "Je n'aime pas la poussière.", "mots": ["Je", "n'aime", "pas", "la", "poussière."], "trous": [1, 4]}, {"t": "Je fais du dessin.", "mots": ["Je", "fais", "du", "dessin."], "trous": [1, 3]}]}, "A2": {"texte": "Je m'appelle Ahmed et j'ai 28 ans. Je suis égyptien, mais j'habite à Nice. Je parle arabe et français. Je travaille comme jardinier. J'aime beaucoup les plantes, mais je n'aime pas la poussière. Pendant mon temps libre, je fais du dessin.", "phrases": [{"t": "Je m'appelle Ahmed et j'ai 28 ans.", "mots": ["Je", "m'appelle", "Ahmed", "et", "j'ai", "28", "ans."], "trous": [1, 2, 4]}, {"t": "Je suis égyptien, mais j'habite à Nice.", "mots": ["Je", "suis", "égyptien,", "mais", "j'habite", "à", "Nice."], "trous": [1, 2, 4, 6]}, {"t": "Je parle arabe et français.", "mots": ["Je", "parle", "arabe", "et", "français."], "trous": [1, 2, 4]}, {"t": "Je travaille comme jardinier.", "mots": ["Je", "travaille", "comme", "jardinier."], "trous": [1, 3]}, {"t": "J'aime beaucoup les plantes, mais je n'aime pas la poussière.", "mots": ["J'aime", "beaucoup", "les", "plantes,", "mais", "je", "n'aime", "pas", "la", "poussière."], "trous": [0, 1, 3, 6, 9]}, {"t": "Pendant mon temps libre, je fais du dessin.", "mots": ["Pendant", "mon", "temps", "libre,", "je", "fais", "du", "dessin."], "trous": [0, 2, 3, 5, 7]}]}, "B1": {"texte": "Je m'appelle Ahmed et j'ai 28 ans. Je suis égyptien et j'habite à Nice depuis 4 ans. Je parle arabe et français. Je travaille comme jardinier. J'ai choisi ce métier parce que j'aime travailler dehors, dans la nature. J'aime aussi les plantes, mais je n'aime pas la poussière. Le week-end, je fais du dessin.", "phrases": [{"t": "Je m'appelle Ahmed et j'ai 28 ans.", "mots": ["Je", "m'appelle", "Ahmed", "et", "j'ai", "28", "ans."], "trous": [1, 2, 4]}, {"t": "Je suis égyptien et j'habite à Nice depuis 4 ans.", "mots": ["Je", "suis", "égyptien", "et", "j'habite", "à", "Nice", "depuis", "4", "ans."], "trous": [1, 2, 4, 6, 7]}, {"t": "Je parle arabe et français.", "mots": ["Je", "parle", "arabe", "et", "français."], "trous": [1, 2, 4]}, {"t": "Je travaille comme jardinier.", "mots": ["Je", "travaille", "comme", "jardinier."], "trous": [1, 3]}, {"t": "J'ai choisi ce métier parce que j'aime travailler dehors, dans la nature.", "mots": ["J'ai", "choisi", "ce", "métier", "parce", "que", "j'aime", "travailler", "dehors,", "dans", "la", "nature."], "trous": [0, 1, 3, 4, 6, 7, 8, 11]}, {"t": "J'aime aussi les plantes, mais je n'aime pas la poussière.", "mots": ["J'aime", "aussi", "les", "plantes,", "mais", "je", "n'aime", "pas", "la", "poussière."], "trous": [0, 1, 3, 6, 9]}, {"t": "Le week-end, je fais du dessin.", "mots": ["Le", "week-end,", "je", "fais", "du", "dessin."], "trous": [1, 3, 5]}]}, "B2": {"texte": "Je m'appelle Ahmed, j'ai 28 ans et je suis égyptien. Je me suis installé à Nice il y a 4 ans. Je parle arabe et français. Je travaille comme jardinier, un métier que j'ai choisi parce que j'aime travailler dehors, dans la nature. En dehors du travail, j'adore les plantes et je fais du dessin dès que je peux. Ce que j'aime le moins, c'est la poussière, mais je reste positif.", "phrases": [{"t": "Je m'appelle Ahmed, j'ai 28 ans et je suis égyptien.", "mots": ["Je", "m'appelle", "Ahmed,", "j'ai", "28", "ans", "et", "je", "suis", "égyptien."], "trous": [1, 2, 3, 8, 9]}, {"t": "Je me suis installé à Nice il y a 4 ans.", "mots": ["Je", "me", "suis", "installé", "à", "Nice", "il", "y", "a", "4", "ans."], "trous": [2, 3, 5]}, {"t": "Je parle arabe et français.", "mots": ["Je", "parle", "arabe", "et", "français."], "trous": [1, 2, 4]}, {"t": "Je travaille comme jardinier, un métier que j'ai choisi parce que j'aime travailler dehors, dans la nature.", "mots": ["Je", "travaille", "comme", "jardinier,", "un", "métier", "que", "j'ai", "choisi", "parce", "que", "j'aime", "travailler", "dehors,", "dans", "la", "nature."], "trous": [1, 3, 5, 7, 8, 9, 11, 12, 13, 16]}, {"t": "En dehors du travail, j'adore les plantes et je fais du dessin dès que je peux.", "mots": ["En", "dehors", "du", "travail,", "j'adore", "les", "plantes", "et", "je", "fais", "du", "dessin", "dès", "que", "je", "peux."], "trous": [1, 3, 4, 6, 9, 11, 15]}, {"t": "Ce que j'aime le moins, c'est la poussière, mais je reste positif.", "mots": ["Ce", "que", "j'aime", "le", "moins,", "c'est", "la", "poussière,", "mais", "je", "reste", "positif."], "trous": [2, 4, 7, 10, 11]}]}}}};
+const VERSION = "1.1";
+const ouvert = true; /* mode test : tous les niveaux ouverts */
+
+/* ── état ── */
+const KEY="mcd_v1";
+function defautEtat(){ return {niveau:null, vus:{}, faits:{}, reglages:{debit:0.9, accents:true}}; }
+function chargerEtat(){ try{ const e=JSON.parse(localStorage.getItem(KEY)); if(e&&e.reglages) return Object.assign(defautEtat(),e); }catch(err){} return defautEtat(); }
+let E = chargerEtat();
+function sauver(){ try{ localStorage.setItem(KEY, JSON.stringify(E)); }catch(e){} }
+
+/* ── prénom partagé ── */
+function lireCommun(){ try{ return JSON.parse(localStorage.getItem('maf_commun')||'{}'); }catch(e){ return {}; } }
+function prenom(){ return (lireCommun().prenom)||''; }
+
+/* ── voix ── */
+let voixFR=[];
+function chargerVoix(){ try{ voixFR = speechSynthesis.getVoices().filter(v=>v.lang&&v.lang.toLowerCase().startsWith("fr")); }catch(e){} }
+if("speechSynthesis" in window){ chargerVoix(); speechSynthesis.onvoiceschanged = chargerVoix; }
+function voixChoisie(){ return voixFR.find(v=>v.lang&&v.lang.toLowerCase()==="fr-fr")||voixFR[0]||null; }
+function dire(texte, lent){
+  return new Promise(res=>{
+    if(!("speechSynthesis" in window)){ res(); return; }
+    try{ speechSynthesis.cancel(); }catch(e){}
+    const u=new SpeechSynthesisUtterance(texte); u.lang="fr-FR";
+    const v=voixChoisie(); if(v) u.voice=v;
+    u.rate = lent ? 0.55 : (E.reglages.debit||0.9);
+    u.onend=()=>res(); u.onerror=()=>res();
+    try{ speechSynthesis.speak(u); }catch(e){ res(); }
+  });
+}
+
+/* ── helpers tirage ── */
+function melange(a){ const t=[...a]; for(let i=t.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[t[i],t[j]]=[t[j],t[i]];} return t; }
+function tire(a,n){ return melange(a).slice(0,n); }
+function tirerSansRepeter(id, dispo, n){
+  if(!E.vus[id]) E.vus[id]=[];
+  let vus=E.vus[id]; const cles=dispo.map(x=>x.cle);
+  vus=vus.filter(c=>cles.includes(c));
+  let jamais=dispo.filter(x=>!vus.includes(x.cle));
+  let choisis=[];
+  if(jamais.length>=n){ choisis=tire(jamais,n); }
+  else { choisis=[...jamais]; vus=[]; let reste=dispo.filter(x=>!choisis.includes(x)); choisis=choisis.concat(tire(reste,n-choisis.length)); }
+  vus=vus.concat(choisis.map(x=>x.cle)); E.vus[id]=vus; sauver();
+  return choisis;
+}
+
+/* ── parcours ── */
+const NIVEAUX_CECRL = {
+  A1:{nom:"A1 · Débutant", desc:"Phrases courtes et simples", coul:"a1"},
+  A2:{nom:"A2 · Élémentaire", desc:"Des connecteurs, plus de détails", coul:"a2"},
+  B1:{nom:"B1 · Intermédiaire", desc:"On explique, on raconte son parcours", coul:"b1"},
+  B2:{nom:"B2 · Avancé", desc:"Textes développés et nuancés", coul:"b2"}
+};
+const COUL_CECRL={A1:"#2563EB",A2:"#059669",B1:"#7C3AED",B2:"#EA580C"};
+const PARCOURS = { id:"presentation", titre:"Me présenter", picto:"🙋",
+  niveaux:[
+    {n:1, mode:"etiquettes", phr:1,    nom:"Les mots dans l'ordre", pic:"🔤"},
+    {n:2, mode:"etiquettes", phr:2,    nom:"Deux phrases",          pic:"🔤"},
+    {n:3, mode:"etiquettes", phr:"all",nom:"Tout le texte",         pic:"🔤"},
+    {n:4, mode:"trous",      phr:2,    nom:"Complète les mots",     pic:"⬜"},
+    {n:5, mode:"trous",      phr:"all",nom:"Complète le texte",     pic:"⬜"},
+    {n:6, mode:"clavier",    phr:2,    nom:"Écris les phrases",     pic:"⌨️"},
+    {n:7, mode:"clavier",    phr:"all",nom:"Écris le texte",        pic:"⌨️"},
+    {n:8, mode:"bilan",      phr:"all",nom:"Bilan",                 pic:"🏆"}
+  ]
+};
+const LIB_MODE={etiquettes:"Étiquettes",trous:"Trous",clavier:"Clavier",bilan:"Tout mélangé"};
+
+/* ── normalisation / comparaison ── */
+function sansAccents(s){ return s.normalize("NFD").replace(/[\u0300-\u036f]/g,""); }
+function normMot(s){
+  s=(s||"").toLowerCase().trim().replace(/[''`]/g,"'").replace(/[.,!?;:«»"]/g,"").replace(/\s+/g," ");
+  if(E.reglages.accents) s=sansAccents(s);
+  return s;
+}
+function egalMot(a,b){ return normMot(a)===normMot(b); }
+function egalPhrase(a,b){
+  const na=normMot(a).replace(/\s+/g," ").trim(), nb=normMot(b).replace(/\s+/g," ").trim();
+  return na===nb;
+}
+
+/* ── construction d'une session ── */
+/* pool de TOUTES les phrases de tous les personnages (pour le niveau « 1 phrase ») */
+function poolPhrases(niv){
+  const pool=[];
+  DATA.ordre.forEach(nom=>{
+    DATA.textes[nom][niv].phrases.forEach((p,i)=>pool.push({cle:nom+"#"+i, nom, phrase:p}));
+  });
+  return pool;
+}
+function construire(lvl){
+  const def=PARCOURS.niveaux.find(x=>x.n===lvl);
+  let nom, etapes;
+
+  if(def.mode!=="bilan" && def.phr===1){
+    /* 1 phrase : on pioche dans TOUTES les phrases de tous les personnages,
+       sans répétition → variété maximale (langues, métier, goûts… pas que « Je m'appelle ») */
+    const pool=poolPhrases(E.niveau);
+    const [c]=tirerSansRepeter(`pres-ph1-${E.niveau}`, pool, 1);
+    nom=c.nom;
+    etapes=[{phrase:c.phrase, mode:def.mode}];
+  } else {
+    /* un personnage (sans répétition) + fenêtre de phrases à un endroit ALÉATOIRE du texte */
+    const dispo=DATA.ordre.map(n=>({cle:n,nom:n}));
+    const [c]=tirerSansRepeter(`pres-${lvl}-${E.niveau}`, dispo, 1);
+    nom=c.nom;
+    const t=DATA.textes[nom][E.niveau];
+    let phrases;
+    if(def.phr==="all"){
+      phrases=t.phrases;
+    } else {
+      const n=Math.min(def.phr, t.phrases.length);
+      const maxStart=Math.max(0, t.phrases.length-n);
+      const start=Math.floor(Math.random()*(maxStart+1));
+      phrases=t.phrases.slice(start, start+n);
+    }
+    if(def.mode==="bilan"){
+      const modes=["etiquettes","trous","clavier"];
+      etapes=phrases.map((p,i)=>({phrase:p, mode:modes[i%3]}));
+    } else {
+      etapes=phrases.map(p=>({phrase:p, mode:def.mode}));
+    }
+  }
+  return {lvl, def, nom, etapes, idx:0, score:0, total:etapes.length};
+}
+let S=null;
+
+/* ════ ÉCRANS ════ */
+const app=()=>document.getElementById("app");
+function vers(html){ app().innerHTML=html; }
+
+function pied(){ return `<div class="pied">Mon Coach Dictées · v${VERSION}</div>`; }
+function bandeau(titre, onRetour){
+  return `<div class="bandeau"><div class="retour" id="ret">‹</div><div class="titre-h">${titre}</div>${ouvert?'<div class="test-badge">🔓 test</div>':''}</div>`;
+}
+
+/* choix du niveau CECRL */
+function ecranNiveau(premier){
+  let cards="";
+  for(const k of ["A1","A2","B1","B2"]){
+    const c=NIVEAUX_CECRL[k];
+    cards+=`<div class="cec ${c.coul} ${E.niveau===k?'sel':''}" data-niv="${k}">
+      <div class="pic">${k}</div><div><div class="nom">${c.nom}</div><div class="desc">${c.desc}</div></div></div>`;
+  }
+  vers(`${premier?'':bandeau("Mon niveau")}
+    <div class="logo">📝</div><h1>Mon Coach Dictées</h1>
+    <div class="accroche">${premier?'Choisis ton niveau pour commencer':'Tu peux changer de niveau'}</div>
+    <div class="niv-cecrl">${cards}</div>${pied()}`);
+  if(!premier){ document.getElementById("ret").onclick=()=>ecranAccueil(); }
+  document.querySelectorAll(".cec").forEach(el=>el.onclick=()=>{
+    E.niveau=el.dataset.niv; sauver(); ecranAccueil();
+  });
+}
+
+/* accueil parcours */
+function ecranAccueil(){
+  const p=prenom();
+  const chip=`<span class="chip-niveau" id="chg" style="background:${COUL_CECRL[E.niveau]}">${E.niveau} ✎</span>`;
+  let rows="";
+  for(const d of PARCOURS.niveaux){
+    const fait=E.faits[`${d.n}-${E.niveau}`];
+    rows+=`<div class="niv-row" data-lvl="${d.n}">
+      <div class="niv-pic">${d.pic}</div>
+      <div class="niv-txt"><div class="niv-nom">${d.n}. ${d.nom}</div>
+        <div class="niv-mode">${LIB_MODE[d.mode]}${d.phr==="all"?" · texte complet":d.phr===1?" · 1 phrase":" · "+d.phr+" phrases"}${fait?" ✓":""}</div></div>
+      <div class="niv-fl">›</div></div>`;
+  }
+  vers(`${bandeau(PARCOURS.titre)}
+    <div class="parc-tete"><div class="pic">${PARCOURS.picto}</div>
+      <div style="flex:1"><div class="nom">${PARCOURS.titre}</div><div class="sous">${p?p+', ':''}écris des présentations sous la dictée</div></div>
+      ${chip}</div>
+    <div class="niveaux">${rows}</div>${pied()}`);
+  document.getElementById("ret").onclick=()=>{ try{location.href="index.html";}catch(e){} };
+  document.getElementById("chg").onclick=()=>ecranNiveau(false);
+  document.querySelectorAll(".niv-row").forEach(el=>el.onclick=()=>lancer(parseInt(el.dataset.lvl)));
+}
+
+/* ── lancer un niveau ── */
+function lancer(lvl){ S=construire(lvl); etape(); }
+
+function barre(){
+  const pct = S.total? Math.round(S.idx/S.total*100):0;
+  return `<div class="progress-barre"><div class="progress-fill" style="width:${pct}%"></div></div>
+          <div class="compte">${Math.min(S.idx+1,S.total)} / ${S.total}</div>`;
+}
+
+function etape(){
+  if(S.idx>=S.etapes.length){ return resultat(); }
+  const e=S.etapes[S.idx];
+  if(e.mode==="etiquettes") rendEtiquettes(e);
+  else if(e.mode==="trous") rendTrous(e);
+  else rendClavier(e);
+}
+
+function teteJeu(consigne){
+  return `${bandeau(S.def.nom)}${barre()}<div class="zone-jeu"><div class="consigne">${consigne}</div>
+    <div class="ecoutes">
+      <button class="btn-ecoute" id="ec">🔊 Écouter</button>
+      <button class="btn-ecoute lent" id="ecl">🐢 Lentement</button>
+    </div>`;
+}
+function brancherEcoute(txt){
+  document.getElementById("ret").onclick=()=>{ try{speechSynthesis.cancel();}catch(e){} ecranAccueil(); };
+  document.getElementById("ec").onclick=()=>dire(txt,false);
+  document.getElementById("ecl").onclick=()=>dire(txt,true);
+}
+
+/* ── MODE ÉTIQUETTES ── */
+function rendEtiquettes(e){
+  const mots=e.phrase.mots;
+  const ordreMel=melange(mots.map((m,i)=>({m,i})));
+  let placees=[]; // indices d'origine placés, dans l'ordre choisi
+  vers(`${teteJeu("Écoute, puis remets les mots dans l'ordre 👇")}
+    <div class="zone-phrase" id="zp"></div>
+    <div class="banque-etiq" id="bq"></div>
+    <div class="feedback" id="fb"></div>
+    <button class="btn-valider" id="val" disabled>Vérifier</button>
+    </div>${pied()}`);
+  brancherEcoute(e.phrase.t);
+  const zp=document.getElementById("zp"), bq=document.getElementById("bq"), val=document.getElementById("val");
+  function redraw(){
+    zp.innerHTML=""; bq.innerHTML="";
+    placees.forEach((oi,pos)=>{
+      const b=document.createElement("div"); b.className="etiq placee"; b.textContent=mots[oi];
+      b.onclick=()=>{ placees.splice(pos,1); redraw(); };
+      zp.appendChild(b);
+    });
+    ordreMel.forEach(o=>{
+      if(placees.includes(o.i)) return;
+      const b=document.createElement("div"); b.className="etiq"; b.textContent=o.m;
+      b.onclick=()=>{ placees.push(o.i); redraw(); };
+      bq.appendChild(b);
+    });
+    val.disabled = placees.length!==mots.length;
+  }
+  redraw();
+  setTimeout(()=>dire(e.phrase.t,false),250);
+  val.onclick=()=>{
+    const propose=placees.map(i=>mots[i]);
+    const bon = propose.join(" ")===mots.join(" ");
+    const fb=document.getElementById("fb");
+    if(bon){ S.score++; fb.className="feedback bon"; fb.textContent="✅ Bravo !"; val.disabled=true;
+      setTimeout(()=>{ S.idx++; etape(); }, 900);
+    } else {
+      fb.className="feedback mauvais"; fb.textContent="❌ Pas tout à fait, réécoute et réessaie";
+      dire(e.phrase.t,true);
+    }
+  };
+}
+
+/* ── MODE TROUS ── */
+function rendTrous(e){
+  const mots=e.phrase.mots, trous=e.phrase.trous;
+  const saisies={}; trous.forEach(i=>saisies[i]="");
+  let actif = trous.length? trous[0] : null;
+  vers(`${teteJeu("Écoute, puis complète les mots qui manquent ✏️")}
+    <div class="phrase-trous" id="pt"></div>
+    <div class="feedback" id="fb"></div>
+    <div class="clavier" id="clav"></div>
+    <button class="btn-valider" id="val">Vérifier</button>
+    </div>${pied()}`);
+  brancherEcoute(e.phrase.t);
+  const pt=document.getElementById("pt");
+  function dessine(){
+    pt.innerHTML="";
+    mots.forEach((m,i)=>{
+      if(trous.includes(i)){
+        const sp=document.createElement("span");
+        sp.className="trou"+(i===actif?" actif":"");
+        sp.textContent=saisies[i]||"____";
+        sp.onclick=()=>{ actif=i; dessine(); };
+        pt.appendChild(sp);
+      } else {
+        const sp=document.createElement("span"); sp.textContent=m+" "; pt.appendChild(sp);
+      }
+      pt.appendChild(document.createTextNode(" "));
+    });
+  }
+  dessine();
+  monterClavier(document.getElementById("clav"), {
+    car:(c)=>{ if(actif!=null){ saisies[actif]+=c; dessine(); } },
+    eff:()=>{ if(actif!=null){ saisies[actif]=saisies[actif].slice(0,-1); dessine(); } },
+    espace:null
+  });
+  setTimeout(()=>dire(e.phrase.t,false),250);
+  document.getElementById("val").onclick=()=>{
+    let tout=true;
+    const fb=document.getElementById("fb");
+    pt.querySelectorAll(".trou").forEach(()=>{});
+    // évaluer
+    let ok=0;
+    trous.forEach(i=>{
+      const cible=mots[i];
+      if(egalMot(saisies[i], cible)) ok++; else tout=false;
+    });
+    dessine();
+    // colorier
+    let k=0;
+    pt.querySelectorAll(".trou").forEach((el)=>{
+      const i=trous[k++]; el.classList.remove("actif");
+      if(egalMot(saisies[i],mots[i])) el.classList.add("ok"); else el.classList.add("ko");
+    });
+    if(tout){ S.score++; fb.className="feedback bon"; fb.textContent="✅ Parfait !";
+      setTimeout(()=>{ S.idx++; etape(); },950);
+    } else {
+      fb.className="feedback mauvais"; fb.textContent="❌ Regarde les mots en rouge";
+      const corr=document.createElement("div"); corr.className="correction";
+      corr.innerHTML="La phrase : <span class='att'>"+e.phrase.t+"</span>";
+      fb.after(corr);
+      document.getElementById("val").textContent="Continuer";
+      document.getElementById("val").onclick=()=>{ S.idx++; etape(); };
+    }
+  };
+}
+
+/* ── MODE CLAVIER ── */
+function rendClavier(e){
+  let saisie="";
+  vers(`${teteJeu("Écoute, puis écris la phrase ⌨️")}
+    <div class="saisie" id="sa"></div>
+    <div class="feedback" id="fb"></div>
+    <div class="clavier" id="clav"></div>
+    <button class="btn-valider" id="val">Vérifier</button>
+    </div>${pied()}`);
+  brancherEcoute(e.phrase.t);
+  const sa=document.getElementById("sa");
+  function dessine(){ sa.innerHTML=(saisie.replace(/</g,"&lt;"))+'<span class="curseur"></span>'; }
+  dessine();
+  monterClavier(document.getElementById("clav"), {
+    car:(c)=>{ saisie+=c; dessine(); },
+    eff:()=>{ saisie=saisie.slice(0,-1); dessine(); },
+    espace:()=>{ saisie+=" "; dessine(); }
+  });
+  setTimeout(()=>dire(e.phrase.t,false),250);
+  document.getElementById("val").onclick=()=>{
+    const fb=document.getElementById("fb");
+    if(egalPhrase(saisie, e.phrase.t)){
+      S.score++; fb.className="feedback bon"; fb.textContent="✅ Bravo, c'est exact !";
+      setTimeout(()=>{ S.idx++; etape(); },1000);
+    } else {
+      fb.className="feedback mauvais"; fb.textContent="❌ Presque ! Voici la phrase :";
+      const corr=document.createElement("div"); corr.className="correction";
+      corr.innerHTML="<span class='att'>"+e.phrase.t+"</span>";
+      fb.after(corr);
+      document.getElementById("val").textContent="Continuer";
+      document.getElementById("val").onclick=()=>{ S.idx++; etape(); };
+    }
+  };
+}
+
+/* ── clavier maison ── */
+function monterClavier(cont, h){
+  const rows=[ "azertyuiop", "qsdfghjklm", "wxcvbn" ];
+  const accents="éèàçêâîôûœ";
+  let html="";
+  html+='<div class="clav-row">'+"1234567890".split("").map(c=>`<div class="touche" data-c="${c}">${c}</div>`).join("")+'</div>';
+  rows.forEach(r=>{ html+='<div class="clav-row">'+r.split("").map(c=>`<div class="touche" data-c="${c}">${c}</div>`).join("")+'</div>'; });
+  html+='<div class="clav-row">'+accents.split("").map(c=>`<div class="touche acc" data-c="${c}">${c}</div>`).join("")+'</div>';
+  html+='<div class="clav-row">';
+  if(h.espace){ html+='<div class="touche sp" data-act="apos">\'</div><div class="touche espace" data-act="space">espace</div>'; }
+  else { html+='<div class="touche sp" data-act="apos">\'</div>'; }
+  html+='<div class="touche sp eff" data-act="eff">⌫ effacer</div></div>';
+  cont.innerHTML=html;
+  cont.querySelectorAll(".touche").forEach(t=>{
+    t.onclick=()=>{
+      const act=t.dataset.act;
+      if(act==="eff") h.eff();
+      else if(act==="space" && h.espace) h.espace();
+      else if(act==="apos") h.car("'");
+      else if(t.dataset.c!=null) h.car(t.dataset.c);
+    };
+  });
+}
+
+/* ── résultat ── */
+function resultat(){
+  E.faits[`${S.lvl}-${E.niveau}`]=true; sauver();
+  const sc=S.score, tot=S.total;
+  const parfait = sc===tot;
+  const emo = parfait?"🌟":(sc>=tot/2?"👍":"💪");
+  vers(`${bandeau(S.def.nom)}
+    <div class="resultat">
+      <div class="big">${emo}</div>
+      <h2>${parfait?"Parfait !":"Bien joué !"}</h2>
+      <div class="score">${sc} / ${tot} ${tot>1?"réussites":"réussite"}</div>
+      <div><button class="btn-rejouer" id="rej">🔁 Un autre</button>
+      <button class="btn-suite" id="suite">Continuer ›</button></div>
+    </div>${pied()}`);
+  document.getElementById("ret").onclick=()=>ecranAccueil();
+  document.getElementById("rej").onclick=()=>lancer(S.lvl);
+  document.getElementById("suite").onclick=()=>{
+    const i=PARCOURS.niveaux.findIndex(x=>x.n===S.lvl);
+    if(i>=0 && i+1<PARCOURS.niveaux.length) lancer(PARCOURS.niveaux[i+1].n);
+    else ecranAccueil();
+  };
+}
+
+/* ── démarrage ── */
+function start(){
+  if(!E.niveau) ecranNiveau(true);
+  else ecranAccueil();
+}
+start();
+</script>
+</body>
+</html>
