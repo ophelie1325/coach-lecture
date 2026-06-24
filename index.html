@@ -44,6 +44,9 @@ h1{font-family:'Baloo 2';font-size:27px;font-weight:800;text-align:center;margin
 /* dictées */
 .c-dictees{border-color:#FBCFE8}.c-dictees .coach-ico{background:#FCE7F3}
 .c-dictees .coach-nom{color:var(--rose,#BE185D)}
+/* code de la route */
+.c-code{border-color:#FED7AA}.c-code .coach-ico{background:#FFEDD5}
+.c-code .coach-nom{color:#C2410C}
 /* futurs */
 .c-soon{border-color:#E5E7EB}.c-soon .coach-ico{background:#F3F4F6}
 /* prénom */
@@ -99,6 +102,14 @@ h1{font-family:'Baloo 2';font-size:27px;font-weight:800;text-align:center;margin
       </div>
       <div class="coach-fleche">›</div>
     </a>
+    <a class="coach c-code dispo" href="code.html">
+      <div class="coach-ico">🚦</div>
+      <div class="coach-txt">
+        <div class="coach-nom">Mon Coach Code</div>
+        <div class="coach-desc">Le code de la route : panneaux, règles, examen</div>
+      </div>
+      <div class="coach-fleche">›</div>
+    </a>
     <div class="coach c-soon bientot">
       <div class="coach-ico">🗣️</div>
       <div class="coach-txt">
@@ -110,7 +121,7 @@ h1{font-family:'Baloo 2';font-size:27px;font-weight:800;text-align:center;margin
   <div class="mini-modif" id="modif-prenom">✏️ Changer mon prénom</div>
 </div>
 
-<div class="pied">Mon Assistant de Formation · v1.0</div>
+<div class="pied">Mon Assistant de Formation · v1.1</div>
 
 <script>
 function lireCommun(){ try{ return JSON.parse(localStorage.getItem('maf_commun')||'{}'); }catch(e){ return {}; } }

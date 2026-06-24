@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mon Coach Code — HOPE 2026</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Baloo+2:wght@500;700;800&family=Noto+Naskh+Arabic:wght@500;700&family=Noto+Sans+SC:wght@500;700&family=Noto+Sans+Devanagari:wght@500;700&display=swap');
+:root{--rose:#DB2777;--rose-p:#FCE7F3;
+  --bleu:#2563EB;--bleu-d:#1E40AF;--bleu-p:#EFF6FF;
+  --vert:#059669;--vert-p:#ECFDF5;--rouge:#DC2626;--rouge-p:#FEF2F2;
+  --orange:#EA580C;--orange-p:#FFF7ED;--violet:#7C3AED;--violet-p:#F5F3FF;
+  --jaune:#F59E0B;--jaune-p:#FFFBEB;--gris:#6B7280;--gris-p:#F3F4F6;
+  --texte:#111827;--creme:#FAFAF8;--ombre:0 4px 14px rgba(17,24,39,.08);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Nunito',sans-serif;background:var(--creme);color:var(--texte);line-height:1.5;padding-bottom:80px;}
+.rtl{direction:rtl;font-family:'Noto Naskh Arabic','Nunito',sans-serif;text-align:right;}
+.zh{font-family:'Noto Sans SC','Nunito',sans-serif;}
+.hi{font-family:'Noto Sans Devanagari','Nunito',sans-serif;}
+.hide{display:none!important;}
+header{background:linear-gradient(135deg,#1E293B,#334155);color:#fff;padding:15px 18px 13px;position:relative;overflow:hidden;}
+header::after{content:"";position:absolute;left:0;right:0;bottom:0;height:7px;background:repeating-linear-gradient(90deg,#F59E0B 0 24px,transparent 24px 44px);}
+.h-top{display:flex;align-items:center;gap:12px;}
+.h-logo{width:44px;height:44px;border-radius:12px;background:#F59E0B;color:#1E293B;display:flex;align-items:center;justify-content:center;font-size:25px;flex-shrink:0;box-shadow:0 3px 0 #B45309;}
+.h-title{font-family:'Baloo 2';font-weight:800;font-size:19px;line-height:1.05;}
+.h-sub{font-size:10.5px;opacity:.8;}
+.lang-bar{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap;}
+.lang-btn{border:none;background:rgba(255,255,255,.13);color:#fff;border-radius:999px;padding:5px 11px;font-family:'Nunito';font-weight:800;font-size:12px;cursor:pointer;}
+.lang-btn.on{background:#F59E0B;color:#1E293B;}
+.lang-note{font-size:10px;opacity:.75;margin-top:6px;}
+.back-menu{display:inline-block;color:#fff;text-decoration:none;font-weight:800;font-size:12.5px;background:rgba(255,255,255,.14);padding:5px 12px;border-radius:999px;margin-bottom:10px;}
+.back-menu:active{background:rgba(255,255,255,.28);}
+main{max-width:560px;margin:0 auto;padding:15px 14px 24px;}
+.intro{background:#fff;border-radius:16px;padding:13px 15px;box-shadow:var(--ombre);margin-bottom:15px;border:1.5px solid #FDE68A;font-size:14px;}
+.intro b{color:var(--rouge);}
+.exam-stats{display:flex;gap:7px;margin-top:9px;}
+.stat{flex:1;text-align:center;background:var(--jaune-p);border-radius:10px;padding:7px 3px;}
+.stat .n{font-family:'Baloo 2';font-weight:800;font-size:17px;color:var(--orange);}
+.stat .l{font-size:9.5px;color:var(--gris);font-weight:700;}
+.parcours-grid{display:flex;flex-direction:column;gap:11px;}
+.pcard{display:flex;align-items:center;gap:13px;background:#fff;border-radius:16px;padding:14px 15px;box-shadow:var(--ombre);border:2px solid transparent;cursor:pointer;width:100%;font-family:'Nunito';text-align:left;}
+.pcard:active{transform:scale(.98);}
+.pcard .ic{width:50px;height:50px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0;}
+.pcard .tt{font-family:'Baloo 2';font-weight:800;font-size:16px;line-height:1.1;}
+.pcard .ds{font-size:11.5px;color:var(--gris);margin-top:2px;}
+.pcard .ar{margin-left:auto;font-size:20px;color:#CBD5E1;}
+.c1 .ic{background:var(--rouge-p);}.c2 .ic{background:var(--bleu-p);}.c3 .ic{background:var(--vert-p);}.c4 .ic{background:var(--orange-p);}.c5 .ic{background:var(--violet-p);}
+.c6 .ic{background:var(--rose-p);}
+.c1{border-color:#FCA5A5;}.c2{border-color:#BFDBFE;}.c3{border-color:#6EE7B7;}.c4{border-color:#FDBA74;}.c5{border-color:#C4B5FD;}
+.c6{border-color:#FBCFE8;}
+.pbar{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.back{border:none;background:#fff;border-radius:11px;width:40px;height:40px;font-size:18px;cursor:pointer;box-shadow:var(--ombre);flex-shrink:0;}
+.pbar h2{font-family:'Baloo 2';font-weight:800;font-size:18px;}
+.mode-switch{display:flex;gap:8px;margin-bottom:13px;}
+.mode-switch button{flex:1;border:none;border-radius:12px;padding:10px;font-family:'Nunito';font-weight:800;font-size:14px;cursor:pointer;background:#fff;color:var(--gris);box-shadow:var(--ombre);}
+.mode-switch button.on{background:var(--texte);color:#fff;}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:11px;}
+.tab{border:none;white-space:nowrap;border-radius:999px;padding:6px 12px;font-family:'Nunito';font-weight:800;font-size:12px;cursor:pointer;background:#fff;color:var(--gris);box-shadow:var(--ombre);}
+.tab.on{color:#fff;}
+.signs{display:grid;grid-template-columns:1fr 1fr;gap:11px;}
+.sign{background:#fff;border-radius:15px;padding:11px 9px 12px;box-shadow:var(--ombre);text-align:center;border:1.5px solid #EEF0F2;}
+.sign svg{width:78px;height:78px;display:block;margin:0 auto 6px;}
+.sign .nm{font-family:'Baloo 2';font-weight:800;font-size:13px;line-height:1.1;}
+.sign .ds{font-size:10.5px;color:var(--gris);margin-top:3px;}
+.sign .tr{font-size:11.5px;margin-top:5px;padding-top:4px;border-top:1px dashed #E5E7EB;color:#1E293B;font-weight:700;min-height:16px;}
+.spk{margin-top:6px;border:none;background:var(--bleu-p);color:var(--bleu);border-radius:9px;padding:5px 10px;font-size:11.5px;font-weight:800;cursor:pointer;font-family:'Nunito';}
+.spk:active{background:var(--bleu);color:#fff;}
+.words{display:flex;flex-direction:column;gap:9px;}
+.word{display:flex;align-items:center;gap:12px;background:#fff;border-radius:14px;padding:10px 12px;box-shadow:var(--ombre);border:1.5px solid #EEF0F2;}
+.word .emo{font-size:28px;width:38px;text-align:center;flex-shrink:0;}
+.word .body{flex:1;min-width:0;}
+.word .fr{font-family:'Baloo 2';font-weight:800;font-size:15px;}
+.word .code-tag{display:inline-block;background:var(--orange-p);color:var(--orange);font-size:9.5px;font-weight:800;border-radius:6px;padding:1px 6px;margin-left:5px;vertical-align:middle;}
+.word .alt{font-size:11px;color:var(--gris);}
+.word .tr{font-size:12.5px;color:#1E293B;font-weight:700;margin-top:2px;}
+.rules{display:flex;flex-direction:column;gap:10px;}
+.rule{background:#fff;border-radius:14px;padding:12px 14px;box-shadow:var(--ombre);border-left:5px solid var(--vert);}
+.rule .rt{font-family:'Baloo 2';font-weight:800;font-size:14.5px;display:flex;align-items:center;gap:7px;}
+.rule .rd{font-size:12.5px;margin-top:3px;}
+.rule .tr{font-size:12px;color:#1E293B;font-weight:700;margin-top:6px;padding-top:5px;border-top:1px dashed #E5E7EB;}
+.rule.warn{border-left-color:var(--rouge);}.rule.info{border-left-color:var(--bleu);}
+.hub{display:flex;flex-direction:column;gap:11px;}
+.hub-card{display:flex;align-items:center;gap:13px;background:#fff;border-radius:15px;padding:14px 15px;box-shadow:var(--ombre);border:2px solid #EEF0F2;cursor:pointer;width:100%;font-family:'Nunito';text-align:left;}
+.hub-card:active{transform:scale(.98);}
+.hub-card .ic{font-size:27px;width:42px;text-align:center;flex-shrink:0;}
+.hub-card .tt{font-family:'Baloo 2';font-weight:800;font-size:15px;}
+.hub-card .ds{font-size:11.5px;color:var(--gris);}
+.quiz-head{background:#fff;border-radius:14px;padding:11px 14px;box-shadow:var(--ombre);display:flex;align-items:center;gap:12px;margin-bottom:13px;}
+.quiz-head .sc{font-family:'Baloo 2';font-weight:800;font-size:21px;min-width:52px;}
+.quiz-head .pg{font-size:12px;color:var(--gris);flex:1;font-weight:700;}
+.qcard{background:#fff;border-radius:16px;padding:15px;box-shadow:var(--ombre);}
+.q-scene{background:var(--gris-p);border-radius:12px;padding:13px;text-align:center;margin-bottom:11px;min-height:92px;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;}
+.q-scene svg{width:84px;height:84px;}
+.q-scene .emo{font-size:48px;}
+.q-badge{display:inline-block;font-size:10px;font-weight:800;border-radius:6px;padding:2px 8px;margin-bottom:6px;}
+.q-badge.one{background:var(--bleu-p);color:var(--bleu);}
+.q-badge.multi{background:var(--orange-p);color:var(--orange);}
+.q-text{font-family:'Baloo 2';font-weight:800;font-size:15.5px;line-height:1.2;}
+.q-tr{font-size:12.5px;color:var(--gris);font-weight:700;margin-top:4px;}
+.q-opts{display:flex;flex-direction:column;gap:8px;margin-top:12px;}
+.opt{display:flex;align-items:center;gap:10px;background:var(--gris-p);border:2px solid #E5E7EB;border-radius:12px;padding:11px 13px;cursor:pointer;font-size:13.5px;font-weight:700;font-family:'Nunito';text-align:left;width:100%;}
+.opt .box{width:21px;height:21px;border-radius:7px;border:2px solid #9CA3AF;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;color:#fff;}
+.opt.sel{border-color:var(--violet);background:var(--violet-p);}
+.opt.sel .box{background:var(--violet);border-color:var(--violet);}
+.opt.good{border-color:var(--vert);background:var(--vert-p);}.opt.good .box{background:var(--vert);border-color:var(--vert);}
+.opt.bad{border-color:var(--rouge);background:var(--rouge-p);}.opt.bad .box{background:var(--rouge);border-color:var(--rouge);}
+.btn{border:none;border-radius:12px;padding:12px;font-family:'Nunito';font-weight:800;font-size:15px;cursor:pointer;width:100%;}
+.btn-main{background:var(--violet);color:#fff;}.btn-main:disabled{background:#CBD5E1;}
+.btn-ghost{background:#fff;color:var(--violet);box-shadow:var(--ombre);}
+.expl{margin-top:12px;border-radius:12px;padding:11px 13px;font-size:13px;background:var(--vert-p);border-left:4px solid var(--vert);display:none;}
+.expl.show{display:block;}.expl.ko{background:var(--rouge-p);border-left-color:var(--rouge);}
+.spk-q{border:none;background:var(--violet-p);color:var(--violet);border-radius:10px;padding:6px 12px;font-weight:800;font-size:12.5px;cursor:pointer;margin-top:8px;font-family:'Nunito';}
+.match-instr{font-size:12.5px;color:var(--gris);font-weight:700;margin-bottom:11px;}
+.match-wrap{display:flex;gap:10px;}
+.match-col{flex:1;display:flex;flex-direction:column;gap:8px;}
+.mitem{background:#fff;border:2px solid #E5E7EB;border-radius:13px;padding:9px;box-shadow:var(--ombre);cursor:pointer;font-size:13px;font-weight:700;text-align:center;font-family:'Nunito';min-height:52px;display:flex;align-items:center;justify-content:center;}
+.mitem svg{width:52px;height:52px;}
+.mitem.sel{border-color:var(--bleu);background:var(--bleu-p);}
+.mitem.ok{border-color:var(--vert);background:var(--vert-p);pointer-events:none;opacity:.8;}
+.mitem.bad{border-color:var(--rouge);background:var(--rouge-p);}
+.quiz-end{background:#fff;border-radius:16px;padding:22px 18px;box-shadow:var(--ombre);text-align:center;}
+.quiz-end .big{font-family:'Baloo 2';font-weight:800;font-size:32px;}
+.quiz-end .em{font-size:50px;}
+.sgfx{display:inline-flex;align-items:center;justify-content:center}
+.sgfx .fb{display:none}
+.sgfx img{object-fit:contain;background:#fff;border-radius:6px}
+.sign .sgfx,.sign .sgfx img,.sign .sgfx .fb svg{width:78px;height:78px}
+.sign .sgfx{display:flex;margin:0 auto 6px}
+.q-scene .sgfx,.q-scene .sgfx img,.q-scene .sgfx .fb svg{width:84px;height:84px}
+.mitem .sgfx,.mitem .sgfx img,.mitem .sgfx .fb svg{width:52px;height:52px}
+.start-card{background:#fff;border-radius:16px;padding:20px 18px;box-shadow:var(--ombre);text-align:center;}
+footer{text-align:center;font-size:10.5px;color:var(--gris);padding:14px;}
+</style>
+</head>
+<body>
+<header>
+  <a href="index.html" class="back-menu">◀ Mes coachs</a>
+  <div class="h-top">
+    <div class="h-logo">🚦</div>
+    <div><div class="h-title">Mon Coach Code</div><div class="h-sub">HOPE 2026 · AFPA Tarbes · le code de la route</div></div>
+  </div>
+  <div class="lang-bar" id="langBar"></div>
+  <div class="lang-note" id="langNote"></div>
+</header>
+<main>
+  <section id="home">
+    <div class="intro">Apprends puis <b>entraîne-toi</b> : panneaux, vocabulaire, règles, premiers secours, et un examen blanc différent à chaque fois. Choisis ta langue d'aide en haut.
+      <div class="exam-stats">
+        <div class="stat"><div class="n">40</div><div class="l">questions</div></div>
+        <div class="stat"><div class="n">35</div><div class="l">pour réussir</div></div>
+        <div class="stat"><div class="n">30 min</div><div class="l">durée</div></div>
+        <div class="stat"><div class="n">30 €</div><div class="l">l'examen</div></div>
+      </div>
+    </div>
+    <div class="parcours-grid" id="parcoursGrid"></div>
+  </section>
+
+  <section id="p1" class="hide"></section>
+  <section id="p2" class="hide"></section>
+  <section id="p3" class="hide"></section>
+  <section id="p4" class="hide"></section>
+  <section id="p5" class="hide"></section>
+  <section id="p6" class="hide"></section>
+  <section id="game" class="hide"></section>
+</main>
+<footer>Mon Coach Code · HOPE 2026 · Outil d'apprentissage — ne remplace pas une auto-école</footer>
+
+<script>
+/* ============================================================
+   TRADUCTIONS — À FAIRE VÉRIFIER PAR UN LOCUTEUR NATIF
+   Langues : fr · en · ps(pachto) · ar(arabe) · zh(chinois) · hi(hindi)
+   Pour corriger : trouve le mot, modifie la valeur entre guillemets.
+   ============================================================ */
+const LANGS=[{c:'fr',n:'Français',f:'🇫🇷'},{c:'en',n:'English',f:'🇬🇧'},{c:'ps',n:'پښتو',f:'🇦🇫'},{c:'ar',n:'العربية',f:'🇸🇦'},{c:'zh',n:'中文',f:'🇨🇳'},{c:'hi',n:'हिन्दी',f:'🇮🇳'}];
+const RTL=['ps','ar']; let lang='en';
+const T=o=>(o&&(o[lang]||o.fr))||'';
+function trWrap(o){
+  if(lang==='fr')return'';
+  const v=(o&&o[lang])||''; if(!v)return'';
+  let cls='tr'; if(RTL.includes(lang))cls+=' rtl'; if(lang==='zh')cls+=' zh'; if(lang==='hi')cls+=' hi';
+  return `<div class="${cls}">${v}</div>`;
+}
+
+/* ===== SVG helpers ===== */
+function triD(i){return `<svg viewBox="0 0 100 92"><polygon points="50,6 96,86 4,86" fill="#fff" stroke="#DC2626" stroke-width="9" stroke-linejoin="round"/>${i}</svg>`;}
+function cInt(i){return `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="#fff" stroke="#DC2626" stroke-width="9"/>${i}</svg>`;}
+function cObl(i){return `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" fill="#2563EB"/>${i}</svg>`;}
+function cInd(i){return `<svg viewBox="0 0 100 100"><rect x="8" y="8" width="84" height="84" rx="8" fill="#2563EB"/>${i}</svg>`;}
+function vSign(n){return cInt(`<text x="50" y="64" font-family="Arial" font-weight="900" font-size="38" text-anchor="middle" fill="#111">${n}</text>`);}
+function cStat(d){return `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="#2563EB" stroke="#DC2626" stroke-width="9"/>${d}</svg>`;}
+const PED='<path d="M50 30a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9zM45 36l-6 13 4 2 4-8v22h4V49l4 8 4-2-6-13z"/>';
+const BIKE='<g fill="none" stroke="#111" stroke-width="4"><circle cx="34" cy="62" r="10"/><circle cx="66" cy="62" r="10"/><path d="M34 62l10-16h14M44 46l10 16M58 46h8" stroke-linecap="round"/></g>';
+
+/* ===== PANNEAUX ===== */
+const SIGNS=[
+ {f:'danger',id:'virage-d',svg:triD('<path d="M44 74V52c0-12 12-12 12-22" fill="none" stroke="#111" stroke-width="7" stroke-linecap="round"/><path d="M56 26l8 6-10 4z" fill="#111"/>'),nm:{fr:'Virage à droite',en:'Bend right',ps:'ښي ته کږه',ar:'منعطف يميناً',zh:'向右弯',hi:'दाएँ मोड़'},ds:{fr:'Attention, virage dangereux à droite.'}},
+ {f:'danger',id:'virage-g',svg:triD('<path d="M56 74V52c0-12-12-12-12-22" fill="none" stroke="#111" stroke-width="7" stroke-linecap="round"/><path d="M44 26l-8 6 10 4z" fill="#111"/>'),nm:{fr:'Virage à gauche',en:'Bend left',ps:'کیڼ ته کږه',ar:'منعطف يساراً',zh:'向左弯',hi:'बाएँ मोड़'},ds:{fr:'Attention, virage dangereux à gauche.'}},
+ {f:'danger',id:'glissante',svg:triD('<rect x="38" y="40" width="24" height="14" rx="3" fill="#111"/><path d="M30 70q6-8 12 0t12 0t12 0" fill="none" stroke="#111" stroke-width="3"/>'),nm:{fr:'Chaussée glissante',en:'Slippery road',ps:'ښوی سړک',ar:'طريق زلق',zh:'路面湿滑',hi:'फिसलन भरी सड़क'},ds:{fr:'Attention, la route peut être glissante.'}},
+ {f:'danger',id:'ralentisseur',svg:triD('<path d="M30 64a20 14 0 0 1 40 0z" fill="#111"/>'),nm:{fr:'Ralentisseur',en:'Speed bump',ps:'سرعت ماتوونکی',ar:'مطبّ',zh:'减速带',hi:'गति अवरोधक'},ds:{fr:'Attention, dos d’âne (ralentisseur). Ralentissez.'}},
+ {f:'danger',id:'travaux',svg:triD('<path d="M40 74l8-22h4l8 22z" fill="#111"/><circle cx="50" cy="40" r="5" fill="#111"/><rect x="56" y="34" width="14" height="5" transform="rotate(35 56 34)" fill="#111"/>'),nm:{fr:'Travaux',en:'Roadworks',ps:'سړک جوړونه',ar:'أعمال طرق',zh:'道路施工',hi:'सड़क कार्य'},ds:{fr:'Attention, travaux sur la route.'}},
+ {f:'danger',id:'pieton-d',svg:triD(PED),nm:{fr:'Passage de piétons',en:'Pedestrian crossing',ps:'د پلیو تګ ځای',ar:'ممرّ مشاة',zh:'人行横道',hi:'पैदल पार पथ'},ds:{fr:'Attention, passage de piétons proche.'}},
+ {f:'danger',id:'enfants',svg:triD('<circle cx="44" cy="40" r="4" fill="#111"/><circle cx="58" cy="42" r="4" fill="#111"/><path d="M40 70l4-22h4l1 10h2l1-10h4l4 22z" fill="#111"/>'),nm:{fr:'Enfants',en:'Children',ps:'ماشومان',ar:'أطفال',zh:'注意儿童',hi:'बच्चे'},ds:{fr:'Attention, endroit fréquenté par des enfants.'}},
+ {f:'danger',id:'cyclistes',svg:triD('<g transform="translate(0 4) scale(.95)">'+BIKE+'</g>'),nm:{fr:'Cyclistes',en:'Cyclists',ps:'بایسکل چلوونکي',ar:'دراجات',zh:'注意自行车',hi:'साइकिल चालक'},ds:{fr:'Attention, débouché de cyclistes.'}},
+ {f:'danger',id:'feux',svg:triD('<rect x="42" y="30" width="16" height="38" rx="4" fill="#111"/><circle cx="50" cy="38" r="4" fill="#DC2626"/><circle cx="50" cy="49" r="4" fill="#F59E0B"/><circle cx="50" cy="60" r="4" fill="#22C55E"/>'),nm:{fr:'Feux tricolores',en:'Traffic lights',ps:'د ترافیک څراغونه',ar:'إشارات ضوئية',zh:'前方红绿灯',hi:'यातायात बत्ती'},ds:{fr:'Attention, feux tricolores plus loin.'}},
+ {f:'danger',id:'niveau',svg:triD('<rect x="26" y="44" width="48" height="6" fill="#111"/><rect x="32" y="40" width="5" height="26" fill="#111"/><rect x="63" y="40" width="5" height="26" fill="#111"/>'),nm:{fr:'Passage à niveau',en:'Level crossing',ps:'د اورګاډي پرلاره',ar:'مزلقان قطار',zh:'铁路道口',hi:'रेलवे क्रॉसिंग'},ds:{fr:'Attention, passage à niveau (train).'}},
+ {f:'danger',id:'deux-sens',svg:triD('<path d="M42 30v32M42 30l-5 7h10zM58 70V38M58 70l-5-7h10z" stroke="#111" stroke-width="4" fill="#111" stroke-linejoin="round"/>'),nm:{fr:'Circulation à double sens',en:'Two-way traffic',ps:'دوه اړخیز ترافیک',ar:'حركة باتجاهين',zh:'双向交通',hi:'दोतरफ़ा यातायात'},ds:{fr:'Attention, circulation dans les deux sens.'}},
+ // INTERDICTION
+ {f:'interdiction',id:'sens-interdit',svg:'<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" fill="#DC2626"/><rect x="22" y="43" width="56" height="14" rx="2" fill="#fff"/></svg>',nm:{fr:'Sens interdit',en:'No entry',ps:'ننوتل منع دي',ar:'ممنوع الدخول',zh:'禁止驶入',hi:'प्रवेश निषेध'},ds:{fr:'Interdiction de passer dans ce sens.'}},
+ {f:'interdiction',id:'acces',svg:cInt(''),nm:{fr:'Circulation interdite',en:'No vehicles',ps:'موټرو ته منع',ar:'ممنوع المرور',zh:'禁止通行',hi:'वाहन निषेध'},ds:{fr:'Accès interdit à tous les véhicules.'}},
+ {f:'interdiction',id:'demi-tour',svg:cInt('<path d="M40 70V46a10 10 0 0 1 20 0v18" fill="none" stroke="#111" stroke-width="6"/><path d="M34 64l6 10 6-10z" fill="#111"/>'),nm:{fr:'Demi-tour interdit',en:'No U-turn',ps:'بیرته ګرځېدل منع',ar:'ممنوع الالتفاف',zh:'禁止掉头',hi:'यू-टर्न निषेध'},ds:{fr:'Interdiction de faire demi-tour.'}},
+ {f:'interdiction',id:'depasser',svg:cInt('<rect x="30" y="34" width="16" height="32" rx="3" fill="#DC2626"/><rect x="54" y="34" width="16" height="32" rx="3" fill="#111"/>'),nm:{fr:'Dépassement interdit',en:'No overtaking',ps:'مخکې کول منع',ar:'ممنوع التجاوز',zh:'禁止超车',hi:'ओवरटेक निषेध'},ds:{fr:'Interdiction de doubler (dépasser).'}},
+ {f:'interdiction',id:'v30',svg:vSign(30),nm:{fr:'Limitation à 30',en:'Speed limit 30',ps:'سرعت ۳۰',ar:'حد السرعة ٣٠',zh:'限速 30',hi:'गति सीमा 30'},ds:{fr:'Vitesse maximale : 30 km/h.'}},
+ {f:'interdiction',id:'v50',svg:vSign(50),nm:{fr:'Limitation à 50',en:'Speed limit 50',ps:'سرعت ۵۰',ar:'حد السرعة ٥٠',zh:'限速 50',hi:'गति सीमा 50'},ds:{fr:'Vitesse maximale : 50 km/h.'}},
+ {f:'interdiction',id:'v70',svg:vSign(70),nm:{fr:'Limitation à 70',en:'Speed limit 70',ps:'سرعت ۷۰',ar:'حد السرعة ٧٠',zh:'限速 70',hi:'गति सीमा 70'},ds:{fr:'Vitesse maximale : 70 km/h.'}},
+ {f:'interdiction',id:'v90',svg:vSign(90),nm:{fr:'Limitation à 90',en:'Speed limit 90',ps:'سرعت ۹۰',ar:'حد السرعة ٩٠',zh:'限速 90',hi:'गति सीमा 90'},ds:{fr:'Vitesse maximale : 90 km/h.'}},
+ {f:'interdiction',id:'v130',svg:vSign(130),nm:{fr:'Limitation à 130',en:'Speed limit 130',ps:'سرعت ۱۳۰',ar:'حد السرعة ١٣٠',zh:'限速 130',hi:'गति सीमा 130'},ds:{fr:'Vitesse maximale : 130 km/h (autoroute).'}},
+ {f:'interdiction',id:'stat',svg:cStat('<line x1="22" y1="22" x2="78" y2="78" stroke="#DC2626" stroke-width="8"/>'),nm:{fr:'Stationnement interdit',en:'No parking',ps:'ودرول منع',ar:'ممنوع الوقوف',zh:'禁止停车',hi:'पार्किंग निषेध'},ds:{fr:'Interdiction de se garer.'}},
+ {f:'interdiction',id:'arret-stat',svg:cStat('<line x1="22" y1="22" x2="78" y2="78" stroke="#DC2626" stroke-width="8"/><line x1="78" y1="22" x2="22" y2="78" stroke="#DC2626" stroke-width="8"/>'),nm:{fr:'Arrêt et stationnement interdits',en:'No stopping',ps:'درېدل او ودرول منع',ar:'ممنوع الوقوف والتوقف',zh:'禁止停留',hi:'रुकना/पार्किंग निषेध'},ds:{fr:'Interdiction de s’arrêter et de stationner.'}},
+ {f:'interdiction',id:'fin-lim',svg:'<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="#fff" stroke="#9CA3AF" stroke-width="6"/><line x1="26" y1="74" x2="74" y2="26" stroke="#111" stroke-width="6"/><line x1="34" y1="78" x2="78" y2="34" stroke="#111" stroke-width="6"/></svg>',nm:{fr:'Fin des interdictions',en:'End of restrictions',ps:'د منع پای',ar:'نهاية القيود',zh:'限制结束',hi:'प्रतिबंध समाप्त'},ds:{fr:'Fin de toutes les interdictions précédentes.'}},
+ // OBLIGATION
+ {f:'obligation',id:'tout-droit',svg:cObl('<path d="M50 28l14 18h-9v26h-10V46h-9z" fill="#fff"/>'),nm:{fr:'Tout droit obligatoire',en:'Straight ahead',ps:'مستقیم لازمي',ar:'للأمام إلزامي',zh:'必须直行',hi:'सीधे अनिवार्य'},ds:{fr:'Vous devez aller tout droit.'}},
+ {f:'obligation',id:'droite-ob',svg:cObl('<path d="M30 45h26V36l18 14-18 14v-9H30z" fill="#fff"/>'),nm:{fr:'À droite obligatoire',en:'Turn right',ps:'ښي ته لازمي',ar:'يميناً إلزامي',zh:'必须右转',hi:'दाएँ अनिवार्य'},ds:{fr:'Vous devez tourner à droite.'}},
+ {f:'obligation',id:'gauche-ob',svg:cObl('<path d="M70 45H44V36L26 50l18 14v-9h26z" fill="#fff"/>'),nm:{fr:'À gauche obligatoire',en:'Turn left',ps:'کیڼ ته لازمي',ar:'يساراً إلزامي',zh:'必须左转',hi:'बाएँ अनिवार्य'},ds:{fr:'Vous devez tourner à gauche.'}},
+ {f:'obligation',id:'cyclable',svg:cObl('<g fill="none" stroke="#fff" stroke-width="4"><circle cx="34" cy="62" r="10"/><circle cx="66" cy="62" r="10"/><path d="M34 62l10-16h14M44 46l10 16M58 46h8" stroke-linecap="round"/></g>'),nm:{fr:'Piste cyclable',en:'Cycle path',ps:'د بایسکل لاره',ar:'مسار دراجات',zh:'自行车道',hi:'साइकिल पथ'},ds:{fr:'Voie obligatoire pour les vélos.'}},
+ {f:'obligation',id:'giratoire',svg:cObl('<g fill="none" stroke="#fff" stroke-width="5"><path d="M50 30a20 20 0 0 1 17 30" stroke-linecap="round"/><path d="M67 60l2-9 7 5z" fill="#fff" stroke="none"/><path d="M50 70a20 20 0 0 1-17-30" stroke-linecap="round"/><path d="M33 40l-2 9-7-5z" fill="#fff" stroke="none"/></g>'),nm:{fr:'Sens giratoire',en:'Roundabout',ps:'چورلیز',ar:'دوّار',zh:'环岛',hi:'गोल चक्कर'},ds:{fr:'Vous entrez dans un rond-point.'}},
+ {f:'obligation',id:'chaines',svg:cObl('<circle cx="50" cy="52" r="20" fill="none" stroke="#fff" stroke-width="6"/><circle cx="50" cy="52" r="9" fill="#fff"/>'),nm:{fr:'Chaînes à neige',en:'Snow chains',ps:'د واورې زنځیرونه',ar:'سلاسل الثلج',zh:'雪地防滑链',hi:'स्नो चेन'},ds:{fr:'Chaînes à neige obligatoires.'}},
+ // PRIORITÉ
+ {f:'priorite',id:'stop',svg:'<svg viewBox="0 0 100 100"><polygon points="32,6 68,6 94,32 94,68 68,94 32,94 6,68 6,32" fill="#DC2626" stroke="#fff" stroke-width="4"/><text x="50" y="60" font-family="Arial" font-weight="900" font-size="25" text-anchor="middle" fill="#fff">STOP</text></svg>',nm:{fr:'STOP — Arrêt',en:'STOP',ps:'ودریږه',ar:'قف',zh:'停车',hi:'रुको'},ds:{fr:'Arrêt complet obligatoire, puis cédez le passage.'}},
+ {f:'priorite',id:'cedez',svg:'<svg viewBox="0 0 100 92"><polygon points="50,86 4,6 96,6" fill="#fff" stroke="#DC2626" stroke-width="9" stroke-linejoin="round"/></svg>',nm:{fr:'Cédez le passage',en:'Give way',ps:'لاره ورکړه',ar:'أعطِ الأولوية',zh:'让行',hi:'रास्ता दें'},ds:{fr:'Laissez passer les autres véhicules.'}},
+ {f:'priorite',id:'prioritaire',svg:'<svg viewBox="0 0 100 100"><rect x="50" y="8" width="59" height="59" transform="rotate(45 50 50)" fill="#F9D000" stroke="#fff" stroke-width="5"/><rect x="50" y="26" width="34" height="34" transform="rotate(45 50 50)" fill="#fff"/></svg>',nm:{fr:'Route prioritaire',en:'Priority road',ps:'لومړیتوب سړک',ar:'طريق ذو أولوية',zh:'优先道路',hi:'प्राथमिकता सड़क'},ds:{fr:'Vous êtes sur une route prioritaire.'}},
+ {f:'priorite',id:'fin-prio',svg:'<svg viewBox="0 0 100 100"><rect x="50" y="8" width="59" height="59" transform="rotate(45 50 50)" fill="#F9D000" stroke="#fff" stroke-width="5"/><rect x="50" y="26" width="34" height="34" transform="rotate(45 50 50)" fill="#fff"/><line x1="22" y1="78" x2="78" y2="22" stroke="#111" stroke-width="6"/></svg>',nm:{fr:'Fin de route prioritaire',en:'End of priority',ps:'د لومړیتوب پای',ar:'نهاية الأولوية',zh:'优先结束',hi:'प्राथमिकता समाप्त'},ds:{fr:'Fin de la route prioritaire.'}},
+ // INDICATION
+ {f:'indication',id:'pieton-i',svg:cInd('<rect x="30" y="30" width="40" height="40" rx="4" fill="#fff"/><g transform="translate(0 6)" fill="#111">'+PED+'</g>'),nm:{fr:'Passage piéton',en:'Pedestrian crossing',ps:'د پلیو تګ ځای',ar:'ممرّ مشاة',zh:'人行横道',hi:'पैदल पार पथ'},ds:{fr:'Endroit pour traverser à pied.'}},
+ {f:'indication',id:'parking',svg:cInd('<text x="50" y="72" font-family="Arial" font-weight="900" font-size="60" text-anchor="middle" fill="#fff">P</text>'),nm:{fr:'Parking',en:'Parking',ps:'پارکینګ',ar:'موقف',zh:'停车场',hi:'पार्किंग'},ds:{fr:'Lieu de stationnement autorisé.'}},
+ {f:'indication',id:'sens-unique',svg:'<svg viewBox="0 0 100 100"><rect x="8" y="30" width="84" height="40" rx="6" fill="#2563EB"/><path d="M22 50h40M54 40l16 10-16 10z" stroke="#fff" stroke-width="6" fill="#fff" stroke-linejoin="round"/></svg>',nm:{fr:'Sens unique',en:'One way',ps:'یو لوری',ar:'اتجاه واحد',zh:'单行道',hi:'एकल मार्ग'},ds:{fr:'Circulation dans un seul sens.'}},
+ {f:'indication',id:'impasse',svg:cInd('<rect x="46" y="40" width="8" height="34" fill="#fff"/><rect x="34" y="32" width="32" height="9" fill="#DC2626"/>'),nm:{fr:'Impasse',en:'Dead end',ps:'تړل شوې لار',ar:'طريق مسدود',zh:'死胡同',hi:'बंद रास्ता'},ds:{fr:'Voie sans issue.'}},
+ {f:'indication',id:'hopital',svg:cInd('<text x="50" y="70" font-family="Arial" font-weight="900" font-size="52" text-anchor="middle" fill="#fff">H</text>'),nm:{fr:'Hôpital',en:'Hospital',ps:'روغتون',ar:'مستشفى',zh:'医院',hi:'अस्पताल'},ds:{fr:'Hôpital à proximité.'}},
+];
+const FAM={danger:{n:'Danger',c:'#DC2626'},interdiction:{n:'Interdiction',c:'#DC2626'},obligation:{n:'Obligation',c:'#2563EB'},priorite:{n:'Priorité',c:'#F59E0B'},indication:{n:'Indication',c:'#2563EB'}};
+
+/* Vrais panneaux officiels (Wikimedia Commons, licence CC). Si l'image ne charge pas → repli sur le dessin SVG. */
+const WM={
+ 'virage-d':'France road sign A1a.svg','virage-g':'France road sign A1b.svg','glissante':'France road sign A4.svg',
+ 'ralentisseur':'France road sign A2b.svg','travaux':'France road sign AK5.svg','pieton-d':'France road sign A13b.svg',
+ 'enfants':'France road sign A13a.svg','cyclistes':'France road sign A21.svg','feux':'France road sign A17.svg',
+ 'niveau':'France road sign A7.svg','deux-sens':'France road sign A18.svg',
+ 'sens-interdit':'France road sign B1.svg','acces':'France road sign B0.svg','demi-tour':'France road sign B2b.svg',
+ 'depasser':'France road sign B3.svg','v30':'France road sign B14 (30).svg','v50':'France road sign B14 (50).svg',
+ 'v70':'France road sign B14 (70).svg','v90':'France road sign B14 (90).svg','v130':'France road sign B14 (130).svg',
+ 'stat':'France road sign B6a1.svg','arret-stat':'France road sign B6d.svg','fin-lim':'France road sign B31.svg',
+ 'cyclable':'France road sign B22a.svg','chaines':'France road sign B26.svg',
+ 'stop':'France road sign AB4.svg','cedez':'France road sign AB3a.svg','prioritaire':'France road sign AB6.svg','fin-prio':'France road sign AB7.svg',
+ 'pieton-i':'France road sign C20a.svg','parking':'France road sign C1a.svg','sens-unique':'France road sign C12.svg','impasse':'France road sign C13a.svg',
+};
+function signGfx(s){
+  const fn=WM[s.id];
+  if(!fn) return s.svg;
+  const url='https://commons.wikimedia.org/wiki/Special:FilePath/'+encodeURIComponent(fn)+'?width=300';
+  return `<span class="sgfx"><img src="${url}" alt="${s.nm.fr}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><span class="fb">${s.svg}</span></span>`;
+}
+
+/* ===== MOTS DU CODE ===== */
+const WORDS=[
+ {g:'lieux',emo:'🛣️',fr:'la chaussée',alt:'(la partie où roulent les voitures)',tr:{en:'the roadway',ps:'سړک',ar:'مسار السير',zh:'车行道',hi:'सड़क मार्ग'}},
+ {g:'lieux',emo:'🚶',fr:'le trottoir',alt:'(pour les piétons)',tr:{en:'the pavement',ps:'فوتپاث',ar:'الرصيف',zh:'人行道',hi:'फुटपाथ'}},
+ {g:'lieux',emo:'🔀',fr:'le carrefour',alt:'(croisement de routes)',tr:{en:'the crossroads',ps:'څلورلاره',ar:'تقاطع',zh:'十字路口',hi:'चौराहा'}},
+ {g:'lieux',emo:'🔄',fr:'le rond-point',code:'carrefour à sens giratoire',tr:{en:'the roundabout',ps:'چورلیز',ar:'الدوّار',zh:'环岛',hi:'गोल चक्कर'}},
+ {g:'lieux',emo:'✖️',fr:"l'intersection",alt:'(où deux routes se rencontrent)',tr:{en:'the intersection',ps:'پرلاره',ar:'التقاطع',zh:'交叉路口',hi:'चौराहा'}},
+ {g:'lieux',emo:'🛤️',fr:"l'autoroute",alt:'(route rapide, 130 km/h)',tr:{en:'the motorway',ps:'لويه لار',ar:'الطريق السريع',zh:'高速公路',hi:'राजमार्ग'}},
+ {g:'lieux',emo:'🚸',fr:'le passage piéton',alt:'(les bandes blanches)',tr:{en:'the pedestrian crossing',ps:'د پلیو تګ ځای',ar:'ممرّ المشاة',zh:'人行横道',hi:'पैदल पार पथ'}},
+ {g:'lieux',emo:'🟧',fr:"la bande d'arrêt d'urgence",alt:'(à droite de l’autoroute)',tr:{en:'the hard shoulder',ps:'د بیړني درېدو کرښه',ar:'كتف الطوارئ',zh:'紧急停车带',hi:'आपातकालीन लेन'}},
+ {g:'lieux',emo:'🟩',fr:'le terre-plein central',alt:'(sépare les deux sens)',tr:{en:'the central reservation',ps:'مرکزي بیلونکی',ar:'الجزيرة الوسطى',zh:'中央隔离带',hi:'मध्य पट्टी'}},
+ // signalisation
+ {g:'signal',emo:'🚦',fr:'le feu tricolore',alt:'(rouge, orange, vert)',tr:{en:'the traffic light',ps:'د ترافیک څراغ',ar:'الإشارة الضوئية',zh:'红绿灯',hi:'यातायात बत्ती'}},
+ {g:'signal',emo:'🔆',fr:'les feux de croisement',code:'les codes',tr:{en:'dipped headlights',ps:'ښکته رڼاوې',ar:'الأضواء المنخفضة',zh:'近光灯',hi:'लो बीम'}},
+ {g:'signal',emo:'💡',fr:'les feux de route',code:'les pleins phares',tr:{en:'main beam',ps:'لوړې رڼاوې',ar:'الأضواء العالية',zh:'远光灯',hi:'हाई बीम'}},
+ {g:'signal',emo:'🌫️',fr:'les feux de brouillard',alt:'(quand on voit mal)',tr:{en:'fog lights',ps:'د لړې څراغونه',ar:'أضواء الضباب',zh:'雾灯',hi:'फॉग लाइट'}},
+ {g:'signal',emo:'⚠️',fr:'les feux de détresse',alt:'(les warnings)',tr:{en:'hazard lights',ps:'د خطر څراغونه',ar:'أضواء التحذير',zh:'危险报警灯',hi:'खतरे की बत्ती'}},
+ {g:'signal',emo:'🪧',fr:'le panneau',alt:'(signal sur la route)',tr:{en:'the road sign',ps:'د سړک نښه',ar:'لوحة المرور',zh:'交通标志',hi:'सड़क चिन्ह'}},
+ {g:'signal',emo:'➖',fr:'le marquage au sol',code:'signalisation horizontale',tr:{en:'road markings',ps:'په سړک کرښې',ar:'علامات الطريق',zh:'路面标线',hi:'सड़क रेखाएँ'}},
+ // usagers
+ {g:'usagers',emo:'🚶',fr:'le piéton',alt:'(qui marche)',tr:{en:'the pedestrian',ps:'پلی',ar:'المشاة',zh:'行人',hi:'पैदल यात्री'}},
+ {g:'usagers',emo:'🧑‍✈️',fr:'le conducteur',alt:'(qui conduit)',tr:{en:'the driver',ps:'چلوونکی',ar:'السائق',zh:'驾驶员',hi:'चालक'}},
+ {g:'usagers',emo:'🚴',fr:'le cycliste',alt:'(à vélo)',tr:{en:'the cyclist',ps:'بایسکل چلوونکی',ar:'راكب الدراجة',zh:'骑车人',hi:'साइकिल चालक'}},
+ {g:'usagers',emo:'🏍️',fr:'le motard',alt:'(à moto)',tr:{en:'the motorcyclist',ps:'موټرسایکل چلوونکی',ar:'سائق الدراجة النارية',zh:'摩托车手',hi:'मोटरसाइकिल चालक'}},
+ {g:'usagers',emo:'🚚',fr:'le poids lourd',code:'le camion',tr:{en:'the lorry / truck',ps:'لوی موټر',ar:'الشاحنة',zh:'卡车',hi:'ट्रक'}},
+ {g:'usagers',emo:'🚑',fr:'le véhicule prioritaire',alt:'(ambulance, pompiers, police)',tr:{en:'the priority vehicle',ps:'لومړیتوب لرونکی موټر',ar:'مركبة الأولوية',zh:'优先车辆',hi:'प्राथमिकता वाहन'}},
+ {g:'usagers',emo:'👥',fr:"l'usager",alt:'(toute personne sur la route)',tr:{en:'the road user',ps:'د سړک کارونکی',ar:'مستخدم الطريق',zh:'道路使用者',hi:'सड़क उपयोगकर्ता'}},
+ // véhicule
+ {g:'vehicule',emo:'🔒',fr:'la ceinture de sécurité',alt:'(obligatoire)',tr:{en:'the seatbelt',ps:'د خوندیتوب کمربند',ar:'حزام الأمان',zh:'安全带',hi:'सीट बेल्ट'}},
+ {g:'vehicule',emo:'🪞',fr:'le rétroviseur',alt:'(pour voir derrière)',tr:{en:'the rear-view mirror',ps:'د شا هنداره',ar:'مرآة الرؤية الخلفية',zh:'后视镜',hi:'पिछला दर्पण'}},
+ {g:'vehicule',emo:'➡️',fr:'le clignotant',alt:'(pour indiquer la direction)',tr:{en:'the indicator',ps:'د لوري نښه',ar:'إشارة الانعطاف',zh:'转向灯',hi:'इंडिकेटर'}},
+ {g:'vehicule',emo:'📢',fr:"l'avertisseur sonore",code:'le klaxon',tr:{en:'the horn',ps:'هارن',ar:'البوق',zh:'喇叭',hi:'हॉर्न'}},
+ {g:'vehicule',emo:'🚷',fr:"l'angle mort",alt:'(zone qu’on ne voit pas)',tr:{en:'the blind spot',ps:'ړوند ګوټ',ar:'النقطة العمياء',zh:'盲区',hi:'अंधा स्थान'}},
+ // mots de l'examen (techniques)
+ {g:'tech',emo:'📏',fr:'la distance de sécurité',alt:'(espace avec la voiture devant)',tr:{en:'the safety distance',ps:'د خوندیتوب واټن',ar:'مسافة الأمان',zh:'安全距离',hi:'सुरक्षा दूरी'}},
+ {g:'tech',emo:'🛑',fr:"la distance d'arrêt",alt:'(réaction + freinage)',tr:{en:'the stopping distance',ps:'د درېدو واټن',ar:'مسافة التوقف',zh:'停车距离',hi:'रुकने की दूरी'}},
+ {g:'tech',emo:'⏱️',fr:'le temps de réaction',alt:'(environ 1 seconde)',tr:{en:'the reaction time',ps:'د غبرګون وخت',ar:'زمن رد الفعل',zh:'反应时间',hi:'प्रतिक्रिया समय'}},
+ {g:'tech',emo:'🤝',fr:'la priorité',alt:'(qui passe en premier)',tr:{en:'right of way / priority',ps:'لومړیتوب',ar:'الأولوية',zh:'优先权',hi:'प्राथमिकता'}},
+ {g:'tech',emo:'🐢',fr:"l'éco-conduite",alt:'(conduire en économisant)',tr:{en:'eco-driving',ps:'اقتصادي چلول',ar:'القيادة الاقتصادية',zh:'节能驾驶',hi:'इको-ड्राइविंग'}},
+ {g:'tech',emo:'🌍',fr:'la ZFE',alt:'(zone à faibles émissions)',tr:{en:'low-emission zone',ps:'د کم آلودګۍ سیمه',ar:'منطقة انبعاثات منخفضة',zh:'低排放区',hi:'कम उत्सर्जन क्षेत्र'}},
+ // actions
+ {g:'actions',emo:'↔️',fr:'dépasser',code:'doubler',tr:{en:'to overtake',ps:'مخکې کول',ar:'يتجاوز',zh:'超车',hi:'ओवरटेक करना'}},
+ {g:'actions',emo:'🤝',fr:'céder le passage',alt:'(laisser passer)',tr:{en:'to give way',ps:'لاره ورکول',ar:'إعطاء الأولوية',zh:'让行',hi:'रास्ता देना'}},
+ {g:'actions',emo:'🛑',fr:'freiner',alt:'(pour s’arrêter)',tr:{en:'to brake',ps:'بریک نیول',ar:'الكبح',zh:'刹车',hi:'ब्रेक लगाना'}},
+ {g:'actions',emo:'🐢',fr:'ralentir',alt:'(aller moins vite)',tr:{en:'to slow down',ps:'ورو کول',ar:'تخفيف السرعة',zh:'减速',hi:'धीमा करना'}},
+ {g:'actions',emo:'🅿️',fr:'se garer',code:'stationner',tr:{en:'to park',ps:'ودرول',ar:'الركن',zh:'停车',hi:'पार्क करना'}},
+];
+const WGROUPS=[{g:'lieux',n:'La route'},{g:'signal',n:'Signalisation'},{g:'usagers',n:'Les usagers'},{g:'vehicule',n:'Le véhicule'},{g:'tech',n:'Mots de l’examen'},{g:'actions',n:'Les actions'}];
+
+/* ===== COMPRENDRE LA QUESTION ===== */
+const CQG=[{g:'consignes',n:'Les mots des consignes'},{g:'petits',n:'Les petits mots pièges'},{g:'reponses',n:'Combien de réponses ?'}];
+const CQ=[
+ {g:'consignes',ic:'✅',t:{fr:'« Je dois… » / « Il faut… »'},d:{fr:'C’est une obligation : je n’ai pas le choix.',en:'An obligation: I have no choice.',ps:'یو مکلفیت دی: بل لار نشته.',ar:'إلزام: لا خيار لي.',zh:'义务：别无选择。',hi:'अनिवार्यता: कोई विकल्प नहीं।'}},
+ {g:'consignes',ic:'🟢',t:{fr:'« Je peux… » / « J’ai le droit de… »'},d:{fr:'C’est une permission : c’est autorisé, mais pas obligatoire.',en:'A permission: allowed, but not compulsory.',ps:'اجازه ده: روا ده، خو لازمي نه ده.',ar:'إذن: مسموح، لكنه ليس إلزامياً.',zh:'许可：允许，但非强制。',hi:'अनुमति: स्वीकृत, पर अनिवार्य नहीं।'}},
+ {g:'consignes',ic:'⛔',t:{fr:'« Il est interdit de… »'},d:{fr:'C’est une interdiction : je ne dois pas le faire.',en:'A prohibition: I must not do it.',ps:'منع ده: باید یې ونه کړم.',ar:'منع: يجب ألّا أفعله.',zh:'禁止：我不能做。',hi:'निषेध: मुझे ऐसा नहीं करना चाहिए।'}},
+ {g:'consignes',ic:'❓',t:{fr:'« Suis-je en infraction ? »'},d:{fr:'On me demande : est-ce que je NE respecte PAS la règle ?',en:'It asks: am I breaking the rule?',ps:'پوښتنه: ایا قانون نه مراعاتوم؟',ar:'السؤال: هل أخالف القاعدة؟',zh:'即问：我是否违反了规则？',hi:'अर्थात: क्या मैं नियम तोड़ रहा हूँ?'}},
+ {g:'petits',ic:'🚫',t:{fr:'« ne … pas » (la négation)'},d:{fr:'La phrase est négative : elle dit le contraire. Lis bien le « ne… pas ».',en:'The sentence is negative: it says the opposite. Read “ne… pas” carefully.',ps:'جمله منفي ده: مخالف معنا ورکوي.',ar:'الجملة منفية: تقول العكس. اقرأ «ne… pas» جيداً.',zh:'句子是否定的：意思相反。注意“ne… pas”。',hi:'वाक्य नकारात्मक है: उल्टा कहता है। “ne… pas” ध्यान से पढ़ें।'}},
+ {g:'petits',ic:'➖',t:{fr:'« sauf »'},d:{fr:'« Sauf » = excepté. Ex. « interdit sauf riverains » = les habitants peuvent passer.',en:'“Sauf” = except. E.g. forbidden except for residents.',ps:'«sauf» = پرته له. بېلګه: منع پرته له اوسیدونکو.',ar:'«sauf» = إلّا. مثال: ممنوع إلّا للسكان.',zh:'“sauf”=除…之外。例：禁止，本地居民除外。',hi:'“sauf” = सिवाय। उदा. निषिद्ध, निवासियों को छोड़कर।'}},
+ {g:'petits',ic:'📍',t:{fr:'« en l’absence de… »'},d:{fr:'= quand il n’y a pas de… Ex. « en l’absence de panneau, priorité à droite ».',en:'= when there is no… E.g. with no sign, priority to the right.',ps:'= کله چې نه وي… بېلګه: بې نښې، ښي ته لومړیتوب.',ar:'= عندما لا يوجد… مثال: بلا لوحة، الأولوية لليمين.',zh:'= 当没有…时。例：无标志时右方优先。',hi:'= जब कोई न हो… उदा. चिन्ह न हो तो दाएँ को प्राथमिकता।'}},
+ {g:'petits',ic:'➡️',t:{fr:'« à l’approche de… »'},d:{fr:'= quand on arrive près de… Ex. à l’approche d’un passage piéton, je ralentis.',en:'= when getting close to… E.g. approaching a crossing, I slow down.',ps:'= کله چې نږدې شو… بېلګه: د پلي تګ ته نږدې، ورو کیږم.',ar:'= عند الاقتراب من… مثال: قرب ممرّ المشاة، أبطئ.',zh:'= 接近…时。例：接近人行横道时减速。',hi:'= पास पहुँचते समय… उदा. क्रॉसिंग के पास धीमा होना।'}},
+ {g:'reponses',ic:'1️⃣',t:{fr:'« Une seule réponse »'},d:{fr:'Je coche UNE seule case, la meilleure.',en:'Tick ONE box only, the best one.',ps:'یوازې یوه خانه وټاکه، تر ټولو ښه.',ar:'اختر خانة واحدة فقط، الأفضل.',zh:'只勾选一个最佳答案。',hi:'केवल एक सर्वोत्तम विकल्प चुनें।'}},
+ {g:'reponses',ic:'2️⃣',t:{fr:'« Plusieurs réponses » / « réponses attendues : 2 »'},d:{fr:'Je dois cocher TOUTES les bonnes cases. Une oubliée = faux.',en:'Tick ALL correct boxes. One missed = wrong.',ps:'ټولې سمې خانې وټاکه. یوه هېره = غلط.',ar:'اختر كلّ الخانات الصحيحة. نسيان واحدة = خطأ.',zh:'勾选所有正确项。漏一个即错。',hi:'सभी सही विकल्प चुनें। एक छूटा = गलत।'}},
+];
+
+/* ===== RÈGLES ===== */
+const RULES=[
+ {th:'feux',k:'warn',ic:'🔴',t:{fr:'Feu rouge = arrêt',en:'Red = stop',ps:'سور = ودرېدل',ar:'أحمر = توقّف',zh:'红灯=停',hi:'लाल=रुकें'},d:{fr:'Au feu rouge, je m’arrête avant la ligne. Je ne passe pas.'}},
+ {th:'feux',k:'',ic:'🟠',t:{fr:'Feu orange = je m’arrête si je peux',en:'Amber = stop if safe',ps:'نارنجي = که وکولای شم ودرېږم',ar:'برتقالي = توقّف إن أمكن',zh:'黄灯=能停则停',hi:'नारंगी=संभव हो तो रुकें'},d:{fr:'Au feu orange, je m’arrête si je peux le faire sans danger.'}},
+ {th:'feux',k:'',ic:'🟢',t:{fr:'Feu vert = je passe si c’est libre',en:'Green = go if clear',ps:'شین = که خالي وي تېر شه',ar:'أخضر = سِر إن خلا',zh:'绿灯=畅通则行',hi:'हरा=खाली हो तो जाएँ'},d:{fr:'Au feu vert, je passe seulement si la voie est libre.'}},
+ {th:'priorite',k:'info',ic:'🛑',t:{fr:'Au STOP : arrêt complet',en:'STOP: full stop',ps:'STOP: بشپړ درېدل',ar:'STOP: توقّف تام',zh:'STOP：完全停',hi:'STOP: पूरी तरह रुकें'},d:{fr:'Je m’arrête complètement, puis je cède le passage.'}},
+ {th:'priorite',k:'info',ic:'⚠️',t:{fr:'Cédez le passage',en:'Give way',ps:'لاره ورکړه',ar:'أعطِ الأولوية',zh:'让行',hi:'रास्ता दें'},d:{fr:'Je ralentis et je laisse passer les autres avant de repartir.'}},
+ {th:'priorite',k:'info',ic:'➡️',t:{fr:'Priorité à droite',en:'Priority to the right',ps:'ښي ته لومړیتوب',ar:'الأولوية لليمين',zh:'右方优先',hi:'दाएँ को प्राथमिकता'},d:{fr:'À une intersection sans panneau, je laisse passer celui qui vient de ma droite.'}},
+ {th:'priorite',k:'warn',ic:'🚑',t:{fr:'Véhicule prioritaire',en:'Priority vehicle',ps:'لومړیتوب موټر',ar:'مركبة الأولوية',zh:'优先车辆',hi:'प्राथमिकता वाहन'},d:{fr:'Si j’entends une sirène (pompiers, ambulance), je me range et je laisse passer.'}},
+ {th:'vitesse',k:'',ic:'🏙️',t:{fr:'En ville : 50 km/h',en:'Town: 50 km/h',ps:'ښار: ۵۰',ar:'المدينة: ٥٠',zh:'城区:50',hi:'शहर: 50'},d:{fr:'En agglomération : 50 km/h (souvent 30 en centre-ville).'}},
+ {th:'vitesse',k:'',ic:'🌳',t:{fr:'Hors agglomération : 80 km/h',en:'Outside town: 80 km/h',ps:'له ښار بهر: ۸۰',ar:'خارج المدينة: ٨٠',zh:'城区外:80',hi:'शहर बाहर: 80'},d:{fr:'Routes à double sens sans séparateur central : 80 km/h.'}},
+ {th:'vitesse',k:'warn',ic:'🛤️',t:{fr:'Autoroute : 130 (110 sous la pluie)',en:'Motorway: 130 (110 in rain)',ps:'لويه لار: ۱۳۰ (باران ۱۱۰)',ar:'سريع: ١٣٠ (مطر ١١٠)',zh:'高速:130(雨110)',hi:'राजमार्ग:130(बारिश 110)'},d:{fr:'Autoroute : 130 km/h par temps sec, 110 km/h sous la pluie.'}},
+ {th:'conducteur',k:'warn',ic:'🍺',t:{fr:'Alcool : 0,5 g/L maximum',en:'Alcohol: 0.5 g/L max',ps:'شراب: تر ۰٫۵',ar:'الكحول: ٠٫٥ كحد أقصى',zh:'酒精:最高0.5',hi:'शराब: अधिकतम 0.5'},d:{fr:'Maximum 0,5 g/L de sang. Permis récent (probatoire) : 0,2 g/L.'}},
+ {th:'conducteur',k:'warn',ic:'📵',t:{fr:'Téléphone en main interdit',en:'No phone in hand',ps:'ټیلیفون په لاس کې منع',ar:'ممنوع الهاتف باليد',zh:'禁止手持电话',hi:'फ़ोन हाथ में मना'},d:{fr:'Je ne tiens pas mon téléphone en conduisant. C’est interdit et dangereux.'}},
+ {th:'conducteur',k:'info',ic:'😴',t:{fr:'Fatigue : pause toutes les 2 h',en:'Tiredness: break every 2 h',ps:'ستړیا: هرو ۲ ساعتو دمه',ar:'التعب: استرح كل ساعتين',zh:'疲劳:每2小时休息',hi:'थकान: हर 2 घंटे विश्राम'},d:{fr:'Sur un long trajet, je fais une pause toutes les 2 heures.'}},
+ {th:'securite',k:'info',ic:'🔒',t:{fr:'Ceinture obligatoire pour tous',en:'Seatbelt for everyone',ps:'کمربند د ټولو لپاره',ar:'الحزام للجميع',zh:'人人系安全带',hi:'सबके लिए सीट बेल्ट'},d:{fr:'La ceinture est obligatoire à l’avant et à l’arrière.'}},
+ {th:'securite',k:'info',ic:'🦺',t:{fr:'Gilet + triangle obligatoires',en:'Vest + triangle required',ps:'جاکټ + مثلث لازمي',ar:'سترة + مثلث إلزامي',zh:'必备背心+三角牌',hi:'जैकेट + त्रिकोण अनिवार्य'},d:{fr:'Dans la voiture, je dois avoir un gilet jaune et un triangle.'}},
+ {th:'securite',k:'info',ic:'🚴',t:{fr:'Dépasser un vélo : 1 m en ville',en:'Overtaking a bike: 1 m in town',ps:'بایسکل ته ۱ متره واټن',ar:'تجاوز الدراجة: متر واحد',zh:'超自行车:城区1米',hi:'साइकिल से 1 मी दूरी'},d:{fr:'Pour dépasser un vélo : au moins 1 m en ville, 1,5 m hors agglomération.'}},
+ {th:'securite',k:'warn',ic:'🏔️',t:{fr:'Montagne : équipements hiver',en:'Mountains: winter gear',ps:'غرونه: د ژمي تجهیزات',ar:'الجبال: معدات شتوية',zh:'山区:冬季装备',hi:'पहाड़: शीत उपकरण'},d:{fr:'En zone de montagne (Hautes-Pyrénées) : équipements hiver obligatoires du 1ᵉʳ nov au 31 mars.'}},
+];
+const RTHEMES=[{th:'feux',n:'Les feux'},{th:'priorite',n:'Priorités'},{th:'vitesse',n:'Vitesses'},{th:'conducteur',n:'Le conducteur'},{th:'securite',n:'Sécurité'}];
+
+/* ===== PREMIERS SECOURS ===== */
+const SECOURS=[
+ {th:'etapes',k:'info',ic:'1️⃣',t:{fr:'PROTÉGER',en:'PROTECT',ps:'ساتنه',ar:'الحماية',zh:'保护',hi:'सुरक्षा'},d:{fr:'Je mets mon gilet, j’allume les feux de détresse et je pose le triangle à 30 m.'}},
+ {th:'etapes',k:'warn',ic:'2️⃣',t:{fr:'ALERTER',en:'ALERT',ps:'خبرول',ar:'الإبلاغ',zh:'报警',hi:'सूचना'},d:{fr:'J’appelle les secours : 112 (ou 15, 17, 18) et je donne le lieu exact.'}},
+ {th:'etapes',k:'info',ic:'3️⃣',t:{fr:'SECOURIR',en:'HELP',ps:'مرسته',ar:'الإسعاف',zh:'施救',hi:'मदद'},d:{fr:'Je ne déplace pas la victime (sauf danger). Je la couvre et je lui parle.'}},
+ {th:'numeros',k:'warn',ic:'🆘',t:{fr:'112 — Urgence (partout en Europe)',en:'112 — European emergency',ps:'۱۱۲ — بیړنی',ar:'١١٢ — الطوارئ',zh:'112 — 欧洲急救',hi:'112 — यूरोपीय आपातकाल'},d:{fr:'Le numéro d’urgence européen. On peut appeler de tout téléphone.'}},
+ {th:'numeros',k:'info',ic:'🚑',t:{fr:'15 — SAMU (médical)',en:'15 — Medical (SAMU)',ps:'۱۵ — طبي',ar:'١٥ — الإسعاف الطبي',zh:'15 — 医疗急救',hi:'15 — चिकित्सा'},d:{fr:'Pour un problème médical, un blessé, un malaise.'}},
+ {th:'numeros',k:'info',ic:'👮',t:{fr:'17 — Police / Gendarmerie',en:'17 — Police',ps:'۱۷ — پولیس',ar:'١٧ — الشرطة',zh:'17 — 警察',hi:'17 — पुलिस'},d:{fr:'Pour un accident, un vol, un danger, la police.'}},
+ {th:'numeros',k:'info',ic:'🚒',t:{fr:'18 — Pompiers',en:'18 — Fire brigade',ps:'۱۸ — اور وژونکي',ar:'١٨ — الإطفاء',zh:'18 — 消防',hi:'18 — दमकल'},d:{fr:'Pour un incendie, un accident, un secours.'}},
+ {th:'numeros',k:'info',ic:'🧏',t:{fr:'114 — Urgence par SMS',en:'114 — Emergency by SMS',ps:'۱۱۴ — د SMS بیړنی',ar:'١١٤ — طوارئ برسالة',zh:'114 — 短信急救',hi:'114 — एसएमएस आपातकाल'},d:{fr:'Pour les personnes sourdes ou malentendantes (par SMS).'}},
+];
+const STHEMES=[{th:'etapes',n:'Les 3 étapes'},{th:'numeros',n:'Les numéros'}];
+
+/* ===== EXAMEN — banque ===== */
+function sgn(id){const s=SIGNS.find(x=>x.id===id);return s?signGfx(s):'';}
+const EXAM_BANK=[
+ // ---- PANNEAUX ----
+ {scene:sgn('stop'),multi:false,
+  q:{fr:'Vous arrivez à ce panneau. Que devez-vous faire ?',en:'You reach this sign. What must you do?',ps:'دې نښې ته رسېږئ. څه باید وکړئ؟',ar:'تصل إلى هذه اللوحة. ماذا يجب أن تفعل؟',zh:'你到达这个标志。你必须做什么？',hi:'आप इस चिन्ह पर पहुँचते हैं। आपको क्या करना चाहिए?'},
+  o:['Ralentir seulement','Marquer un arrêt complet, puis céder le passage','Accélérer pour passer vite'],a:[1],
+  ex:{fr:'STOP : arrêt complet obligatoire, même si la route est libre.',en:'STOP: a full stop is compulsory, even if the road is clear.',ps:'STOP: بشپړ درېدل لازمي دي، که څه هم لار خالي وي.',ar:'STOP: التوقّف التام إلزامي حتى لو كان الطريق خالياً.',zh:'STOP：必须完全停车，即使道路畅通。',hi:'STOP: पूरी तरह रुकना अनिवार्य है, भले ही रास्ता खाली हो।'}},
+
+ {scene:sgn('cedez'),multi:false,
+  q:{fr:'Ce panneau signifie :',en:'This sign means:',ps:'دا نښه څه معنا لري:',ar:'ماذا تعني هذه اللوحة:',zh:'这个标志的意思是：',hi:'इस चिन्ह का अर्थ है:'},
+  o:['Arrêt obligatoire à la ligne','Céder le passage, sans toujours s’arrêter','Interdiction de tourner'],a:[1],
+  ex:{fr:'« Cédez le passage » : on laisse passer, on ne s’arrête que si nécessaire.',en:'“Give way”: let others pass; stop only if needed.',ps:'«لاره ورکړه»: نورو ته لار ورکړه؛ یوازې که اړتیا وي ودرېږه.',ar:'«أعطِ الأولوية»: اترك الآخرين يمرّون، وتوقّف عند الحاجة فقط.',zh:'“让行”：让别人先过，必要时才停。',hi:'“रास्ता दें”: दूसरों को जाने दें; ज़रूरत हो तभी रुकें।'}},
+
+ {scene:sgn('sens-interdit'),multi:false,
+  q:{fr:'Ce panneau vous indique que :',en:'This sign tells you that:',ps:'دا نښه تاسو ته وایي چې:',ar:'تخبرك هذه اللوحة بأنّ:',zh:'这个标志告诉你：',hi:'यह चिन्ह बताता है कि:'},
+  o:['Vous pouvez passer prudemment','Vous ne devez pas vous engager dans cette voie','C’est un sens unique dans votre sens'],a:[1],
+  ex:{fr:'Sens interdit : on ne s’engage pas dans cette voie.',en:'No entry: do not enter this lane.',ps:'ننوتل منع: دې لار کې مه ننوځئ.',ar:'ممنوع الدخول: لا تدخل هذا المسار.',zh:'禁止驶入：不要进入此车道。',hi:'प्रवेश निषेध: इस मार्ग में न जाएँ।'}},
+
+ // ---- PRIORITÉS ----
+ {scene:'<span class="emo">🚗</span><span class="emo">➕</span><span class="emo">🚙</span>',multi:false,
+  q:{fr:'Intersection sans panneau ni feu. Une voiture arrive à votre droite. Vous :',en:'Junction with no sign or light. A car comes from your right. You:',ps:'پرلاره بې نښې او بې څراغه. یوه موټر ستاسو ښي لور ته راځي. تاسو:',ar:'تقاطع بلا لوحة ولا إشارة. سيارة قادمة من يمينك. أنت:',zh:'无标志无信号灯的路口。一辆车从你右边来。你：',hi:'बिना चिन्ह या बत्ती वाला चौराहा। एक कार आपकी दाईं ओर से आती है। आप:'},
+  o:['Passez en premier','Laissez passer la voiture de droite','Klaxonnez pour passer'],a:[1],
+  ex:{fr:'Priorité à droite : la voiture venant de droite passe d’abord.',en:'Priority to the right: the car on your right goes first.',ps:'ښي ته لومړیتوب: د ښي لور موټر لومړی تېرېږي.',ar:'الأولوية لليمين: السيارة على يمينك تمرّ أولاً.',zh:'右方优先：右边的车先行。',hi:'दाएँ को प्राथमिकता: दाईं ओर की कार पहले जाती है।'}},
+
+ {scene:'<span class="emo">🔄</span>',multi:true,
+  q:{fr:'Vous abordez un carrefour à sens giratoire (rond-point). Vous devez :',en:'You approach a roundabout. You must:',ps:'تاسو یوه چورلیز ته رسېږئ. تاسو باید:',ar:'تقترب من دوّار. يجب أن:',zh:'你接近一个环岛。你必须：',hi:'आप एक गोल चक्कर के पास पहुँचते हैं। आपको चाहिए:'},
+  o:['Accélérer pour vous insérer','Céder le passage aux véhicules déjà engagés','Mettre le clignotant à droite pour sortir','Vous arrêter systématiquement'],a:[1,2],
+  ex:{fr:'On cède aux véhicules déjà sur l’anneau et on met le clignotant à droite pour sortir.',en:'Give way to vehicles already on the ring, and signal right to leave.',ps:'هغو موټرو ته لاره ورکړه چې دمخه په کړۍ کې دي، او د وتلو لپاره ښي اشاره وکړه.',ar:'أعطِ الأولوية للمركبات الموجودة في الدوّار، وأشِر يميناً عند الخروج.',zh:'让已在环岛内的车辆先行，出环岛时打右转灯。',hi:'जो वाहन पहले से चक्कर में हैं उन्हें रास्ता दें, और निकलते समय दायाँ इंडिकेटर दें।'}},
+
+ {scene:'<span class="emo">🚑</span>',multi:false,
+  q:{fr:'Un véhicule de secours arrive avec sa sirène. Vous :',en:'An emergency vehicle approaches with its siren. You:',ps:'یو بیړنی موټر له سایرن سره راځي. تاسو:',ar:'تقترب مركبة إسعاف بصفّارتها. أنت:',zh:'一辆急救车鸣笛驶来。你：',hi:'एक आपातकालीन वाहन सायरन के साथ आता है। आप:'},
+  o:['Continuez normalement','Vous rangez sur le côté et le laissez passer','Accélérez pour le devancer'],a:[1],
+  ex:{fr:'Véhicule prioritaire : on se range à droite et on s’arrête si besoin.',en:'Priority vehicle: pull over to the right and stop if needed.',ps:'لومړیتوب موټر: ښي لور ته ودرېږه که اړتیا وي.',ar:'مركبة ذات أولوية: انحرف يميناً وتوقّف عند الحاجة.',zh:'优先车辆：靠右停让，必要时停车。',hi:'प्राथमिकता वाहन: दाईं ओर हटें और ज़रूरत हो तो रुकें।'}},
+
+ // ---- VITESSES ----
+ {scene:sgn('v50'),multi:false,
+  q:{fr:'Que signifie ce panneau ?',en:'What does this sign mean?',ps:'دا نښه څه معنا لري؟',ar:'ماذا تعني هذه اللوحة؟',zh:'这个标志是什么意思？',hi:'इस चिन्ह का क्या अर्थ है?'},
+  o:['Vitesse minimale 50 km/h','Vitesse maximale 50 km/h','Distance de 50 mètres'],a:[1],
+  ex:{fr:'Vitesse maximale autorisée : 50 km/h.',en:'Maximum permitted speed: 50 km/h.',ps:'تر ټولو لوړه اجازه شوې چټکتیا: ۵۰ km/h.',ar:'السرعة القصوى المسموحة: ٥٠ كم/س.',zh:'最高限速：50 km/h。',hi:'अधिकतम अनुमत गति: 50 km/h।'}},
+
+ {scene:'<span class="emo">🌳</span><span class="emo">↔️</span>',multi:false,
+  q:{fr:'Route à double sens sans séparateur, hors agglomération. Vitesse limitée à :',en:'Two-way road, no central divider, outside town. Speed limit:',ps:'دوه‌اړخیزه لار بې بیلونکي، له ښار بهر. چټکتیا تر:',ar:'طريق باتجاهين بلا فاصل، خارج المدينة. السرعة محدودة بـ:',zh:'城外、无中央隔离的双向道路。限速：',hi:'शहर के बाहर, बिना डिवाइडर वाली दो-तरफ़ा सड़क। गति सीमा:'},
+  o:['80 km/h','90 km/h','110 km/h'],a:[0],
+  ex:{fr:'80 km/h (90 si la route a 2 voies dans le sens, séparées).',en:'80 km/h (90 only on separated dual carriageways).',ps:'۸۰ km/h (۹۰ یوازې جلا شویو دوه‌لینه لارو کې).',ar:'٨٠ كم/س (٩٠ فقط على الطرق المزدوجة المفصولة).',zh:'80 km/h（仅分隔的双车道为90）。',hi:'80 km/h (अलग की गई दोहरी सड़क पर ही 90)।'}},
+
+ {scene:'<span class="emo">🛤️</span><span class="emo">🌧️</span>',multi:false,
+  q:{fr:'Sur autoroute, par temps de pluie, la vitesse maximale passe à :',en:'On the motorway in the rain, the maximum speed becomes:',ps:'په لويه لار کې د باران پر مهال، تر ټولو لوړه چټکتیا کیږي:',ar:'على الطريق السريع وقت المطر، تصبح السرعة القصوى:',zh:'高速公路雨天，最高限速变为：',hi:'राजमार्ग पर बारिश में अधिकतम गति हो जाती है:'},
+  o:['130 km/h','110 km/h','100 km/h'],a:[1],
+  ex:{fr:'Pluie : 110 km/h sur autoroute (au lieu de 130).',en:'Rain: 110 km/h on the motorway (instead of 130).',ps:'باران: په لویه لار کې ۱۱۰ km/h (د ۱۳۰ پرځای).',ar:'المطر: ١١٠ كم/س على الطريق السريع (بدل ١٣٠).',zh:'雨天：高速110 km/h（而非130）。',hi:'बारिश: राजमार्ग पर 110 km/h (130 के बजाय)।'}},
+
+ {scene:'<span class="emo">🔰</span><span class="emo">🛤️</span>',multi:false,
+  q:{fr:'Jeune conducteur (permis probatoire), sur autoroute, vous ne dépassez pas :',en:'Novice driver (probationary licence), on the motorway, do not exceed:',ps:'نوی چلوونکی، په لویه لار کې، له دې مه اوړئ:',ar:'سائق مبتدئ (رخصة تحت الاختبار)، على الطريق السريع، لا تتجاوز:',zh:'实习期新手司机，高速公路上不得超过：',hi:'नया चालक (परिवीक्षा लाइसेंस), राजमार्ग पर इससे अधिक न जाएँ:'},
+  o:['130 km/h','110 km/h','90 km/h'],a:[1],
+  ex:{fr:'Permis probatoire : 110 km/h sur autoroute (par beau temps).',en:'Probationary licence: 110 km/h on the motorway (in good weather).',ps:'د ازموینې جواز: په لویه لار کې ۱۱۰ km/h (په ښه هوا کې).',ar:'الرخصة تحت الاختبار: ١١٠ كم/س على الطريق السريع (بطقس جيد).',zh:'实习期：晴天高速110 km/h。',hi:'परिवीक्षा लाइसेंस: अच्छे मौसम में राजमार्ग पर 110 km/h।'}},
+
+ // ---- CROISEMENT / DÉPASSEMENT ----
+ {scene:'<span class="emo">🚗</span><span class="emo">➡️</span><span class="emo">🚚</span>',multi:true,
+  q:{fr:'Le dépassement est interdit : (cochez les bonnes réponses)',en:'Overtaking is forbidden: (tick the correct answers)',ps:'مخکې وتل منع دي: (سم ځوابونه وټاکئ)',ar:'التجاوز ممنوع: (اختر الإجابات الصحيحة)',zh:'禁止超车的情况：（选出正确答案）',hi:'ओवरटेक करना निषिद्ध है: (सही उत्तर चुनें)'},
+  o:['Juste avant un sommet de côte sans visibilité','En franchissant une ligne blanche continue','Sur une route droite et bien dégagée','Quand le véhicule devant roule lentement'],a:[0,1],
+  ex:{fr:'Interdit sans visibilité (sommet, virage) et en franchissant une ligne continue.',en:'Forbidden without visibility (crest, bend) and across a solid line.',ps:'بې لیدلوري (سر، کږه) او د ټینګې کرښې په تېرېدو منع دي.',ar:'ممنوع دون رؤية (قمة، منعطف) وعند تجاوز خط متّصل.',zh:'视线不良（坡顶、弯道）及越实线时禁止。',hi:'दृश्यता न होने पर (चढ़ाई, मोड़) और ठोस रेखा पार करते समय निषिद्ध।'}},
+
+ {scene:'<span class="emo">🚴</span>',multi:false,
+  q:{fr:'Pour dépasser un cycliste en ville, vous laissez au moins :',en:'To overtake a cyclist in town, leave at least:',ps:'په ښار کې د بایسکل چلوونکي د تېرولو لپاره لږ تر لږه پرېږده:',ar:'لتجاوز راكب دراجة داخل المدينة، اترك على الأقل:',zh:'城内超越骑车人，至少留出：',hi:'शहर में साइकिल चालक को ओवरटेक करते समय कम से कम छोड़ें:'},
+  o:['1 mètre','1,5 mètre','Aucun espace si je roule doucement'],a:[0],
+  ex:{fr:'Au moins 1 m en ville, 1,5 m hors agglomération.',en:'At least 1 m in town, 1.5 m outside town.',ps:'په ښار کې لږ تر لږه ۱ متر، له ښار بهر ۱.۵ متر.',ar:'متر واحد على الأقل داخل المدينة، ١٫٥ متر خارجها.',zh:'城内至少1米，城外1.5米。',hi:'शहर में कम से कम 1 मीटर, बाहर 1.5 मीटर।'}},
+
+ // ---- STATIONNEMENT (piège arrêt/stationnement) ----
+ {scene:'<span class="emo">🅿️</span>',multi:true,
+  q:{fr:'Parmi ces situations, lesquelles sont un ARRÊT (et non un stationnement) ?',en:'Which of these are a STOP (not parking)?',ps:'له دې حالتونو کوم یو «درېدل» دي (نه پارک)؟',ar:'أيٌّ من هذه «وقوف لحظي» (ليس ركناً)؟',zh:'以下哪些属于“临时停车”（而非停放）？',hi:'इनमें से कौन “रुकना” है (पार्किंग नहीं)?'},
+  o:['Je laisse descendre un passager, je reste au volant','Je me gare 1 heure pour faire les courses','Je m’immobilise 2 min pour charger un colis, sans quitter la voiture','Je laisse ma voiture la nuit devant chez moi'],a:[0,2],
+  ex:{fr:'L’arrêt est court, le conducteur reste aux commandes. Sinon, c’est du stationnement.',en:'A stop is brief with the driver staying at the wheel. Otherwise it is parking.',ps:'درېدل لنډ وي او چلوونکی په موټر کې پاتې وي. که نه، نو پارک دی.',ar:'الوقوف اللحظي قصير والسائق باقٍ خلف المقود؛ وإلا فهو ركن.',zh:'临时停车短暂且司机在车上；否则即为停放。',hi:'रुकना संक्षिप्त है और चालक स्टीयरिंग पर रहता है; वरना वह पार्किंग है।'}},
+
+ {scene:sgn('stat'),multi:false,
+  q:{fr:'Devant ce panneau, vous avez le droit de :',en:'At this sign, you are allowed to:',ps:'د دې نښې مخې ته، تاسو اجازه لرئ چې:',ar:'أمام هذه اللوحة، يحقّ لك أن:',zh:'在此标志处，你可以：',hi:'इस चिन्ह के सामने, आपको अनुमति है:'},
+  o:['Stationner toute la journée','Vous arrêter un instant pour déposer quelqu’un, sans stationner','Vous garer une heure'],a:[1],
+  ex:{fr:'Stationnement interdit : l’arrêt très court reste possible, pas le stationnement.',en:'No parking: a very short stop is still possible, but not parking.',ps:'پارک منع: ډېر لنډ درېدل کېدای شي، خو پارک نه.',ar:'ممنوع الركن: يجوز الوقوف القصير جداً، أمّا الركن فلا.',zh:'禁止停放：可极短暂停车，但不可停放。',hi:'पार्किंग निषेध: बहुत छोटा रुकना संभव है, पर पार्किंग नहीं।'}},
+
+ // ---- CONDUCTEUR ----
+ {scene:'<span class="emo">📵</span>',multi:false,
+  q:{fr:'Au volant, tenir son téléphone en main est :',en:'While driving, holding your phone in your hand is:',ps:'د چلولو پر مهال، ټیلیفون په لاس نیول:',ar:'أثناء القيادة، إمساك الهاتف باليد:',zh:'驾驶时手持手机：',hi:'गाड़ी चलाते समय फ़ोन हाथ में पकड़ना:'},
+  o:['Autorisé à l’arrêt à un feu rouge','Interdit, même arrêté au feu','Autorisé pour le GPS'],a:[1],
+  ex:{fr:'Interdit en circulation, même arrêté à un feu, moteur tournant.',en:'Forbidden in traffic, even stopped at a light with the engine running.',ps:'په ترافیک کې منع، حتی د څراغ پر مهال چې انجن کار کوي.',ar:'ممنوع في السير، حتى عند التوقف بإشارة والمحرّك يعمل.',zh:'行车中禁止，即使在红灯停车且发动机运转。',hi:'यातायात में निषिद्ध, बत्ती पर इंजन चालू रहते रुके होने पर भी।'}},
+
+ {scene:'<span class="emo">🍺</span><span class="emo">🚫</span>',multi:false,
+  q:{fr:'Taux d’alcool maximal autorisé avec un permis normal :',en:'Maximum blood-alcohol level with a normal licence:',ps:'د عادي جواز سره د الکولو تر ټولو لوړه اندازه:',ar:'الحدّ الأقصى للكحول برخصة عادية:',zh:'普通驾照允许的最高血液酒精含量：',hi:'सामान्य लाइसेंस के साथ अधिकतम रक्त-अल्कोहल:'},
+  o:['0,2 g/L de sang','0,5 g/L de sang','0,8 g/L de sang'],a:[1],
+  ex:{fr:'0,5 g/L de sang (0,2 g/L en permis probatoire).',en:'0.5 g/L of blood (0.2 g/L on a probationary licence).',ps:'۰٫۵ g/L وینه (د ازموینې جواز کې ۰٫۲).',ar:'٠٫٥ غ/ل دم (٠٫٢ للرخصة تحت الاختبار).',zh:'血液0.5 g/L（实习期0.2 g/L）。',hi:'रक्त में 0.5 g/L (परिवीक्षा लाइसेंस में 0.2)।'}},
+
+ {scene:'<span class="emo">😴</span>',multi:true,
+  q:{fr:'Vous sentez la fatigue sur un long trajet. Vous devez :',en:'You feel tired on a long trip. You should:',ps:'په اوږد سفر کې ستړیا احساسوئ. تاسو باید:',ar:'تشعر بالتعب في رحلة طويلة. عليك أن:',zh:'长途中感到疲劳。你应该：',hi:'लंबी यात्रा में थकान महसूस होती है। आपको चाहिए:'},
+  o:['Vous arrêter pour vous reposer','Faire une pause toutes les 2 heures environ','Boire un café et continuer sans vous arrêter','Ouvrir la fenêtre et accélérer'],a:[0,1],
+  ex:{fr:'On s’arrête pour se reposer ; une pause environ toutes les 2 heures.',en:'Stop to rest; take a break roughly every 2 hours.',ps:'د ارام لپاره ودرېږه؛ نږدې هرو ۲ ساعتو وروسته یوه دمه.',ar:'توقّف للراحة؛ استرح كلّ ساعتين تقريباً.',zh:'停车休息；大约每2小时休息一次。',hi:'आराम के लिए रुकें; लगभग हर 2 घंटे में विराम लें।'}},
+
+ // ---- PREMIERS SECOURS ----
+ {scene:'<span class="emo">🚧</span><span class="emo">🆘</span>',multi:false,
+  q:{fr:'Vous arrivez sur un accident. Dans quel ordre agir ?',en:'You arrive at an accident. In what order do you act?',ps:'یوې پېښې ته رسېږئ. په کوم ترتیب عمل کوئ؟',ar:'تصل إلى حادث. بأيّ ترتيب تتصرّف؟',zh:'你到达事故现场。按什么顺序行动？',hi:'आप दुर्घटना स्थल पर पहुँचते हैं। किस क्रम में कार्य करें?'},
+  o:['Secourir, Alerter, Protéger','Protéger, Alerter, Secourir','Alerter, Protéger, Secourir'],a:[1],
+  ex:{fr:'Toujours : 1) Protéger 2) Alerter 3) Secourir.',en:'Always: 1) Protect 2) Alert 3) Help.',ps:'تل: ۱) ساتنه ۲) خبرول ۳) مرسته.',ar:'دائماً: ١) الحماية ٢) الإبلاغ ٣) الإسعاف.',zh:'始终：1)保护 2)报警 3)施救。',hi:'हमेशा: 1) सुरक्षा 2) सूचना 3) मदद।'}},
+
+ {scene:'<span class="emo">📞</span>',multi:true,
+  q:{fr:'Quels numéros joignent les secours en France ? (plusieurs réponses)',en:'Which numbers reach emergency services in France? (several answers)',ps:'په فرانسه کې کوم شمېرې بیړنیو خدمتونو ته رسېږي؟ (څو ځوابه)',ar:'ما الأرقام التي تصل بخدمات الطوارئ في فرنسا؟ (عدة إجابات)',zh:'在法国哪些号码能联系急救？（多选）',hi:'फ्रांस में कौन-से नंबर आपातकालीन सेवाओं तक पहुँचते हैं? (कई उत्तर)'},
+  o:['112','15','911','18'],a:[0,1,3],
+  ex:{fr:'112 (Europe), 15 (SAMU), 18 (pompiers). Le 911 n’existe pas en France.',en:'112 (Europe), 15 (medical), 18 (fire). 911 does not exist in France.',ps:'۱۱۲ (اروپا)، ۱۵ (طبي)، ۱۸ (اور وژونکي). ۹۱۱ په فرانسه کې نشته.',ar:'١١٢ (أوروبا)، ١٥ (طبي)، ١٨ (إطفاء). الرقم ٩١١ غير موجود في فرنسا.',zh:'112（欧洲）、15（医疗）、18（消防）。法国没有911。',hi:'112 (यूरोप), 15 (चिकित्सा), 18 (दमकल)। 911 फ्रांस में नहीं है।'}},
+];
+
+/* ===== ÉTAT ===== */
+function renderLangBar(){
+  document.getElementById('langBar').innerHTML=LANGS.map(l=>`<button class="lang-btn ${l.c===lang?'on':''}" onclick="setLang('${l.c}')">${l.f} ${l.n}</button>`).join('');
+  document.getElementById('langNote').textContent=lang==='fr'?'':'⚠️ Traductions à faire vérifier par un locuteur natif.';
+}
+function setLang(c){lang=c;renderLangBar();if(cur)renderParcours(cur,mode);}
+
+const PCFG={
+  p1:{ic:'🚧',cls:'c1',tt:'Les panneaux',ds:'Reconnaître les panneaux',col:'var(--rouge)'},
+  p2:{ic:'💬',cls:'c2',tt:'Les mots du code',ds:'Le vocabulaire, avec audio',col:'var(--bleu)'},
+  p3:{ic:'📏',cls:'c3',tt:'Les règles',ds:'Feux, priorités, vitesses…',col:'var(--vert)'},
+  p4:{ic:'🆘',cls:'c4',tt:'Premiers secours',ds:'Protéger, alerter, secourir',col:'var(--orange)'},
+  p5:{ic:'🎯',cls:'c5',tt:'Examen blanc',ds:'Questions ETG tirées au sort',col:'var(--violet)'},
+  p6:{ic:'🧠',cls:'c6',tt:'Comprendre la question',ds:'Décoder les consignes du code',col:'var(--rose)'},
+};
+function renderHome(){
+  document.getElementById('parcoursGrid').innerHTML=Object.keys(PCFG).map(id=>{
+    const p=PCFG[id];
+    return `<button class="pcard ${p.cls}" onclick="openP('${id}')"><div class="ic">${p.ic}</div><div><div class="tt">${p.tt}</div><div class="ds">${p.ds}</div></div><div class="ar">›</div></button>`;
+  }).join('');
+}
+
+let cur=null, mode='revise';
+let subtab={p1:'danger',p2:'lieux',p3:'feux',p4:'etapes',p6:'consignes'};
+const SECTIONS=['home','p1','p2','p3','p4','p5','p6','game'];
+function show(id){SECTIONS.forEach(s=>{const el=document.getElementById(s);el.classList.toggle('hide',s!==id);if(s!==id&&s!=='home')el.innerHTML='';});window.scrollTo(0,0);}
+function setMode(id,m){mode=m;renderParcours(id,m);}
+
+function renderParcours(id,m){
+  const p=PCFG[id];
+  let html=`<div class="pbar"><button class="back" onclick="openP('home')">←</button><h2>${p.ic} ${p.tt}</h2></div>`;
+  if(id!=='p5'){
+    html+=`<div class="mode-switch">
+      <button class="${m==='revise'?'on':''}" onclick="setMode('${id}','revise')">📖 Réviser</button>
+      <button class="${m==='train'?'on':''}" onclick="setMode('${id}','train')">🎮 S'entraîner</button></div>`;
+  }
+  html+=`<div id="pbody"></div>`;
+  document.getElementById(id).innerHTML=html;
+  document.getElementById(id).classList.remove('hide');
+  if(m==='revise') renderRevise(id); else renderTrain(id);
+}
+function openP(id){ // override to handle home
+  if(id==='home'){cur=null;show('home');return;}
+  cur=id;mode='revise';
+  if(id==='p5'){show('p5');renderExamHome();return;}
+  show(id);renderParcours(id,'revise');
+}
+
+function renderRevise(id){
+  const body=document.querySelector('#'+id+' #pbody');
+  if(id==='p1'){
+    const fams=Object.keys(FAM);
+    body.innerHTML=`<div class="tabs" id="tb">${fams.map(f=>`<button class="tab ${f===subtab.p1?'on':''}" style="${f===subtab.p1?'background:'+FAM[f].c:''}" onclick="subtab.p1='${f}';renderRevise('p1')">${FAM[f].n}</button>`).join('')}</div><div class="signs" id="lst"></div>`;
+    body.querySelector('#lst').innerHTML=SIGNS.filter(s=>s.f===subtab.p1).map(s=>
+      `<div class="sign">${signGfx(s)}<div class="nm">${s.nm.fr}</div><div class="ds">${s.ds.fr}</div>${trWrap(s.nm)}<button class="spk" onclick="speak('${jq(s.nm.fr)}. ${jq(s.ds.fr)}')">🔊</button></div>`).join('');
+  } else if(id==='p2'){
+    body.innerHTML=`<div class="tabs">${WGROUPS.map(g=>`<button class="tab ${g.g===subtab.p2?'on':''}" style="${g.g===subtab.p2?'background:var(--bleu)':''}" onclick="subtab.p2='${g.g}';renderRevise('p2')">${g.n}</button>`).join('')}</div><div class="words" id="lst"></div>`;
+    body.querySelector('#lst').innerHTML=WORDS.filter(w=>w.g===subtab.p2).map(w=>{
+      const code=w.code?`<span class="code-tag">mot du code : ${w.code}</span>`:'';
+      const alt=w.alt?`<div class="alt">${w.alt}</div>`:'';
+      const sp=w.fr+(w.code?(', ou '+w.code):'');
+      return `<div class="word"><div class="emo">${w.emo}</div><div class="body"><div class="fr">${w.fr}${code}</div>${alt}${trWrap(w.tr)}</div><button class="spk" onclick="speak('${jq(sp)}')">🔊</button></div>`;
+    }).join('');
+  } else if(id==='p3'){
+    body.innerHTML=`<div class="tabs">${RTHEMES.map(t=>`<button class="tab ${t.th===subtab.p3?'on':''}" style="${t.th===subtab.p3?'background:var(--vert)':''}" onclick="subtab.p3='${t.th}';renderRevise('p3')">${t.n}</button>`).join('')}</div><div class="rules" id="lst"></div>`;
+    body.querySelector('#lst').innerHTML=RULES.filter(r=>r.th===subtab.p3).map(r=>
+      `<div class="rule ${r.k==='warn'?'warn':r.k==='info'?'info':''}"><div class="rt">${r.ic} ${r.t.fr}</div><div class="rd">${r.d.fr}</div>${trWrap(r.t)}<button class="spk" style="margin-top:7px" onclick="speak('${jq(r.t.fr)}. ${jq(r.d.fr)}')">🔊</button></div>`).join('');
+  } else if(id==='p4'){
+    body.innerHTML=`<div class="tabs">${STHEMES.map(t=>`<button class="tab ${t.th===subtab.p4?'on':''}" style="${t.th===subtab.p4?'background:var(--orange)':''}" onclick="subtab.p4='${t.th}';renderRevise('p4')">${t.n}</button>`).join('')}</div><div class="rules" id="lst"></div>`;
+    body.querySelector('#lst').innerHTML=SECOURS.filter(r=>r.th===subtab.p4).map(r=>
+      `<div class="rule ${r.k==='warn'?'warn':'info'}"><div class="rt">${r.ic} ${r.t.fr}</div><div class="rd">${r.d.fr}</div>${trWrap(r.t)}<button class="spk" style="margin-top:7px" onclick="speak('${jq(r.t.fr)}. ${jq(r.d.fr)}')">🔊</button></div>`).join('');
+  } else if(id==='p6'){
+    body.innerHTML=`<div class="tabs">${CQG.map(t=>`<button class="tab ${t.g===subtab.p6?'on':''}" style="${t.g===subtab.p6?'background:var(--rose)':''}" onclick="subtab.p6='${t.g}';renderRevise('p6')">${t.n}</button>`).join('')}</div><div class="rules" id="lst"></div>`;
+    body.querySelector('#lst').innerHTML=CQ.filter(r=>r.g===subtab.p6).map(r=>
+      `<div class="rule info"><div class="rt">${r.ic} ${r.t.fr}</div><div class="rd">${r.d.fr}</div>${trWrap(r.d)}<button class="spk" style="margin-top:7px" onclick="speak('${jq(r.t.fr)}. ${jq(r.d.fr)}')">🔊</button></div>`).join('');
+  }
+}
+
+/* ===== HUB ENTRAÎNEMENT ===== */
+const GAMES={
+  p1:[{ic:'🔍',tt:'Reconnais le panneau',ds:'Trouve le bon nom',go:"qcmSign()"},
+      {ic:'🎨',tt:'Forme + couleur → type',ds:'Reconnais la catégorie',go:"typeGame()"},
+      {ic:'🔗',tt:'Relie panneau ↔ fonction',ds:'Dans les deux sens',go:"matchSign()"}],
+  p2:[{ic:'🔗',tt:'Mot du code ↔ mot courant',ds:'Dans les deux sens',go:"matchWords()"},
+      {ic:'🔍',tt:'Trouve le bon mot',ds:'Choisis le mot qui correspond',go:"qcmWord()"},
+      {ic:'✍️',tt:'Le bon mot dans la phrase',ds:'Vocabulaire en situation',go:"vctxGame()"},
+      {ic:'🅿️',tt:'Arrêt ou stationnement ?',ds:'Le piège classique du code',go:"arrStatGame()"}],
+  p3:[{ic:'✅',tt:'Vrai ou Faux',ds:'Les règles de la route',go:"vfRules()"},
+      {ic:'🔗',tt:'Relie règle ↔ thème',ds:'Dans les deux sens',go:"matchRuleTheme()"}],
+  p4:[{ic:'🔢',tt:'Situation ↔ numéro',ds:'Quel numéro appeler ?',go:"matchNum()"},
+      {ic:'✅',tt:'Vrai ou Faux',ds:'Les bons réflexes',go:"vfSecours()"}],
+  p6:[{ic:'❓',tt:'Que demande la question ?',ds:'Sens des consignes + négations',go:"cqSensGame()"},
+      {ic:'🔢',tt:'Combien de réponses ?',ds:'Une seule ou plusieurs',go:"cqMultiGame()"}],
+};
+function renderTrain(id){
+  const body=document.querySelector('#'+id+' #pbody');
+  body.innerHTML=`<div class="hub">${GAMES[id].map(g=>
+    `<button class="hub-card" onclick="${g.go}"><div class="ic">${g.ic}</div><div><div class="tt">${g.tt}</div><div class="ds">${g.ds}</div></div><div class="ar" style="margin-left:auto;font-size:20px;color:#CBD5E1">›</div></button>`).join('')}</div>`;
+}
+
+/* ===== MOTEUR QCM ===== */
+let qg={items:[],idx:0,score:0,done:false,title:'',col:'var(--violet)',multi:false};
+function startQcm(title,items,col){qg={items,idx:0,score:0,done:false,title,col:col||'var(--violet)'};show('game');renderQcm();}
+function renderQcm(){
+  if(qg.idx>=qg.items.length)return renderQcmEnd();
+  const it=qg.items[qg.idx];qg.done=false;
+  document.getElementById('game').innerHTML=
+   `<div class="pbar"><button class="back" onclick="backTrain()">←</button><h2>${qg.title}</h2></div>
+    <div class="quiz-head"><div class="sc" style="color:${qg.col}">${qg.idx+1}/${qg.items.length}</div><div class="pg">Score : ${qg.score}</div></div>
+    <div class="qcard">${it.scene?`<div class="q-scene">${it.scene}</div>`:''}
+      <div class="q-text">${it.q}</div>
+      <div class="q-opts" id="o">${it.o.map((o,i)=>`<button class="opt" id="o${i}" onclick="pickQcm(${i})"><span class="box"></span><span>${o}</span></button>`).join('')}</div>
+      <div class="expl" id="ex"></div></div>`;
+}
+function pickQcm(i){
+  if(qg.done)return;qg.done=true;
+  const it=qg.items[qg.idx],ok=i===it.a;
+  it.o.forEach((_,k)=>{const el=document.getElementById('o'+k);
+    if(k===it.a){el.classList.add('good');el.querySelector('.box').textContent='✓';}
+    else if(k===i){el.classList.add('bad');el.querySelector('.box').textContent='✗';}});
+  if(ok)qg.score++;
+  const ex=document.getElementById('ex');ex.className='expl show '+(ok?'':'ko');
+  ex.innerHTML=(ok?'<b>✅ Bravo !</b> ':'<b>❌ </b>')+(it.ex||'');
+  const b=document.createElement('button');b.className='btn btn-main';b.style.cssText='margin-top:12px;background:'+qg.col;
+  b.textContent=(qg.idx+1<qg.items.length)?'Suivant →':'Résultat';b.onclick=()=>{qg.idx++;renderQcm();};
+  document.querySelector('#game .qcard').appendChild(b);
+}
+function renderQcmEnd(){
+  const pct=Math.round(qg.score/qg.items.length*100),em=pct>=80?'🏆':pct>=60?'😀':'💪';
+  document.getElementById('game').innerHTML=
+   `<div class="pbar"><button class="back" onclick="backTrain()">←</button><h2>${qg.title}</h2></div>
+    <div class="quiz-end"><div class="em">${em}</div><div class="big" style="color:${qg.col}">${qg.score} / ${qg.items.length}</div>
+      <button class="btn btn-main" style="background:${qg.col};margin-top:14px" onclick="replayQcm()">↺ Rejouer</button>
+      <button class="btn btn-ghost" style="margin-top:9px" onclick="backTrain()">← Revenir aux jeux</button></div>`;
+}
+let lastGame=null;
+function replayQcm(){if(lastGame)lastGame();}
+function backTrain(){show(cur);renderParcours(cur,'train');}
+
+/* ===== MOTEUR RELIER (MATCH) ===== */
+let mt={pairs:[],sel:null,done:0,title:'',col:'var(--bleu)'};
+let mtDir=false;
+function startMatch(title,pairs,col){
+  mtDir=!mtDir;
+  let pr=pairs.slice(0,5);
+  if(mtDir) pr=pr.map(p=>({l:p.r,r:p.l}));
+  mt={pairs:pr,sel:null,done:0,title,col:col||'var(--bleu)'};show('game');renderMatch();
+}
+function renderMatch(){
+  const L=shuffle(mt.pairs.map((p,i)=>({i,h:p.l})));
+  const R=shuffle(mt.pairs.map((p,i)=>({i,h:p.r})));
+  document.getElementById('game').innerHTML=
+   `<div class="pbar"><button class="back" onclick="backTrain()">←</button><h2>${mt.title}</h2></div>
+    <div class="match-instr">👉 Touche un élément à gauche, puis sa réponse à droite.</div>
+    <div class="match-wrap">
+      <div class="match-col">${L.map(x=>`<div class="mitem" id="L${x.i}" onclick="selL(${x.i})">${x.h}</div>`).join('')}</div>
+      <div class="match-col">${R.map(x=>`<div class="mitem" id="R${x.i}" onclick="selR(${x.i})">${x.h}</div>`).join('')}</div>
+    </div>
+    <div id="mEnd" style="margin-top:14px"></div>`;
+}
+function selL(i){
+  if(document.getElementById('L'+i).classList.contains('ok'))return;
+  document.querySelectorAll('.match-col .mitem').forEach(e=>{if(!e.classList.contains('ok'))e.classList.remove('sel');});
+  document.getElementById('L'+i).classList.add('sel');mt.sel=i;
+}
+function selR(j){
+  if(mt.sel===null||document.getElementById('R'+j).classList.contains('ok'))return;
+  const L=document.getElementById('L'+mt.sel),R=document.getElementById('R'+j);
+  if(mt.sel===j){L.classList.remove('sel');L.classList.add('ok');R.classList.add('ok');mt.done++;
+    if(mt.done>=mt.pairs.length){document.getElementById('mEnd').innerHTML=
+      `<div class="quiz-end"><div class="em">🏆</div><div class="big" style="color:${mt.col}">Tout relié !</div>
+       <button class="btn btn-main" style="background:${mt.col};margin-top:12px" onclick="replayQcm()">↺ Rejouer</button>
+       <button class="btn btn-ghost" style="margin-top:9px" onclick="backTrain()">← Revenir aux jeux</button></div>`;}
+  } else {R.classList.add('bad');setTimeout(()=>R.classList.remove('bad'),500);L.classList.remove('sel');}
+  mt.sel=null;
+}
+
+/* ===== JEUX CONFIGURÉS ===== */
+function qcmSign(){lastGame=qcmSign;
+  const items=shuffle(SIGNS).slice(0,8).map(s=>{
+    const others=shuffle(SIGNS.filter(x=>x.id!==s.id)).slice(0,2);
+    const opts=shuffle([s,...others]);
+    return {scene:signGfx(s),q:'Quel est ce panneau ?',o:opts.map(o=>o.nm.fr),a:opts.findIndex(o=>o.id===s.id),ex:s.ds.fr};
+  });
+  startQcm('🔍 Reconnais le panneau',items,'var(--rouge)');
+}
+function matchSign(){lastGame=matchSign;
+  const pairs=shuffle(SIGNS).slice(0,5).map(s=>({l:signGfx(s),r:s.ds.fr}));
+  startMatch('🔗 Panneau et fonction',pairs,'var(--rouge)');
+}
+const SHAPES=[
+ {svg:'<svg viewBox="0 0 100 92"><polygon points="50,6 96,86 4,86" fill="#fff" stroke="#DC2626" stroke-width="9" stroke-linejoin="round"/></svg>',t:'Danger',ex:'Triangle rouge = panneau de DANGER.'},
+ {svg:'<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="#fff" stroke="#DC2626" stroke-width="9"/></svg>',t:'Interdiction',ex:'Rond à bord rouge = panneau d\u2019INTERDICTION.'},
+ {svg:'<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" fill="#2563EB"/></svg>',t:'Obligation',ex:'Rond bleu = panneau d\u2019OBLIGATION.'},
+ {svg:'<svg viewBox="0 0 100 100"><rect x="8" y="8" width="84" height="84" rx="6" fill="#2563EB"/></svg>',t:'Indication',ex:'Carré bleu = panneau d\u2019INDICATION.'},
+ {svg:'<svg viewBox="0 0 100 100"><rect x="50" y="10" width="56" height="56" transform="rotate(45 50 50)" fill="#F9D000" stroke="#fff" stroke-width="5"/></svg>',t:'Priorité',ex:'Losange jaune = PRIORITÉ (route prioritaire).'},
+ {svg:'<svg viewBox="0 0 100 100"><polygon points="32,6 68,6 94,32 94,68 68,94 32,94 6,68 6,32" fill="#DC2626"/></svg>',t:'Priorité',ex:'Octogone rouge = PRIORITÉ (STOP).'},
+ {svg:'<svg viewBox="0 0 100 92"><polygon points="50,86 4,6 96,6" fill="#fff" stroke="#DC2626" stroke-width="9" stroke-linejoin="round"/></svg>',t:'Priorité',ex:'Triangle inversé = PRIORITÉ (cédez le passage).'},
+];
+const TYPES=['Danger','Interdiction','Obligation','Indication','Priorité'];
+function typeGame(){lastGame=typeGame;
+  const items=shuffle(SHAPES).map(s=>({scene:s.svg,q:'Quel type de panneau ? (forme + couleur)',o:TYPES.slice(),a:TYPES.indexOf(s.t),ex:s.ex}));
+  startQcm('🎨 Forme + couleur → type',items,'var(--rouge)');
+}
+
+/* ===== COMPRENDRE LA QUESTION — jeux ===== */
+function cqSensGame(){lastGame=cqSensGame;
+  const items=[
+   {q:'« N’êtes-vous pas autorisé à dépasser ici ? »',o:['On me demande si je PEUX dépasser','La phrase est négative : on confirme que c’est INTERDIT'],a:1,ex:'Forme négative : la question attend « interdit ».'},
+   {q:'« Devez-vous vous arrêter ? »',o:['Est-ce OBLIGATOIRE de m’arrêter ?','Est-ce que j’en ai ENVIE ?'],a:0,ex:'« Devez-vous » = est-ce une obligation.'},
+   {q:'« Pouvez-vous stationner ici ? »',o:['Est-ce PERMIS de stationner ?','Est-ce OBLIGATOIRE de stationner ?'],a:0,ex:'« Pouvez-vous » = est-ce autorisé.'},
+   {q:'« Êtes-vous en infraction ? »',o:['Est-ce que je RESPECTE la règle ?','Est-ce que je NE respecte PAS la règle ?'],a:1,ex:'Être en infraction = ne pas respecter la règle.'},
+   {q:'Panneau : « Interdit sauf riverains »',o:['Personne ne peut passer','Les habitants du quartier peuvent passer'],a:1,ex:'« Sauf » = excepté : les riverains passent.'},
+   {q:'« En l’absence de signalisation, qui passe ? »',o:['Quand il N’Y A PAS de panneau','Quand il Y A un panneau'],a:0,ex:'« En l’absence de » = quand il n’y a pas.'},
+   {q:'« Il est interdit de ne pas allumer ses feux la nuit. »',o:['La nuit, je DOIS allumer mes feux','La nuit, je peux rouler sans feux'],a:0,ex:'Double négation : au final, allumer les feux est obligatoire.'},
+  ];
+  startQcm('🧠 Que demande la question ?',shuffle(items),'var(--rose)');
+}
+function cqMultiGame(){lastGame=cqMultiGame;
+  const items=[
+   {q:'« Je ralentis ET je m’arrête. » — réponses attendues : 2',o:['Je coche 1 case','Je coche 2 cases'],a:1,ex:'2 réponses attendues = 2 cases à cocher.'},
+   {q:'« Quelle est la vitesse maximale ? » — une seule réponse',o:['Je coche 1 case','Je coche toutes les cases'],a:0,ex:'Une seule réponse = la meilleure case.'},
+   {q:'« Que devez-vous faire ? » — réponses attendues : 3',o:['Je coche 3 cases','Je coche 1 case'],a:0,ex:'3 attendues = il faut les 3 bonnes cases.'},
+   {q:'Sur 4 cases, 2 sont vraies. J’en coche 1 seulement.',o:['C’est juste','C’est faux : il en manque une'],a:1,ex:'En réponses multiples, une oubliée = faux.'},
+   {q:'« Plusieurs réponses possibles » : combien je peux cocher ?',o:['Au moins 2','Toujours 1'],a:0,ex:'« Plusieurs » = 2 cases ou plus.'},
+  ];
+  startQcm('🔢 Combien de réponses ?',shuffle(items),'var(--rose)');
+}
+
+/* ===== VOCABULAIRE EN CONTEXTE ===== */
+function vctxGame(){lastGame=vctxGame;
+  const items=[
+   {q:'Au feu vert, je ____ sur le carrefour si la voie est libre.',o:['m’engage','me rabats','stationne'],a:0,ex:'S’engager = entrer dans le carrefour.'},
+   {q:'Après avoir dépassé le camion, je ____ à droite.',o:['me rabats','m’engage','recule'],a:0,ex:'Se rabattre = revenir sur sa voie, à droite.'},
+   {q:'Une ambulance arrive : je ____ sur le côté.',o:['me range','accélère','klaxonne'],a:0,ex:'Se ranger = se mettre sur le côté pour laisser passer.'},
+   {q:'Sur l’autoroute, je ____ par la voie de droite.',o:['m’insère','double par la droite','recule'],a:0,ex:'S’insérer = entrer dans la circulation depuis la bretelle.'},
+   {q:'Avant le STOP, je ____ puis je m’arrête complètement.',o:['ralentis','accélère','double'],a:0,ex:'Ralentir = réduire sa vitesse.'},
+   {q:'Le piéton attend : je lui ____ le passage.',o:['cède','interdis','dépasse'],a:0,ex:'Céder le passage = laisser passer.'},
+  ];
+  startQcm('✍️ Le bon mot dans la phrase',shuffle(items),'var(--bleu)');
+}
+function arrStatGame(){lastGame=arrStatGame;
+  const base=[
+   {q:'Je laisse descendre un passager, je reste au volant.',r:'Arrêt'},
+   {q:'Je me gare 1 heure pour faire les courses.',r:'Stationnement'},
+   {q:'Je m’immobilise 2 min pour charger un colis, sans quitter la voiture.',r:'Arrêt'},
+   {q:'Je laisse ma voiture la nuit devant chez moi.',r:'Stationnement'},
+   {q:'Je dépose un enfant à l’école et je repars aussitôt.',r:'Arrêt'},
+   {q:'Je quitte mon véhicule pour aller à un rendez-vous.',r:'Stationnement'},
+  ];
+  const items=shuffle(base).map(b=>({q:b.q,o:['Arrêt','Stationnement'],a:b.r==='Arrêt'?0:1,
+    ex:b.r==='Arrêt'?'ARRÊT : court, le conducteur reste au volant.':'STATIONNEMENT : long ou conducteur absent.'}));
+  startQcm('🅿️ Arrêt ou stationnement ?',items,'var(--bleu)');
+}
+function qcmWord(){lastGame=qcmWord;
+  const pool=WORDS.filter(w=>w.alt);
+  const items=shuffle(pool).slice(0,8).map(w=>{
+    const others=shuffle(pool.filter(x=>x.fr!==w.fr)).slice(0,2);
+    const opts=shuffle([w,...others]);
+    return {scene:`<span class="emo">${w.emo}</span>`,q:'Quel mot correspond à : '+w.alt.replace(/[()]/g,'')+' ?',o:opts.map(o=>o.fr),a:opts.findIndex(o=>o.fr===w.fr),ex:w.fr};
+  });
+  startQcm('🔍 Trouve le bon mot',items,'var(--bleu)');
+}
+function matchWords(){lastGame=matchWords;
+  const pool=WORDS.filter(w=>w.code);
+  const pairs=shuffle(pool).slice(0,5).map(w=>({l:w.code,r:w.fr}));
+  startMatch('🔗 Mot du code et mot courant',pairs,'var(--bleu)');
+}
+const VF_RULES=[
+ {p:'Au feu rouge, je peux passer si la voie est libre.',a:false,e:'Faux. Au feu rouge, je m’arrête toujours.'},
+ {p:'La ceinture est obligatoire à l’avant et à l’arrière.',a:true,e:'Vrai, pour tous.'},
+ {p:'En ville, la vitesse maximale est 50 km/h.',a:true,e:'Vrai (souvent 30 en centre).'},
+ {p:'Je peux tenir mon téléphone en conduisant.',a:false,e:'Faux. C’est interdit et dangereux.'},
+ {p:'Le panneau STOP demande un arrêt complet.',a:true,e:'Vrai : roues à l’arrêt, puis céder.'},
+ {p:'Sous la pluie, l’autoroute est limitée à 130 km/h.',a:false,e:'Faux : 110 km/h sous la pluie.'},
+ {p:'« Cédez le passage » veut dire « priorité pour moi ».',a:false,e:'Faux. Je laisse passer les autres.'},
+ {p:'Le gilet jaune et le triangle sont obligatoires dans la voiture.',a:true,e:'Vrai.'},
+ {p:'Si une ambulance arrive avec sa sirène, je me range.',a:true,e:'Vrai : je laisse passer les véhicules prioritaires.'},
+ {p:'À une intersection sans panneau, je laisse passer la voiture de droite.',a:true,e:'Vrai : priorité à droite.'},
+];
+function vfRules(){lastGame=vfRules;
+  const items=shuffle(VF_RULES).slice(0,8).map(x=>({q:x.p,o:['Vrai','Faux'],a:x.a?0:1,ex:x.e}));
+  startQcm('✅ Vrai ou Faux',items,'var(--vert)');
+}
+function matchRuleTheme(){lastGame=matchRuleTheme;
+  const names={feux:'Les feux',priorite:'Priorité',vitesse:'Vitesse',conducteur:'Le conducteur',securite:'Sécurité'};
+  const pairs=RTHEMES.map(t=>{const r=shuffle(RULES.filter(x=>x.th===t.th))[0];return {l:r.t.fr,r:names[t.th]};});
+  startMatch('🔗 Règle et thème',shuffle(pairs),'var(--vert)');
+}
+const NUM=[
+ {s:'Un blessé, un malaise (médical)',n:'15'},
+ {s:'Un vol, un danger, la police',n:'17'},
+ {s:'Un incendie, les pompiers',n:'18'},
+ {s:'Urgence partout en Europe',n:'112'},
+ {s:'Personne sourde, par SMS',n:'114'},
+];
+function matchNum(){lastGame=matchNum;
+  const pairs=shuffle(NUM).slice(0,5).map(x=>({l:x.s,r:`<b style="font-size:18px">${x.n}</b>`}));
+  startMatch('🔢 Situation et numéro',pairs,'var(--orange)');
+}
+const VF_SEC=[
+ {p:'Le 112 marche partout en Europe.',a:true,e:'Vrai.'},
+ {p:'Je place le triangle juste à côté de la voiture.',a:false,e:'Faux : à 30 m, pour être vu de loin.'},
+ {p:'L’ordre est : Protéger, Alerter, Secourir.',a:true,e:'Vrai.'},
+ {p:'Je déplace toujours la victime tout de suite.',a:false,e:'Faux : on ne la déplace pas, sauf danger immédiat.'},
+ {p:'Le 18, c’est les pompiers.',a:true,e:'Vrai.'},
+ {p:'Avant tout, je mets mon gilet et les feux de détresse.',a:true,e:'Vrai : c’est l’étape « Protéger ».'},
+];
+function vfSecours(){lastGame=vfSecours;
+  const items=shuffle(VF_SEC).slice(0,6).map(x=>({q:x.p,o:['Vrai','Faux'],a:x.a?0:1,ex:x.e}));
+  startQcm('✅ Vrai ou Faux',items,'var(--orange)');
+}
+
+/* ===== EXAMEN BLANC ===== */
+function renderExamHome(){
+  document.getElementById('p5').innerHTML=
+   `<div class="pbar"><button class="back" onclick="openP('home')">←</button><h2>🎯 Examen blanc</h2></div>
+    <div class="start-card">
+      <div style="font-size:46px">🎯</div>
+      <div style="font-family:'Baloo 2';font-weight:800;font-size:18px;margin:6px 0">Un examen différent à chaque fois</div>
+      <p style="font-size:13.5px;color:var(--gris);font-weight:700;margin-bottom:16px">Des questions de type ETG tirées au sort, avec réponses parfois multiples. La question est lue à voix haute.</p>
+      <button class="btn btn-main" onclick="startExam()">▶ Démarrer un examen</button>
+    </div>`;
+}
+let ex={items:[],idx:0,score:0,sel:[],done:false};
+function prep(q){const ord=shuffle(q.o.map((_,i)=>i));return {...q,o:ord.map(i=>q.o[i]),a:q.a.map(ai=>ord.indexOf(ai))};}
+function startExam(){
+  const n=Math.min(40,EXAM_BANK.length);
+  ex={items:shuffle(EXAM_BANK).slice(0,n).map(prep),idx:0,score:0,sel:[],done:false};
+  show('p5');renderExamQ();
+}
+function renderExamQ(){
+  if(ex.idx>=ex.items.length)return renderExamEnd();
+  const q=ex.items[ex.idx];ex.done=false;ex.sel=[];
+  const badge=q.multi?`<span class="q-badge multi">Plusieurs réponses · ${q.a.length} attendues</span>`:'<span class="q-badge one">Une seule réponse</span>';
+  document.getElementById('p5').innerHTML=
+   `<div class="pbar"><button class="back" onclick="renderExamHome()">←</button><h2>🎯 Examen blanc</h2></div>
+    <div class="quiz-head"><div class="sc" style="color:var(--violet)">${ex.idx+1}/${ex.items.length}</div><div class="pg">Score : ${ex.score}</div></div>
+    <div class="qcard"><div class="q-scene">${q.scene}</div>${badge}
+      <div class="q-text">${q.q.fr}</div>${trWrap(q.q)}
+      <button class="spk-q" onclick="speak('${jq(q.q.fr)}')">🔊 Écouter la question</button>
+      <div class="q-opts" id="o">${q.o.map((o,i)=>`<button class="opt" id="o${i}" onclick="pickEx(${i})"><span class="box"></span><span>${o}</span></button>`).join('')}</div>
+      <button class="btn btn-main" id="val" style="margin-top:13px" onclick="validEx()" disabled>Valider</button>
+      <div class="expl" id="ex"></div></div>`;
+}
+function pickEx(i){
+  if(ex.done)return;const q=ex.items[ex.idx];
+  if(q.multi){const p=ex.sel.indexOf(i);if(p>=0)ex.sel.splice(p,1);else ex.sel.push(i);}else ex.sel=[i];
+  q.o.forEach((_,k)=>document.getElementById('o'+k).classList.toggle('sel',ex.sel.includes(k)));
+  document.getElementById('val').disabled=ex.sel.length===0;
+}
+function validEx(){
+  const q=ex.items[ex.idx];ex.done=true;
+  const ok=q.a.length===ex.sel.length&&q.a.every(x=>ex.sel.includes(x));
+  q.o.forEach((_,i)=>{const el=document.getElementById('o'+i);el.classList.remove('sel');
+    if(q.a.includes(i)){el.classList.add('good');el.querySelector('.box').textContent='✓';}
+    else if(ex.sel.includes(i)){el.classList.add('bad');el.querySelector('.box').textContent='✗';}});
+  if(ok)ex.score++;
+  const e=document.getElementById('ex');e.className='expl show '+(ok?'':'ko');
+  e.innerHTML=(ok?'<b>✅ Bravo !</b> ':'<b>❌ Pas tout à fait.</b> ')+q.ex.fr+trWrap(q.ex);
+  const v=document.getElementById('val');v.disabled=false;
+  v.textContent=(ex.idx+1<ex.items.length)?'Question suivante →':'Voir le résultat';
+  v.onclick=()=>{ex.idx++;renderExamQ();};
+}
+function renderExamEnd(){
+  const pct=Math.round(ex.score/ex.items.length*100),em=pct>=85?'🏆':pct>=70?'😀':'💪';
+  const seuil=Math.round(35/40*ex.items.length);
+  const msg=ex.score>=seuil?'Réussi ! Continue à t’entraîner sur l’examen officiel.':'Continue ! Revois les panneaux et les règles, puis recommence.';
+  document.getElementById('p5').innerHTML=
+   `<div class="pbar"><button class="back" onclick="openP('home')">←</button><h2>🎯 Examen blanc</h2></div>
+    <div class="quiz-end"><div class="em">${em}</div><div class="big" style="color:var(--violet)">${ex.score} / ${ex.items.length}</div>
+      <p style="margin:8px 0 16px;color:var(--gris);font-weight:700">${msg}</p>
+      <button class="btn btn-main" onclick="startExam()">↺ Nouvel examen</button>
+      <button class="btn btn-ghost" style="margin-top:9px" onclick="openP('home')">← Accueil</button></div>`;
+}
+
+/* ===== UTILS ===== */
+function jq(s){return String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/\n/g,' ');}
+function shuffle(a){return [...a].sort(()=>Math.random()-0.5);}
+function speak(t){try{window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='fr-FR';u.rate=0.9;window.speechSynthesis.speak(u);}catch(e){}}
+renderLangBar();renderHome();
+</script>
+</body>
+</html>
