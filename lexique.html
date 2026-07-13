@@ -1,0 +1,1335 @@
+<!DOCTYPE html><html lang="fr"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Mon Coach Lexique BTP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Baloo+2:wght@500;700;800&family=Noto+Naskh+Arabic:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bleu:#2563EB;--bleu-d:#1E40AF;--creme:#FAFAF8;--txt:#111827;--gris:#6B7280;
+--epi:#DC2626;--outils:#2563EB;--machines:#7C3AED;--materiaux:#D97706;--techniques:#059669;--ouvrages:#0891B2;--elements:#DB2777;}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'Nunito',sans-serif;background:var(--creme);color:var(--txt);min-height:100vh}
+.wrap{max-width:900px;margin:0 auto;padding:16px 16px 90px}
+.hidden{display:none!important}
+h1,h2,.baloo{font-family:'Baloo 2',cursive}
+.topbar{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.back{background:#fff;border:2px solid #E5E7EB;border-radius:12px;padding:8px 14px;font-weight:800;font-size:15px;cursor:pointer;color:var(--bleu-d)}
+.title{font-size:22px;font-weight:800;color:var(--bleu-d);font-family:'Baloo 2'}
+.sub{color:var(--gris);font-size:14px;margin-top:2px}
+.hello{font-size:15px;color:var(--gris)}
+/* tuiles accueil */
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:8px}
+.tile{border:none;border-radius:20px;padding:26px 18px;color:#fff;text-align:left;cursor:pointer;font-family:'Baloo 2';box-shadow:0 4px 14px rgba(0,0,0,.08)}
+.tile .emo{font-size:40px;display:block;margin-bottom:8px}
+.tile .t{font-size:22px;font-weight:800}
+.tile .d{font-size:13px;font-weight:600;opacity:.9;font-family:'Nunito'}
+.tile.imagier{background:linear-gradient(135deg,#2563EB,#1E40AF)}
+.tile.entrainement{background:linear-gradient(135deg,#059669,#047857)}
+/* sélecteur langue */
+.langrow{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
+.langbtn{border:2px solid #E5E7EB;background:#fff;border-radius:20px;padding:7px 14px;font-weight:800;font-size:14px;cursor:pointer;color:#374151}
+.langbtn.on{background:var(--bleu);color:#fff;border-color:var(--bleu)}
+.cat-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px}
+@media(min-width:640px){.cat-grid{grid-template-columns:1fr 1fr 1fr}}
+.cat-tile{border:none;border-radius:16px;padding:18px 14px;color:#fff;text-align:left;cursor:pointer;font-family:'Baloo 2';font-weight:800;font-size:17px;box-shadow:0 3px 10px rgba(0,0,0,.07)}
+.cat-tile small{display:block;font-family:'Nunito';font-weight:700;font-size:12px;opacity:.9;margin-top:3px}
+/* recherche */
+.search{width:100%;border:2px solid #E5E7EB;border-radius:14px;padding:12px 14px;font-size:16px;font-family:'Nunito';margin-bottom:12px}
+/* galerie */
+.gal{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(min-width:640px){.gal{grid-template-columns:1fr 1fr 1fr}}
+.card{background:#fff;border:2px solid #EFEFEC;border-radius:16px;overflow:hidden;cursor:pointer;display:flex;flex-direction:column}
+.card img{width:100%;height:120px;object-fit:cover;background:#F3F4F6}
+.card .nm{padding:8px 10px;font-weight:800;font-size:14px}
+.card .tr{padding:0 10px 8px;font-size:13px;color:var(--gris);font-weight:700}
+.rtl{direction:rtl;font-family:'Noto Naskh Arabic','Nunito',serif}
+/* détail */
+.detail{background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 6px 20px rgba(0,0,0,.1)}
+.detail img{width:100%;max-height:340px;object-fit:contain;background:#F3F4F6}
+.detail .body{padding:16px 18px}
+.detail .nm{font-size:24px;font-weight:800;font-family:'Baloo 2';display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.spk{background:var(--bleu);color:#fff;border:none;border-radius:50%;width:40px;height:40px;font-size:18px;cursor:pointer;flex-shrink:0}
+.met{font-style:italic;color:#9CA3AF;font-size:13px;font-weight:700}
+.usage{font-size:16px;margin-top:8px;line-height:1.5}
+.trbox{margin-top:14px;background:#F0F6FF;border-radius:12px;padding:12px 14px}
+.trbox .lbl{font-size:12px;font-weight:800;color:var(--bleu-d);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.trbox .tn{font-size:19px;font-weight:800}
+.trbox .tu{font-size:15px;color:#374151;margin-top:3px}
+.warn{font-size:12px;color:#B45309;margin-top:8px}
+/* exercices */
+.exo-choice{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.exo-tile{border:2px solid #E5E7EB;background:#fff;border-radius:16px;padding:16px;text-align:left;cursor:pointer;font-family:'Baloo 2';font-weight:800;font-size:16px}
+.exo-tile .emo{font-size:26px;display:block;margin-bottom:6px}
+.exo-tile small{display:block;font-family:'Nunito';font-weight:700;font-size:12px;color:var(--gris);margin-top:3px}
+.scorebar{display:flex;align-items:center;gap:12px;background:#fff;border-radius:14px;padding:10px 14px;margin-bottom:12px;border:2px solid #EFEFEC}
+.score{font-family:'Baloo 2';font-size:22px;font-weight:800;color:#059669}
+.qbox{background:#fff;border-radius:18px;padding:18px;border:2px solid #EFEFEC;text-align:center}
+.qimg{width:100%;max-height:260px;object-fit:contain;background:#F3F4F6;border-radius:12px}
+.qtext{font-size:20px;font-weight:800;font-family:'Baloo 2';margin:6px 0}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.opt{border:2px solid #E5E7EB;background:#fff;border-radius:14px;padding:14px;font-size:15px;font-weight:800;cursor:pointer;min-height:56px}
+.opt img{width:100%;height:90px;object-fit:cover;border-radius:8px}
+.opt.good{background:#DCFCE7;border-color:#22C55E}
+.opt.bad{background:#FEE2E2;border-color:#EF4444}
+.btn{background:var(--bleu);color:#fff;border:none;border-radius:14px;padding:13px 22px;font-weight:800;font-size:16px;cursor:pointer;font-family:'Nunito';margin-top:12px}
+.btn.sec{background:#fff;color:var(--bleu-d);border:2px solid #E5E7EB}
+/* relier */
+.relier{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.relier .col-lbl{font-size:11px;font-weight:800;color:var(--gris);text-transform:uppercase;text-align:center;margin-bottom:4px}
+.ritem{border:2px solid #E5E7EB;background:#fff;border-radius:12px;padding:8px;margin-bottom:8px;cursor:pointer;font-size:13px;font-weight:700;min-height:56px;display:flex;align-items:center;justify-content:center;text-align:center}
+.ritem img{width:100%;height:70px;object-fit:cover;border-radius:8px}
+.ritem.sel{border-color:var(--bleu);background:#EFF6FF;box-shadow:0 0 0 2px var(--bleu)}
+.ritem.done{opacity:.45;pointer-events:none;border-color:#22C55E;background:#DCFCE7}
+.ritem.flash-bad{border-color:#EF4444;background:#FEE2E2}
+.foot{position:fixed;bottom:0;left:0;right:0;text-align:center;font-size:11px;color:#9CA3AF;padding:6px;background:rgba(250,250,248,.9)}
+.msg{text-align:center;font-weight:800;margin-top:10px;min-height:22px}
+.msg.ok{color:#059669}.msg.no{color:#DC2626}
+</style></head><body>
+<div class="wrap">
+  <!-- ACCUEIL -->
+  <div id="s-home">
+    <div class="title" style="font-size:26px">🧱 Mon Coach Lexique BTP</div>
+    <div class="hello" id="hello"></div>
+    <div class="tiles" style="margin-top:16px">
+      <button class="tile imagier" onclick="go('imagier-cat')"><span class="emo">📚</span><span class="t">Imagier</span><div class="d">Voir les mots, les photos, écouter</div></button>
+      <button class="tile entrainement" onclick="go('exo-cat')"><span class="emo">🎯</span><span class="t">Entraînement</span><div class="d">Jouer et réviser</div></button>
+    </div>
+    <div style="margin-top:22px" class="sub">Langue d'appui (pour l'imagier)</div>
+    <div class="langrow" id="langrow-home"></div>
+  </div>
+
+  <!-- IMAGIER : catégories -->
+  <div id="s-imagier-cat" class="hidden">
+    <div class="topbar"><button class="back" onclick="go('home')">← Accueil</button><div><div class="title">📚 Imagier</div><div class="sub">Choisis une catégorie</div></div></div>
+    <div class="cat-grid" id="imagier-cats"></div>
+  </div>
+
+  <!-- IMAGIER : galerie -->
+  <div id="s-imagier-gal" class="hidden">
+    <div class="topbar"><button class="back" onclick="go('imagier-cat')">← Catégories</button><div><div class="title" id="gal-title"></div><div class="sub" id="gal-count"></div></div></div>
+    <input class="search" id="search" placeholder="🔎 Chercher un mot…" oninput="renderGal()">
+    <div class="langrow" id="langrow-gal"></div>
+    <div class="gal" id="gal"></div>
+  </div>
+
+  <!-- IMAGIER : détail -->
+  <div id="s-detail" class="hidden">
+    <div class="topbar"><button class="back" onclick="go('imagier-gal')">← Retour</button></div>
+    <div class="detail" id="detail"></div>
+  </div>
+
+  <!-- EXO : catégories -->
+  <div id="s-exo-cat" class="hidden">
+    <div class="topbar"><button class="back" onclick="go('home')">← Accueil</button><div><div class="title">🎯 Entraînement</div><div class="sub">1. Choisis une catégorie</div></div></div>
+    <div class="cat-grid" id="exo-cats"></div>
+  </div>
+  <!-- EXO : type -->
+  <div id="s-exo-type" class="hidden">
+    <div class="topbar"><button class="back" onclick="go('exo-cat')">← Catégories</button><div><div class="title" id="exotype-title"></div><div class="sub">2. Choisis un exercice</div></div></div>
+    <div class="exo-choice">
+      <button class="exo-tile" onclick="startExo('relier')"><span class="emo">🔗</span>Relier les 3<small>Photo · Nom · Usage</small></button>
+      <button class="exo-tile" onclick="startExo('photo2nom')"><span class="emo">🖼️</span>Photo → Nom<small>Trouve le bon mot</small></button>
+      <button class="exo-tile" onclick="startExo('nom2photo')"><span class="emo">🔤</span>Nom → Photo<small>Trouve la bonne image</small></button>
+      <button class="exo-tile" onclick="startExo('usage2nom')"><span class="emo">💬</span>Usage → Nom<small>Lis, trouve le mot</small></button>
+    </div>
+  </div>
+  <!-- EXO : jeu -->
+  <div id="s-exo-play" class="hidden">
+    <div class="topbar"><button class="back" onclick="go('exo-type')">← Exercices</button><div><div class="title" id="play-title"></div></div></div>
+    <div class="scorebar"><div class="score" id="score">0</div><div class="sub" id="progress"></div><button class="btn sec" style="margin:0 0 0 auto;padding:8px 14px" onclick="startExo(state.exo)">↺</button></div>
+    <div id="play-area"></div>
+    <div class="msg" id="msg"></div>
+  </div>
+
+  <div class="foot">Mon Coach Lexique BTP · v1.0 · Mon Assistant de Formation</div>
+</div>
+
+<script>
+const DATA = [{"id": "e001", "cat": "EPI", "nom": "Le casque de chantier", "usage": "Protège la tête.", "metier": "", "img": "img/e001.jpg"}, {"id": "e002", "cat": "EPI", "nom": "Les lunettes de sécurité", "usage": "Protègent les yeux : poussière, éclats.", "metier": "", "img": "img/e002.jpg"}, {"id": "e003", "cat": "EPI", "nom": "Les gants", "usage": "Protègent les mains.", "metier": "", "img": "img/e003.jpg"}, {"id": "e004", "cat": "EPI", "nom": "Le casque anti-bruit", "usage": "Protège les oreilles du bruit des machines.", "metier": "", "img": "img/e004.jpg"}, {"id": "e005", "cat": "EPI", "nom": "Les chaussures de sécurité", "usage": "Protègent les pieds : coquille et semelle anti-perforation.", "metier": "", "img": "img/e005.jpg"}, {"id": "e006", "cat": "EPI", "nom": "Le gilet haute visibilité", "usage": "Pour être bien vu sur le chantier.", "metier": "", "img": "img/e006.jpg"}, {"id": "e007", "cat": "Outils", "nom": "Le mètre (ruban)", "usage": "Sert à mesurer les longueurs.", "metier": "", "img": "img/e007.jpg"}, {"id": "e008", "cat": "Outils", "nom": "Le niveau à bulle", "usage": "Règle avec une bulle. Vérifie qu'une surface est droite sur une courte distance.", "metier": "", "img": "img/e008.jpg"}, {"id": "e009", "cat": "Outils", "nom": "La pelle", "usage": "Sert à creuser et à déplacer le sable, la terre, le gravier.", "metier": "", "img": "img/e009.jpg"}, {"id": "e010", "cat": "Outils", "nom": "La pioche", "usage": "Sert à casser la terre dure et à creuser.", "metier": "", "img": "img/e010.jpg"}, {"id": "e011", "cat": "Outils", "nom": "La brouette", "usage": "Sert à transporter les matériaux : sable, béton, gravats.", "metier": "", "img": "img/e011.jpg"}, {"id": "e012", "cat": "Outils", "nom": "La truelle", "usage": "Grande truelle triangulaire. Sert à prendre et à étaler le mortier.", "metier": "", "img": "img/e012.jpg"}, {"id": "e013", "cat": "Outils", "nom": "Le cordeau", "usage": "Sert à tracer une ligne droite entre deux points.", "metier": "", "img": "img/e013.jpg"}, {"id": "e014", "cat": "Outils", "nom": "Le seau / l'auge", "usage": "Servent à transporter et à mélanger de petites quantités de mortier.", "metier": "", "img": "img/e014.jpg"}, {"id": "e015", "cat": "Outils", "nom": "La massette", "usage": "Petit marteau lourd, à une main. Sert à frapper le burin et à casser.", "metier": "", "img": "img/e015.jpg"}, {"id": "e016", "cat": "Outils", "nom": "Le burin", "usage": "Sert à casser ou à tailler la pierre et le béton.", "metier": "", "img": "img/e016.jpg"}, {"id": "e017", "cat": "Outils", "nom": "Le marteau", "usage": "Sert à frapper, à clouer et à ajuster.", "metier": "", "img": "img/e017.jpg"}, {"id": "e018", "cat": "Outils", "nom": "L'équerre", "usage": "Sert à vérifier et à tracer les angles droits.", "metier": "", "img": "img/e018.jpg"}, {"id": "e019", "cat": "Outils", "nom": "Le fil à plomb", "usage": "Sert à vérifier qu'un mur est bien vertical.", "metier": "", "img": "img/e019.jpg"}, {"id": "e020", "cat": "Outils", "nom": "Le décamètre", "usage": "Sert à mesurer les grandes distances.", "metier": "", "img": "img/e020.jpg"}, {"id": "e021", "cat": "Outils", "nom": "Le niveau laser", "usage": "Projette un trait laser. Trace une ligne droite sur une longue distance.", "metier": "", "img": "img/e021.jpg"}, {"id": "e022", "cat": "Outils", "nom": "La truelle langue de chat", "usage": "Petite truelle étroite et pointue. Sert à travailler dans les angles et les petits espaces.", "metier": "maçon", "img": "img/e022.jpg"}, {"id": "e023", "cat": "Outils", "nom": "La taloche", "usage": "Planche avec une poignée. Sert à étaler et à dresser l'enduit.", "metier": "maçon", "img": "img/e023.jpg"}, {"id": "e024", "cat": "Outils", "nom": "Le platoir (la lisseuse)", "usage": "Plaque plate en métal. Sert à la finition : lisser le mortier ou le béton.", "metier": "maçon", "img": "img/e024.jpg"}, {"id": "e025", "cat": "Outils", "nom": "Le fer à joint", "usage": "Sert à creuser et à finir les joints entre les parpaings ou les briques.", "metier": "maçon", "img": "img/e025.jpg"}, {"id": "e026", "cat": "Outils", "nom": "Le marteau de maçon", "usage": "Marteau à panne tranchante. Sert à couper et à ajuster les parpaings.", "metier": "maçon", "img": "img/e026.jpg"}, {"id": "e027", "cat": "Outils", "nom": "La taloche éponge", "usage": "Taloche avec une éponge. Sert à finir l'enduit avec un peu d'eau.", "metier": "maçon", "img": "img/e027.jpg"}, {"id": "e028", "cat": "Outils", "nom": "Le couteau à enduire (la spatule)", "usage": "Sert à appliquer et à lisser de petites quantités d'enduit.", "metier": "maçon", "img": "img/e028.jpg"}, {"id": "e029", "cat": "Outils", "nom": "Le niveau à eau", "usage": "Tuyau transparent rempli d'eau. Reporte la même hauteur entre deux points éloignés.", "metier": "maçon", "img": "img/e029.jpg"}, {"id": "e030", "cat": "Outils", "nom": "Le grattoir (la griffe)", "usage": "Sert à gratter et à nettoyer une surface.", "metier": "maçon", "img": "img/e030.jpg"}, {"id": "e031", "cat": "Outils", "nom": "Le râteau à enrobé", "usage": "Sert à répartir l'enrobé avant le compactage.", "metier": "VRD", "img": "img/e031.jpg"}, {"id": "e032", "cat": "Outils", "nom": "La dame (le pilon)", "usage": "Outil lourd. Sert à tasser le sol à la main dans les petits espaces.", "metier": "VRD", "img": "img/e032.jpg"}, {"id": "e033", "cat": "Outils", "nom": "La pince à bordures", "usage": "Sert à saisir et à poser les bordures lourdes.", "metier": "VRD", "img": "img/e033.jpg"}, {"id": "e034", "cat": "Outils", "nom": "La mire de nivellement", "usage": "Sert à contrôler les niveaux et les pentes.", "metier": "VRD", "img": "img/e034.jpg"}, {"id": "e035", "cat": "Outils", "nom": "Le détecteur de réseaux", "usage": "Sert à repérer les câbles et les tuyaux avant de creuser.", "metier": "VRD", "img": "img/e035.jpg"}, {"id": "e036", "cat": "Outils", "nom": "Le pied-de-biche", "usage": "Barre en acier. Sert à faire levier, à arracher les clous et à décoffrer.", "metier": "", "img": "img/e036.jpg"}, {"id": "e037", "cat": "Outils", "nom": "Le serre-joint", "usage": "Sert à maintenir et à serrer deux pièces ensemble (par ex. un coffrage) le temps du séchage ou du vissage.", "metier": "", "img": "img/e037.jpg"}, {"id": "e038", "cat": "Outils", "nom": "La scie égoïne", "usage": "Sert à couper le bois à la main : planches de coffrage, tasseaux.", "metier": "", "img": "img/e038.jpg"}, {"id": "e039", "cat": "Outils", "nom": "La masse", "usage": "Gros marteau lourd, à deux mains. Sert à frapper très fort.", "metier": "", "img": "img/e039.jpg"}, {"id": "e040", "cat": "Outils", "nom": "La brosse métallique", "usage": "Sert à nettoyer et à décaper une surface : rouille, restes de béton.", "metier": "", "img": "img/e040.jpg"}, {"id": "e041", "cat": "Outils", "nom": "L'étai", "usage": "Poteau métallique réglable. Sert à soutenir provisoirement un coffrage ou un plancher.", "metier": "", "img": "img/e041.jpg"}, {"id": "e042", "cat": "Outils", "nom": "Le plan", "usage": "Le dessin du chantier (plan en coupe, vue de dessus, vue en perspective). On le lit pour savoir quoi construire, où et comment.", "metier": "", "img": "img/e042.jpg"}, {"id": "e043", "cat": "Machines", "nom": "La bétonnière", "usage": "Sert à mélanger le ciment, le sable, l'eau et le gravier pour faire du béton ou du mortier.", "metier": "", "img": "img/e043.jpg"}, {"id": "e044", "cat": "Machines", "nom": "La meuleuse (la disqueuse)", "usage": "Sert à couper ou à meuler le métal, la pierre, le béton.", "metier": "", "img": "img/e044.jpg"}, {"id": "e045", "cat": "Machines", "nom": "Le marteau-piqueur", "usage": "Sert à casser le béton, l'enrobé ou la roche.", "metier": "", "img": "img/e045.jpg"}, {"id": "e046", "cat": "Machines", "nom": "La mini-pelle", "usage": "Sert à creuser des tranchées et à déplacer la terre.", "metier": "", "img": "img/e046.jpg"}, {"id": "e047", "cat": "Machines", "nom": "La plaque vibrante", "usage": "Sert à tasser (compacter) le sol ou le sable.", "metier": "", "img": "img/e047.jpg"}, {"id": "e048", "cat": "Machines", "nom": "Le groupe électrogène", "usage": "Sert à produire de l'électricité sur un chantier sans courant.", "metier": "", "img": "img/e048.jpg"}, {"id": "e049", "cat": "Machines", "nom": "Le compresseur", "usage": "Sert à donner de l'air comprimé aux outils (marteau-piqueur, etc.).", "metier": "", "img": "img/e049.jpg"}, {"id": "e050", "cat": "Machines", "nom": "Le malaxeur électrique", "usage": "Sert à mélanger le mortier ou la colle directement dans un seau.", "metier": "maçon", "img": "img/e050.jpg"}, {"id": "e051", "cat": "Machines", "nom": "Le monte-matériaux (monte-charge)", "usage": "Sert à monter les matériaux jusqu'aux étages.", "metier": "maçon", "img": "img/e051.jpg"}, {"id": "e052", "cat": "Machines", "nom": "La règle vibrante", "usage": "Règle à moteur qui vibre. Sert à lisser et à tasser le béton d'une dalle.", "metier": "maçon", "img": "img/e052.jpg"}, {"id": "e053", "cat": "Machines", "nom": "La pompe à béton", "usage": "Sert à amener le béton liquide vers les étages ou les zones difficiles.", "metier": "maçon", "img": "img/e053.jpg"}, {"id": "e054", "cat": "Machines", "nom": "L'hélicoptère (la talocheuse mécanique)", "usage": "Sert à lisser une grande dalle de béton.", "metier": "maçon", "img": "img/e054.jpg"}, {"id": "e055", "cat": "Machines", "nom": "La pelle mécanique (la pelleteuse)", "usage": "Sert à creuser les tranchées et à déplacer de gros volumes de terre.", "metier": "VRD", "img": "img/e055.jpg"}, {"id": "e056", "cat": "Machines", "nom": "Le tractopelle", "usage": "Engin avec un godet à l'avant et un bras à l'arrière. Sert à creuser et à charger.", "metier": "VRD", "img": "img/e056.jpg"}, {"id": "e057", "cat": "Machines", "nom": "Le compacteur (le rouleau, le cylindre)", "usage": "Sert à tasser le sol, le gravier ou l'enrobé.", "metier": "VRD", "img": "img/e057.jpg"}, {"id": "e058", "cat": "Machines", "nom": "Le camion-benne", "usage": "Sert à transporter et à décharger la terre, le gravier, l'enrobé.", "metier": "VRD", "img": "img/e058.jpg"}, {"id": "e059", "cat": "Machines", "nom": "Le finisseur (la finisseuse)", "usage": "Sert à étaler l'enrobé de façon régulière sur la route.", "metier": "VRD", "img": "img/e059.jpg"}, {"id": "e060", "cat": "Machines", "nom": "La niveleuse", "usage": "Sert à régler et à niveler le sol sur de grandes surfaces.", "metier": "VRD", "img": "img/e060.jpg"}, {"id": "e061", "cat": "Machines", "nom": "La chargeuse (le chargeur)", "usage": "Sert à charger les matériaux dans les camions.", "metier": "VRD", "img": "img/e061.jpg"}, {"id": "e062", "cat": "Machines", "nom": "Le dumper (le tombereau)", "usage": "Petit camion de chantier. Sert à transporter les matériaux sur le chantier.", "metier": "VRD", "img": "img/e062.jpg"}, {"id": "e063", "cat": "Machines", "nom": "La trancheuse", "usage": "Sert à creuser une tranchée étroite et régulière.", "metier": "VRD", "img": "img/e063.jpg"}, {"id": "e064", "cat": "Machines", "nom": "La toupie", "usage": "Sert à livrer de grosses quantités de béton à couler sur un chantier.", "metier": "", "img": "img/e064.jpg"}, {"id": "e065", "cat": "Matériaux", "nom": "Le ciment", "usage": "C'est le liant. Sert à fabriquer le mortier et le béton.", "metier": "", "img": "img/e065.jpg"}, {"id": "e066", "cat": "Matériaux", "nom": "Le sable", "usage": "Sert à fabriquer le mortier et le béton.", "metier": "", "img": "img/e066.jpg"}, {"id": "e067", "cat": "Matériaux", "nom": "Le gravier (les gravillons)", "usage": "Sert à fabriquer le béton.", "metier": "", "img": "img/e067.jpg"}, {"id": "e068", "cat": "Matériaux", "nom": "Le mortier", "usage": "Ciment + sable + eau. Sert à coller les blocs et à faire les joints.", "metier": "", "img": "img/e068.jpg"}, {"id": "e069", "cat": "Matériaux", "nom": "Le béton", "usage": "Ciment + sable + gravier + eau. Sert aux parties solides : dalles, fondations.", "metier": "", "img": "img/e069.jpg"}, {"id": "e070", "cat": "Matériaux", "nom": "Le fer à béton (les armatures)", "usage": "Sert à renforcer le béton de l'intérieur.", "metier": "", "img": "img/e070.jpg"}, {"id": "e071", "cat": "Matériaux", "nom": "Le treillis soudé", "usage": "Grille de fer. Sert à renforcer les dalles de béton.", "metier": "", "img": "img/e071.jpg"}, {"id": "e072", "cat": "Matériaux", "nom": "La chaux", "usage": "C'est un liant. Sert à faire certains mortiers et enduits.", "metier": "", "img": "img/e072.jpg"}, {"id": "e073", "cat": "Matériaux", "nom": "Le tout-venant (la grave)", "usage": "Mélange de cailloux et de sable. Sert à faire les fondations et les sols.", "metier": "", "img": "img/e073.jpg"}, {"id": "e074", "cat": "Matériaux", "nom": "Le parpaing (bloc béton, agglo)", "usage": "Bloc gris en béton, creux. Sert à monter les murs porteurs. On dit aussi « agglo ».", "metier": "maçon", "img": "img/e074.jpg"}, {"id": "e075", "cat": "Matériaux", "nom": "La brique", "usage": "Bloc rouge en terre cuite. Sert à monter les murs.", "metier": "maçon", "img": "img/e075.jpg"}, {"id": "e076", "cat": "Matériaux", "nom": "L'enduit", "usage": "Mélange fin. Sert à recouvrir et à lisser les murs.", "metier": "maçon", "img": "img/e076.jpg"}, {"id": "e077", "cat": "Matériaux", "nom": "Le plâtre", "usage": "Poudre blanche. Sert aux cloisons et aux finitions intérieures.", "metier": "maçon", "img": "img/e077.jpg"}, {"id": "e078", "cat": "Matériaux", "nom": "La pierre", "usage": "Sert à monter les murs en pierre.", "metier": "maçon", "img": "img/e078.jpg"}, {"id": "e079", "cat": "Matériaux", "nom": "La poutrelle et les hourdis (entrevous)", "usage": "Éléments qui servent à construire un plancher.", "metier": "maçon", "img": "img/e079.jpg"}, {"id": "e080", "cat": "Matériaux", "nom": "Le bloc à bancher", "usage": "Bloc creux qu'on remplit de béton. Sert aux murs très solides.", "metier": "maçon", "img": "img/e080.jpg"}, {"id": "e081", "cat": "Matériaux", "nom": "L'enrobé (le bitume, le goudron)", "usage": "Mélange noir. Sert à faire le revêtement des routes.", "metier": "VRD", "img": "img/e081.jpg"}, {"id": "e082", "cat": "Matériaux", "nom": "La grave (le tout-venant, GNT)", "usage": "Mélange de cailloux et de sable. Sert aux couches sous la route.", "metier": "VRD", "img": "img/e082.jpg"}, {"id": "e083", "cat": "Matériaux", "nom": "Les bordures en béton", "usage": "Éléments longs. Servent à border les trottoirs et les routes.", "metier": "VRD", "img": "img/e083.jpg"}, {"id": "e084", "cat": "Matériaux", "nom": "Les tuyaux / canalisations (PVC, fonte, béton, PEHD)", "usage": "Servent à transporter l'eau, les eaux usées, etc.", "metier": "VRD", "img": "img/e084.jpg"}, {"id": "e085", "cat": "Matériaux", "nom": "Les caniveaux", "usage": "Éléments en béton. Servent à évacuer l'eau de pluie.", "metier": "VRD", "img": "img/e085.jpg"}, {"id": "e086", "cat": "Matériaux", "nom": "Le regard en fonte", "usage": "Boîte enterrée avec couvercle. Donne accès aux tuyaux et réseaux sous la terre.", "metier": "VRD", "img": "img/e086.jpg"}, {"id": "e087", "cat": "Matériaux", "nom": "Les pavés et les dalles", "usage": "Servent à recouvrir le sol des trottoirs et des places.", "metier": "VRD", "img": "img/e087.jpg"}, {"id": "e088", "cat": "Matériaux", "nom": "Le grillage avertisseur", "usage": "Filet de couleur. Sert à signaler un réseau enterré (couleur selon le type).", "metier": "VRD", "img": "img/e088.jpg"}, {"id": "e089", "cat": "Matériaux", "nom": "Le géotextile", "usage": "Toile. Sert à séparer la terre et les graviers, et à filtrer.", "metier": "VRD", "img": "img/e089.jpg"}, {"id": "e090", "cat": "Matériaux", "nom": "Le bloc de chaînage (agglo en U)", "usage": "Bloc en U, rempli de béton et de fer. Sert à renforcer (le chaînage).", "metier": "maçon", "img": "img/e090.jpg"}, {"id": "e091", "cat": "Matériaux", "nom": "La fonte", "usage": "Métal très dur mais cassant. Sert à fabriquer des tuyaux, des regards et des pièces de voirie.", "metier": "VRD", "img": "img/e091.jpg"}, {"id": "e092", "cat": "Techniques", "nom": "Gâcher le mortier / le béton", "usage": "Mélanger les matériaux avec de l'eau.", "metier": "", "img": "img/e092.jpg"}, {"id": "e093", "cat": "Techniques", "nom": "Couler le béton", "usage": "Verser le béton dans un coffrage ou une fouille.", "metier": "", "img": "img/e093.jpg"}, {"id": "e094", "cat": "Techniques", "nom": "Tracer / implanter", "usage": "Marquer au sol l'emplacement de l'ouvrage.", "metier": "", "img": "img/e094.jpg"}, {"id": "e095", "cat": "Techniques", "nom": "Terrasser", "usage": "Creuser et préparer le terrain.", "metier": "", "img": "img/e095.jpg"}, {"id": "e096", "cat": "Techniques", "nom": "Niveler", "usage": "Rendre une surface plane et à la bonne hauteur.", "metier": "", "img": "img/e096.jpg"}, {"id": "e097", "cat": "Techniques", "nom": "Compacter (tasser)", "usage": "Tasser le sol pour qu'il soit bien dur.", "metier": "", "img": "img/e097.jpg"}, {"id": "e098", "cat": "Techniques", "nom": "Ferrailler", "usage": "Mettre en place les fers à béton (les armatures).", "metier": "", "img": "img/e098.jpg"}, {"id": "e099", "cat": "Techniques", "nom": "Monter un mur", "usage": "Poser les parpaings ou les briques rang par rang.", "metier": "maçon", "img": "img/e099.jpg"}, {"id": "e100", "cat": "Techniques", "nom": "Faire les joints (jointoyer)", "usage": "Remplir et finir les espaces entre les blocs.", "metier": "maçon", "img": "img/e100.jpg"}, {"id": "e101", "cat": "Techniques", "nom": "Couler une dalle", "usage": "Verser et étaler le béton pour faire un sol.", "metier": "maçon", "img": "img/e101.jpg"}, {"id": "e102", "cat": "Techniques", "nom": "Enduire", "usage": "Recouvrir un mur avec de l'enduit.", "metier": "maçon", "img": "img/e102.jpg"}, {"id": "e103", "cat": "Techniques", "nom": "Talocher / lisser", "usage": "Étaler et lisser l'enduit ou le béton.", "metier": "maçon", "img": "img/e103.jpg"}, {"id": "e104", "cat": "Techniques", "nom": "Couler une chape", "usage": "Couler une fine couche de mortier sur la dalle.", "metier": "maçon", "img": "img/e104.jpg"}, {"id": "e105", "cat": "Techniques", "nom": "Coffrer", "usage": "Construire un moule en bois ou en métal pour le béton.", "metier": "maçon", "img": "img/e105.jpg"}, {"id": "e106", "cat": "Techniques", "nom": "Sceller", "usage": "Fixer un élément avec du mortier ou du ciment.", "metier": "maçon", "img": "img/e106.jpg"}, {"id": "e107", "cat": "Techniques", "nom": "Bancher", "usage": "Couler un mur de béton entre deux panneaux (les banches).", "metier": "maçon", "img": "img/e107.jpg"}, {"id": "e108", "cat": "Techniques", "nom": "Chaîner (faire un chaînage)", "usage": "Couler une ceinture de béton armé pour renforcer.", "metier": "maçon", "img": "img/e108.jpg"}, {"id": "e109", "cat": "Techniques", "nom": "Ragréer", "usage": "Reboucher et lisser une surface avant la finition.", "metier": "maçon", "img": "img/e109.jpg"}, {"id": "e110", "cat": "Techniques", "nom": "Ouvrir une tranchée", "usage": "Creuser un trou long et étroit pour les réseaux.", "metier": "VRD", "img": "img/e110.jpg"}, {"id": "e111", "cat": "Techniques", "nom": "Poser un réseau (une canalisation)", "usage": "Installer les tuyaux dans la tranchée.", "metier": "VRD", "img": "img/e111.jpg"}, {"id": "e112", "cat": "Techniques", "nom": "Poser des bordures", "usage": "Installer les bordures le long de la route.", "metier": "VRD", "img": "img/e112.jpg"}, {"id": "e113", "cat": "Techniques", "nom": "Faire un lit de pose", "usage": "Mettre une couche de sable sous les tuyaux.", "metier": "VRD", "img": "img/e113.jpg"}, {"id": "e114", "cat": "Techniques", "nom": "Compacter (cylindrer)", "usage": "Tasser l'enrobé ou le sol avec le rouleau.", "metier": "VRD", "img": "img/e114.jpg"}, {"id": "e115", "cat": "Techniques", "nom": "Répandre l'enrobé", "usage": "Étaler le goudron sur la route.", "metier": "VRD", "img": "img/e115.jpg"}, {"id": "e116", "cat": "Ouvrages finaux", "nom": "Le mur de clôture", "usage": "Mur qui ferme un terrain.", "metier": "", "img": "img/e116.jpg"}, {"id": "e117", "cat": "Ouvrages finaux", "nom": "La terrasse", "usage": "Surface plane à l'extérieur d'une maison.", "metier": "", "img": "img/e117.jpg"}, {"id": "e118", "cat": "Ouvrages finaux", "nom": "Le muret", "usage": "Petit mur bas.", "metier": "", "img": "img/e118.jpg"}, {"id": "e119", "cat": "Ouvrages finaux", "nom": "La maison individuelle, le pavillon", "usage": "Logement pour une famille.", "metier": "maçon", "img": "img/e119.jpg"}, {"id": "e120", "cat": "Ouvrages finaux", "nom": "L'immeuble (la résidence)", "usage": "Grand bâtiment à plusieurs logements.", "metier": "maçon", "img": "img/e120.jpg"}, {"id": "e121", "cat": "Ouvrages finaux", "nom": "Le garage", "usage": "Local pour la voiture.", "metier": "maçon", "img": "img/e121.jpg"}, {"id": "e122", "cat": "Ouvrages finaux", "nom": "Le bâtiment public", "usage": "École, mairie, gymnase, hôpital…", "metier": "maçon", "img": "img/e122.jpg"}, {"id": "e123", "cat": "Ouvrages finaux", "nom": "Le bâtiment industriel", "usage": "Usine, entrepôt, hangar.", "metier": "maçon", "img": "img/e123.jpg"}, {"id": "e124", "cat": "Ouvrages finaux", "nom": "La piscine en béton", "usage": "Bassin construit en béton.", "metier": "maçon", "img": "img/e124.jpg"}, {"id": "e125", "cat": "Ouvrages finaux", "nom": "La route (la chaussée)", "usage": "Voie pour les véhicules.", "metier": "VRD", "img": "img/e125.jpg"}, {"id": "e126", "cat": "Ouvrages finaux", "nom": "Le trottoir", "usage": "Voie pour les piétons, le long de la route.", "metier": "VRD", "img": "img/e126.jpg"}, {"id": "e127", "cat": "Ouvrages finaux", "nom": "Le parking", "usage": "Zone de stationnement.", "metier": "VRD", "img": "img/e127.jpg"}, {"id": "e128", "cat": "Ouvrages finaux", "nom": "Le réseau d'assainissement", "usage": "Ensemble de tuyaux pour les eaux usées.", "metier": "VRD", "img": "img/e128.jpg"}, {"id": "e129", "cat": "Ouvrages finaux", "nom": "Le réseau d'eau potable", "usage": "Tuyaux qui amènent l'eau propre.", "metier": "VRD", "img": "img/e129.jpg"}, {"id": "e130", "cat": "Ouvrages finaux", "nom": "La piste cyclable", "usage": "Voie pour les vélos.", "metier": "VRD", "img": "img/e130.jpg"}, {"id": "e131", "cat": "Ouvrages finaux", "nom": "Le rond-point (le giratoire)", "usage": "Carrefour en forme de cercle.", "metier": "VRD", "img": "img/e131.jpg"}, {"id": "e132", "cat": "Ouvrages finaux", "nom": "La place / l'esplanade pavée", "usage": "Surface piétonne aménagée.", "metier": "VRD", "img": "img/e132.jpg"}, {"id": "e133", "cat": "Éléments d'ouvrage", "nom": "La fondation", "usage": "Base solide en béton, sous la construction, qui porte tout le poids.", "metier": "", "img": "img/e133.jpg"}, {"id": "e134", "cat": "Éléments d'ouvrage", "nom": "Le remblai", "usage": "Terre ou matériau remis dans un trou pour le combler.", "metier": "", "img": "img/e134.jpg"}, {"id": "e135", "cat": "Éléments d'ouvrage", "nom": "Le mur", "usage": "Paroi verticale qui porte ou qui sépare.", "metier": "maçon", "img": "img/e135.jpg"}, {"id": "e136", "cat": "Éléments d'ouvrage", "nom": "La cloison", "usage": "Mur fin qui sépare deux pièces à l'intérieur.", "metier": "maçon", "img": "img/e136.jpg"}, {"id": "e137", "cat": "Éléments d'ouvrage", "nom": "La dalle", "usage": "Grande surface plate en béton (sol ou plafond).", "metier": "maçon", "img": "img/e137.jpg"}, {"id": "e138", "cat": "Éléments d'ouvrage", "nom": "La chape", "usage": "Fine couche de mortier lisse, posée sur la dalle, avant le carrelage.", "metier": "maçon", "img": "img/e138.jpg"}, {"id": "e139", "cat": "Éléments d'ouvrage", "nom": "Le poteau", "usage": "Pilier vertical qui porte la charge.", "metier": "maçon", "img": "img/e139.jpg"}, {"id": "e140", "cat": "Éléments d'ouvrage", "nom": "La poutre", "usage": "Élément horizontal qui porte la charge.", "metier": "maçon", "img": "img/e140.jpg"}, {"id": "e141", "cat": "Éléments d'ouvrage", "nom": "Le linteau", "usage": "Élément posé au-dessus d'une porte ou d'une fenêtre.", "metier": "maçon", "img": "img/e141.jpg"}, {"id": "e142", "cat": "Éléments d'ouvrage", "nom": "L'escalier en béton", "usage": "Marches pour monter d'un étage à l'autre.", "metier": "maçon", "img": "img/e142.jpg"}, {"id": "e143", "cat": "Éléments d'ouvrage", "nom": "Le plancher", "usage": "Le sol qui sépare deux étages.", "metier": "maçon", "img": "img/e143.jpg"}];
+const TRAD = {
+ "Le casque de chantier": {
+  "en": "safety helmet / hard hat",
+  "ar": "خوذة السلامة",
+  "fa": "کلاه ایمنی",
+  "ps": "د خوندیتوب خولۍ",
+  "ru": "строительная каска"
+ },
+ "Les lunettes de sécurité": {
+  "en": "safety glasses",
+  "ar": "نظارات السلامة",
+  "fa": "عینک ایمنی",
+  "ps": "د خوندیتوب عینکې",
+  "ru": "защитные очки"
+ },
+ "Les gants": {
+  "en": "gloves",
+  "ar": "قفازات",
+  "fa": "دستکش",
+  "ps": "لاسپوښونه",
+  "ru": "перчатки"
+ },
+ "Le casque anti-bruit": {
+  "en": "ear defenders",
+  "ar": "واقي السمع",
+  "fa": "محافظ گوش",
+  "ps": "د غوږ ساتونکی",
+  "ru": "защитные наушники"
+ },
+ "Les chaussures de sécurité": {
+  "en": "safety shoes",
+  "ar": "حذاء السلامة",
+  "fa": "کفش ایمنی",
+  "ps": "د خوندیتوب بوټان",
+  "ru": "защитная обувь"
+ },
+ "Le gilet haute visibilité": {
+  "en": "hi-vis vest",
+  "ar": "سترة عاكسة",
+  "fa": "جلیقه شبرنگ",
+  "ps": "ځلیدونکې جلیقه",
+  "ru": "светоотражающий жилет"
+ },
+ "Le mètre (ruban)": {
+  "en": "tape measure",
+  "ar": "متر شريطي",
+  "fa": "متر نواری",
+  "ps": "د اندازې فیته",
+  "ru": "рулетка"
+ },
+ "Le niveau à bulle": {
+  "en": "spirit level",
+  "ar": "ميزان الماء (فقاعي)",
+  "fa": "تراز حبابی",
+  "ps": "د اوبو تراز",
+  "ru": "строительный уровень"
+ },
+ "La pelle": {
+  "en": "shovel",
+  "ar": "مجرفة",
+  "fa": "بیل",
+  "ps": "بیلچه",
+  "ru": "лопата"
+ },
+ "La pioche": {
+  "en": "pickaxe",
+  "ar": "معول",
+  "fa": "کلنگ",
+  "ps": "کلنگ",
+  "ru": "кирка"
+ },
+ "La brouette": {
+  "en": "wheelbarrow",
+  "ar": "عربة يد",
+  "fa": "فرغون",
+  "ps": "لاسي ګاډۍ",
+  "ru": "тачка"
+ },
+ "La truelle": {
+  "en": "trowel",
+  "ar": "مسطرين",
+  "fa": "ماله",
+  "ps": "ماله",
+  "ru": "мастерок"
+ },
+ "Le cordeau": {
+  "en": "chalk/mason's line",
+  "ar": "خيط البناء",
+  "fa": "ریسمان بنایی",
+  "ps": "د بنا رسۍ",
+  "ru": "шнур-отбивка"
+ },
+ "Le seau / l'auge": {
+  "en": "bucket / mortar tub",
+  "ar": "دلو / وعاء الملاط",
+  "fa": "سطل / تغار",
+  "ps": "بوکه / د ملاط ټب",
+  "ru": "ведро / ёмкость для раствора"
+ },
+ "La massette": {
+  "en": "club hammer",
+  "ar": "مطرقة صغيرة ثقيلة",
+  "fa": "چکش دستی سنگین",
+  "ps": "کوچنی درانه څټک",
+  "ru": "кувалда малая"
+ },
+ "Le burin": {
+  "en": "cold chisel",
+  "ar": "إزميل",
+  "fa": "قلم فولادی",
+  "ps": "قلم",
+  "ru": "зубило"
+ },
+ "Le marteau": {
+  "en": "hammer",
+  "ar": "مطرقة",
+  "fa": "چکش",
+  "ps": "څټک",
+  "ru": "молоток"
+ },
+ "L'équerre": {
+  "en": "try square",
+  "ar": "زاوية قائمة",
+  "fa": "گونیا",
+  "ps": "کونج پیما",
+  "ru": "угольник"
+ },
+ "Le fil à plomb": {
+  "en": "plumb line",
+  "ar": "شاقول",
+  "fa": "شاقول",
+  "ps": "تلوزن",
+  "ru": "отвес"
+ },
+ "Le décamètre": {
+  "en": "long tape (10 m)",
+  "ar": "متر عشاري",
+  "fa": "متر ده‌متری",
+  "ps": "لس متره فیته",
+  "ru": "рулетка 10 м"
+ },
+ "Le niveau laser": {
+  "en": "laser level",
+  "ar": "ميزان ليزر",
+  "fa": "تراز لیزری",
+  "ps": "لیزري تراز",
+  "ru": "лазерный уровень"
+ },
+ "La truelle langue de chat": {
+  "en": "pointing/margin trowel",
+  "ar": "مسطرين مدبب",
+  "fa": "ماله نوک‌تیز",
+  "ps": "نوکه ماله",
+  "ru": "мастерок узкий"
+ },
+ "La taloche": {
+  "en": "float",
+  "ar": "لوح التسوية",
+  "fa": "ماله چوبی/تخته",
+  "ps": "د پلستر تخته",
+  "ru": "тёрка (полутёрок)"
+ },
+ "Le platoir (la lisseuse)": {
+  "en": "finishing trowel",
+  "ar": "مسطرين التنعيم",
+  "fa": "ماله پرداخت",
+  "ps": "د پرداخت ماله",
+  "ru": "гладилка"
+ },
+ "Le fer à joint": {
+  "en": "jointing tool",
+  "ar": "أداة تشكيل الفواصل",
+  "fa": "ابزار بندکشی",
+  "ps": "د درزونو اوسپنه",
+  "ru": "расшивка швов"
+ },
+ "Le marteau de maçon": {
+  "en": "brick hammer",
+  "ar": "مطرقة البناء",
+  "fa": "چکش بنایی",
+  "ps": "د بنا څټک",
+  "ru": "молоток каменщика"
+ },
+ "La taloche éponge": {
+  "en": "sponge float",
+  "ar": "لوح إسفنجي",
+  "fa": "ماله اسفنجی",
+  "ps": "سپنجي تخته",
+  "ru": "тёрка губчатая"
+ },
+ "Le couteau à enduire (la spatule)": {
+  "en": "filling knife",
+  "ar": "سكين المعجون",
+  "fa": "کاردک",
+  "ps": "د پلستر چاړه",
+  "ru": "шпатель"
+ },
+ "Le niveau à eau": {
+  "en": "water level (hose)",
+  "ar": "ميزان مائي (خرطوم)",
+  "fa": "تراز آبی (شلنگ)",
+  "ps": "د اوبو تراز (نل)",
+  "ru": "водяной уровень"
+ },
+ "Le grattoir (la griffe)": {
+  "en": "scraper",
+  "ar": "مكشطة",
+  "fa": "کفچه/خراش",
+  "ps": "خراشوونکی",
+  "ru": "скребок"
+ },
+ "Le râteau à enrobé": {
+  "en": "asphalt rake",
+  "ar": "مِمشط الأسفلت",
+  "fa": "شن‌کش آسفالت",
+  "ps": "د اسفالټ رنده",
+  "ru": "гребок для асфальта"
+ },
+ "La dame (le pilon)": {
+  "en": "hand tamper",
+  "ar": "مدك يدوي",
+  "fa": "کوبه دستی",
+  "ps": "لاسي کوب",
+  "ru": "ручная трамбовка"
+ },
+ "La pince à bordures": {
+  "en": "kerb lifter",
+  "ar": "ملقط الحواف",
+  "fa": "انبر جدول",
+  "ps": "د بورډ ملgriب",
+  "ru": "захват для бордюра"
+ },
+ "La mire de nivellement": {
+  "en": "levelling staff",
+  "ar": "قامة المساحة",
+  "fa": "شاخص ترازیابی",
+  "ps": "د تراز میله",
+  "ru": "нивелирная рейка"
+ },
+ "Le détecteur de réseaux": {
+  "en": "cable/pipe detector",
+  "ar": "كاشف الشبكات",
+  "fa": "ردیاب خطوط زیرزمینی",
+  "ps": "د کیبلونو کشفوونکی",
+  "ru": "детектор коммуникаций"
+ },
+ "Le pied-de-biche": {
+  "en": "crowbar / pry bar",
+  "ar": "عتلة",
+  "fa": "دیلم",
+  "ps": "اهرم",
+  "ru": "монтировка (гвоздодёр)"
+ },
+ "Le serre-joint": {
+  "en": "clamp",
+  "ar": "مِلزمة تثبيت",
+  "fa": "گیره",
+  "ps": "نښلوونکی ملgriب",
+  "ru": "струбцина"
+ },
+ "La scie égoïne": {
+  "en": "hand saw",
+  "ar": "منشار يدوي",
+  "fa": "اره دستی",
+  "ps": "لاسي ارې",
+  "ru": "ножовка"
+ },
+ "La masse": {
+  "en": "sledgehammer",
+  "ar": "مطرقة كبيرة",
+  "fa": "پتک",
+  "ps": "لویه څټک",
+  "ru": "кувалда"
+ },
+ "La brosse métallique": {
+  "en": "wire brush",
+  "ar": "فرشاة سلكية",
+  "fa": "برس سیمی",
+  "ps": "سیمي برس",
+  "ru": "металлическая щётка"
+ },
+ "L'étai": {
+  "en": "adjustable prop",
+  "ar": "دعامة قابلة للضبط",
+  "fa": "شمع قابل تنظیم",
+  "ps": "د تنظیم وړ ستن",
+  "ru": "телескопическая стойка"
+ },
+ "Le plan": {
+  "en": "drawing / blueprint",
+  "ar": "المخطط",
+  "fa": "نقشه",
+  "ps": "نقشه",
+  "ru": "чертёж (план)"
+ },
+ "La bétonnière": {
+  "en": "cement mixer",
+  "ar": "خلاطة الإسمنت",
+  "fa": "دستگاه مخلوط‌کن بتن",
+  "ps": "د بتنو ماشین",
+  "ru": "бетономешалка"
+ },
+ "La meuleuse (la disqueuse)": {
+  "en": "angle grinder",
+  "ar": "جلاخة",
+  "fa": "فرز/سنگ‌فرز",
+  "ps": "برېښنايي رنده",
+  "ru": "болгарка (УШМ)"
+ },
+ "Le marteau-piqueur": {
+  "en": "jackhammer",
+  "ar": "مطرقة هدم",
+  "fa": "چکش برقی",
+  "ps": "برېښنايي څټک",
+  "ru": "отбойный молоток"
+ },
+ "La mini-pelle": {
+  "en": "mini excavator",
+  "ar": "حفارة صغيرة",
+  "fa": "بیل مکانیکی کوچک",
+  "ps": "کوچنی کیندونکی",
+  "ru": "мини-экскаватор"
+ },
+ "La plaque vibrante": {
+  "en": "plate compactor",
+  "ar": "صفيحة هزازة",
+  "fa": "صفحه ویبره",
+  "ps": "ویبره صفحه",
+  "ru": "виброплита"
+ },
+ "Le groupe électrogène": {
+  "en": "generator",
+  "ar": "مولد كهرباء",
+  "fa": "جنراتور برق",
+  "ps": "برېښنا جنراتور",
+  "ru": "генератор"
+ },
+ "Le compresseur": {
+  "en": "air compressor",
+  "ar": "ضاغط هواء",
+  "fa": "کمپرسور هوا",
+  "ps": "د هوا کمپرسور",
+  "ru": "компрессор"
+ },
+ "Le malaxeur électrique": {
+  "en": "electric mixer (paddle)",
+  "ar": "خلاط كهربائي",
+  "fa": "مخلوط‌کن برقی",
+  "ps": "برېښنايي مکسر",
+  "ru": "строительный миксер"
+ },
+ "Le monte-matériaux (monte-charge)": {
+  "en": "material hoist",
+  "ar": "رافعة المواد",
+  "fa": "بالابر مصالح",
+  "ps": "د موادو پورته کوونکی",
+  "ru": "подъёмник грузовой"
+ },
+ "La règle vibrante": {
+  "en": "vibrating screed",
+  "ar": "قاعدة هزازة",
+  "fa": "شمشه ویبره",
+  "ps": "ویبره شمشه",
+  "ru": "виброрейка"
+ },
+ "La pompe à béton": {
+  "en": "concrete pump",
+  "ar": "مضخة الخرسانة",
+  "fa": "پمپ بتن",
+  "ps": "د بتنو پمپ",
+  "ru": "бетононасос"
+ },
+ "L'hélicoptère (la talocheuse mécanique)": {
+  "en": "power trowel",
+  "ar": "مملسة آلية",
+  "fa": "ماله مکانیکی (هلیکوپتر)",
+  "ps": "ماشيني ماله",
+  "ru": "затирочная машина"
+ },
+ "La pelle mécanique (la pelleteuse)": {
+  "en": "excavator",
+  "ar": "حفارة",
+  "fa": "بیل مکانیکی",
+  "ps": "کیندونکی ماشین",
+  "ru": "экскаватор"
+ },
+ "Le tractopelle": {
+  "en": "backhoe loader",
+  "ar": "حفارة لودر",
+  "fa": "تراکتور بیل‌دار",
+  "ps": "د لوډر تراکتور",
+  "ru": "экскаватор-погрузчик"
+ },
+ "Le compacteur (le rouleau, le cylindre)": {
+  "en": "roller compactor",
+  "ar": "مدحلة",
+  "fa": "غلتک",
+  "ps": "ګرځنده بیړۍ (رول)",
+  "ru": "каток"
+ },
+ "Le camion-benne": {
+  "en": "dump truck",
+  "ar": "شاحنة قلابة",
+  "fa": "کامیون کمپرسی",
+  "ps": "د بار موټر",
+  "ru": "самосвал"
+ },
+ "Le finisseur (la finisseuse)": {
+  "en": "asphalt paver",
+  "ar": "فرادة الأسفلت",
+  "fa": "دستگاه آسفالت‌پخش",
+  "ps": "د اسفالټ اچوونکی",
+  "ru": "асфальтоукладчик"
+ },
+ "La niveleuse": {
+  "en": "grader",
+  "ar": "ممهدة",
+  "fa": "گریدر",
+  "ps": "همواروونکی",
+  "ru": "грейдер"
+ },
+ "La chargeuse (le chargeur)": {
+  "en": "loader",
+  "ar": "لودر",
+  "fa": "لودر",
+  "ps": "لوډر",
+  "ru": "погрузчик"
+ },
+ "Le dumper (le tombereau)": {
+  "en": "site dumper",
+  "ar": "قلاب موقع",
+  "fa": "دمپر کارگاهی",
+  "ps": "د کار ځای دمپر",
+  "ru": "думпер"
+ },
+ "La trancheuse": {
+  "en": "trencher",
+  "ar": "حفارة خنادق",
+  "fa": "کانال‌کن",
+  "ps": "د کندې کیندونکی",
+  "ru": "траншеекопатель"
+ },
+ "La toupie": {
+  "en": "concrete mixer truck",
+  "ar": "شاحنة خلط الخرسانة",
+  "fa": "میکسر بتن (تراک)",
+  "ps": "د بتنو موټر",
+  "ru": "автобетоносмеситель"
+ },
+ "Le ciment": {
+  "en": "cement",
+  "ar": "إسمنت",
+  "fa": "سیمان",
+  "ps": "سمنټ",
+  "ru": "цемент"
+ },
+ "Le sable": {
+  "en": "sand",
+  "ar": "رمل",
+  "fa": "ماسه/ریگ",
+  "ps": "شګه",
+  "ru": "песок"
+ },
+ "Le gravier (les gravillons)": {
+  "en": "gravel",
+  "ar": "حصى",
+  "fa": "جغل/سنگریزه",
+  "ps": "جغل",
+  "ru": "гравий"
+ },
+ "Le mortier": {
+  "en": "mortar",
+  "ar": "ملاط",
+  "fa": "ملات",
+  "ps": "ملاط",
+  "ru": "раствор"
+ },
+ "Le béton": {
+  "en": "concrete",
+  "ar": "خرسانة",
+  "fa": "بتن",
+  "ps": "بتن",
+  "ru": "бетон"
+ },
+ "Le fer à béton (les armatures)": {
+  "en": "rebar",
+  "ar": "حديد التسليح",
+  "fa": "میلگرد",
+  "ps": "د بتنو اوسپنه",
+  "ru": "арматура"
+ },
+ "Le treillis soudé": {
+  "en": "welded mesh",
+  "ar": "شبك ملحوم",
+  "fa": "توری جوش‌شده",
+  "ps": "نښتې ځال",
+  "ru": "сварная сетка"
+ },
+ "La chaux": {
+  "en": "lime",
+  "ar": "جير",
+  "fa": "آهک",
+  "ps": "چونه",
+  "ru": "известь"
+ },
+ "Le tout-venant (la grave)": {
+  "en": "crushed aggregate",
+  "ar": "حصى مدرج",
+  "fa": "مصالح مخلوط",
+  "ps": "ګډ جغل",
+  "ru": "щебёночная смесь (ГПС)"
+ },
+ "Le parpaing (bloc béton, agglo)": {
+  "en": "concrete block",
+  "ar": "بلوك إسمنتي",
+  "fa": "بلوک سیمانی",
+  "ps": "سمنټي بلاک",
+  "ru": "бетонный блок"
+ },
+ "La brique": {
+  "en": "brick",
+  "ar": "طوب/آجر",
+  "fa": "خشت",
+  "ps": "خښته",
+  "ru": "кирпич"
+ },
+ "L'enduit": {
+  "en": "render / plaster coat",
+  "ar": "طبقة اللياسة",
+  "fa": "اندود/پلستر",
+  "ps": "پلستر",
+  "ru": "штукатурка"
+ },
+ "Le plâtre": {
+  "en": "plaster",
+  "ar": "جبس",
+  "fa": "گچ",
+  "ps": "گچ",
+  "ru": "гипс"
+ },
+ "La pierre": {
+  "en": "stone",
+  "ar": "حجر",
+  "fa": "سنگ",
+  "ps": "تیږه",
+  "ru": "камень"
+ },
+ "La poutrelle et les hourdis (entrevous)": {
+  "en": "beam & infill blocks",
+  "ar": "عوارض وبلوكات السقف",
+  "fa": "تیرچه و بلوک",
+  "ps": "تیر او بلاک",
+  "ru": "балки и вкладыши перекрытия"
+ },
+ "Le bloc à bancher": {
+  "en": "permanent formwork block",
+  "ar": "بلوك صب",
+  "fa": "بلوک قالب‌بندی",
+  "ps": "د قالب بلاک",
+  "ru": "несъёмный блок опалубки"
+ },
+ "L'enrobé (le bitume, le goudron)": {
+  "en": "asphalt",
+  "ar": "الأسفلت",
+  "fa": "آسفالت/قیر",
+  "ps": "اسفالټ (قیر)",
+  "ru": "асфальт (битум)"
+ },
+ "La grave (le tout-venant, GNT)": {
+  "en": "unbound aggregate (base)",
+  "ar": "طبقة الأساس الحصوية",
+  "fa": "مصالح زیراساس",
+  "ps": "د بنسټ جغل",
+  "ru": "несвязанный щебень (основание)"
+ },
+ "Les bordures en béton": {
+  "en": "concrete kerbs",
+  "ar": "حواف خرسانية",
+  "fa": "جدول بتنی",
+  "ps": "بتني بورډونه",
+  "ru": "бордюрный камень"
+ },
+ "Les tuyaux / canalisations (PVC, fonte, béton, PEHD)": {
+  "en": "pipes (PVC, cast iron, concrete, HDPE)",
+  "ar": "أنابيب",
+  "fa": "لوله‌ها",
+  "ps": "نلونه",
+  "ru": "трубы"
+ },
+ "Les caniveaux": {
+  "en": "gutters / channels",
+  "ar": "مجاري تصريف",
+  "fa": "جوی/کانال آب",
+  "ps": "د اوبو ناوه",
+  "ru": "водоотводные лотки"
+ },
+ "Le regard en fonte": {
+  "en": "cast iron manhole",
+  "ar": "غرفة تفتيش من الحديد الزهر",
+  "fa": "دریچه چدنی",
+  "ps": "د اوسپنې دریڅه",
+  "ru": "чугунный смотровой люк"
+ },
+ "Les pavés et les dalles": {
+  "en": "pavers & slabs",
+  "ar": "بلاط ومربعات الرصف",
+  "fa": "سنگفرش و دال",
+  "ps": "فرشونه او دالۍ",
+  "ru": "брусчатка и плиты"
+ },
+ "Le grillage avertisseur": {
+  "en": "warning mesh (buried)",
+  "ar": "شبكة تحذيرية",
+  "fa": "توری هشدار زیرزمینی",
+  "ps": "خبرداری ځال",
+  "ru": "сигнальная лента/сетка"
+ },
+ "Le géotextile": {
+  "en": "geotextile",
+  "ar": "نسيج جيوتكستايل",
+  "fa": "ژئوتکستایل",
+  "ps": "جیوټیکسټایل",
+  "ru": "геотекстиль"
+ },
+ "Le bloc de chaînage (agglo en U)": {
+  "en": "U-shaped bond-beam block",
+  "ar": "بلوك تربيط على شكل U",
+  "fa": "بلوک کلاف U شکل",
+  "ps": "د U بڼې بلاک",
+  "ru": "U-блок для пояса"
+ },
+ "La fonte": {
+  "en": "cast iron",
+  "ar": "حديد الزهر",
+  "fa": "چدن",
+  "ps": "اوسپنه (چدن)",
+  "ru": "чугун"
+ },
+ "Gâcher le mortier / le béton": {
+  "en": "to mix mortar/concrete",
+  "ar": "خلط الملاط/الخرسانة",
+  "fa": "مخلوط کردن ملات/بتن",
+  "ps": "ملاط/بتن ګډول",
+  "ru": "замешивать раствор/бетон"
+ },
+ "Couler le béton": {
+  "en": "to pour concrete",
+  "ar": "صب الخرسانة",
+  "fa": "ریختن بتن",
+  "ps": "بتن اچول",
+  "ru": "заливать бетон"
+ },
+ "Tracer / implanter": {
+  "en": "to set out / mark",
+  "ar": "التخطيط والتوطين",
+  "fa": "خط‌کشی/پیاده کردن",
+  "ps": "کرښه کول/نښه کول",
+  "ru": "разметка (вынос осей)"
+ },
+ "Terrasser": {
+  "en": "to do earthworks",
+  "ar": "أعمال الحفر والردم",
+  "fa": "خاک‌برداری",
+  "ps": "خاوره کیندل",
+  "ru": "земляные работы"
+ },
+ "Niveler": {
+  "en": "to level",
+  "ar": "تسوية",
+  "fa": "تراز کردن",
+  "ps": "برابرول",
+  "ru": "выравнивать"
+ },
+ "Compacter (tasser)": {
+  "en": "to compact",
+  "ar": "دك/رص",
+  "fa": "متراکم کردن",
+  "ps": "کلکول",
+  "ru": "уплотнять"
+ },
+ "Ferrailler": {
+  "en": "to place rebar",
+  "ar": "تركيب حديد التسليح",
+  "fa": "میلگردگذاری",
+  "ps": "اوسپنه ایښودل",
+  "ru": "армировать"
+ },
+ "Monter un mur": {
+  "en": "to build a wall",
+  "ar": "بناء جدار",
+  "fa": "دیوار چیدن",
+  "ps": "دیوال جوړول",
+  "ru": "класть стену"
+ },
+ "Faire les joints (jointoyer)": {
+  "en": "to point / joint",
+  "ar": "تشكيل الفواصل",
+  "fa": "بندکشی کردن",
+  "ps": "درزونه ډکول",
+  "ru": "расшивать швы"
+ },
+ "Couler une dalle": {
+  "en": "to pour a slab",
+  "ar": "صب بلاطة",
+  "fa": "ریختن دال",
+  "ps": "دال اچول",
+  "ru": "заливать плиту"
+ },
+ "Enduire": {
+  "en": "to render / plaster",
+  "ar": "لياسة/تلبيس",
+  "fa": "اندود کردن",
+  "ps": "پلستر کول",
+  "ru": "штукатурить"
+ },
+ "Talocher / lisser": {
+  "en": "to float / smooth",
+  "ar": "تمليس",
+  "fa": "ماله‌کشی/صاف کردن",
+  "ps": "ماله وهل/همدارول",
+  "ru": "затирать/заглаживать"
+ },
+ "Couler une chape": {
+  "en": "to pour a screed",
+  "ar": "صب طبقة تسوية",
+  "fa": "ریختن شمشه/کفسازی",
+  "ps": "شمشه اچول",
+  "ru": "заливать стяжку"
+ },
+ "Coffrer": {
+  "en": "to form / shutter",
+  "ar": "تركيب القوالب",
+  "fa": "قالب‌بندی کردن",
+  "ps": "قالب جوړول",
+  "ru": "опалубливать"
+ },
+ "Sceller": {
+  "en": "to fix / anchor",
+  "ar": "تثبيت بالإسمنت",
+  "fa": "محکم/جاسازی کردن",
+  "ps": "کلک ایښودل",
+  "ru": "заделывать/крепить"
+ },
+ "Bancher": {
+  "en": "to cast walls in formwork",
+  "ar": "صب الجدران بالقوالب",
+  "fa": "بتن‌ریزی دیوار در قالب",
+  "ps": "په قالب کې دیوال اچول",
+  "ru": "бетонировать стены в опалубке"
+ },
+ "Chaîner (faire un chaînage)": {
+  "en": "to make a bond beam",
+  "ar": "عمل تربيط",
+  "fa": "کلاف‌بندی کردن",
+  "ps": "کلاف جوړول",
+  "ru": "делать пояс жёсткости"
+ },
+ "Ragréer": {
+  "en": "to skim / patch",
+  "ar": "تسوية دقيقة للسطح",
+  "fa": "رگه‌گیری/صاف‌کاری",
+  "ps": "مخ برابرول",
+  "ru": "шпаклевать/выравнивать"
+ },
+ "Ouvrir une tranchée": {
+  "en": "to dig a trench",
+  "ar": "حفر خندق",
+  "fa": "کندن کانال",
+  "ps": "کنده کیندل",
+  "ru": "копать траншею"
+ },
+ "Poser un réseau (une canalisation)": {
+  "en": "to lay a pipe",
+  "ar": "مد أنبوب/شبكة",
+  "fa": "لوله‌گذاری",
+  "ps": "نل ایښودل",
+  "ru": "прокладывать трубу"
+ },
+ "Poser des bordures": {
+  "en": "to lay kerbs",
+  "ar": "تركيب الحواف",
+  "fa": "جدول‌گذاری",
+  "ps": "بورډونه ایښودل",
+  "ru": "укладывать бордюр"
+ },
+ "Faire un lit de pose": {
+  "en": "to make a bedding layer",
+  "ar": "عمل طبقة فرش",
+  "fa": "بستر ماسه ساختن",
+  "ps": "د شګې بستر جوړول",
+  "ru": "делать подстилающий слой"
+ },
+ "Compacter (cylindrer)": {
+  "en": "to roll (compact)",
+  "ar": "دك بالمدحلة",
+  "fa": "غلتک زدن",
+  "ps": "رول کول",
+  "ru": "укатывать"
+ },
+ "Répandre l'enrobé": {
+  "en": "to spread asphalt",
+  "ar": "فرد الأسفلت",
+  "fa": "پخش آسفالت",
+  "ps": "اسفالټ خپرول",
+  "ru": "укладывать асфальт"
+ },
+ "Le mur de clôture": {
+  "en": "boundary wall",
+  "ar": "سور",
+  "fa": "دیوار محوطه",
+  "ps": "د احاطې دیوال",
+  "ru": "ограждающая стена"
+ },
+ "La terrasse": {
+  "en": "terrace",
+  "ar": "تراس/شرفة",
+  "fa": "تراس",
+  "ps": "برنډه",
+  "ru": "терраса"
+ },
+ "Le muret": {
+  "en": "low wall",
+  "ar": "جدار منخفض",
+  "fa": "دیوار کوتاه",
+  "ps": "ټیټ دیوال",
+  "ru": "низкая стенка"
+ },
+ "La maison individuelle, le pavillon": {
+  "en": "detached house",
+  "ar": "منزل مستقل",
+  "fa": "خانه ویلایی",
+  "ps": "یو کورنی کور",
+  "ru": "частный дом"
+ },
+ "L'immeuble (la résidence)": {
+  "en": "apartment building",
+  "ar": "عمارة سكنية",
+  "fa": "آپارتمان/مجتمع",
+  "ps": "اپارتمان",
+  "ru": "многоквартирный дом"
+ },
+ "Le garage": {
+  "en": "garage",
+  "ar": "كراج",
+  "fa": "گاراژ",
+  "ps": "ګراج",
+  "ru": "гараж"
+ },
+ "Le bâtiment public": {
+  "en": "public building",
+  "ar": "مبنى عام",
+  "fa": "ساختمان عمومی",
+  "ps": "عامه ودانۍ",
+  "ru": "общественное здание"
+ },
+ "Le bâtiment industriel": {
+  "en": "industrial building",
+  "ar": "مبنى صناعي",
+  "fa": "ساختمان صنعتی",
+  "ps": "صنعتي ودانۍ",
+  "ru": "промышленное здание"
+ },
+ "La piscine en béton": {
+  "en": "concrete pool",
+  "ar": "حمام سباحة خرساني",
+  "fa": "استخر بتنی",
+  "ps": "بتني حوض",
+  "ru": "бетонный бассейн"
+ },
+ "La route (la chaussée)": {
+  "en": "road (carriageway)",
+  "ar": "طريق",
+  "fa": "جاده",
+  "ps": "سړک",
+  "ru": "дорога (проезжая часть)"
+ },
+ "Le trottoir": {
+  "en": "pavement / sidewalk",
+  "ar": "رصيف",
+  "fa": "پیاده‌رو",
+  "ps": "لارې غاړه",
+  "ru": "тротуар"
+ },
+ "Le parking": {
+  "en": "car park",
+  "ar": "موقف سيارات",
+  "fa": "پارکینگ",
+  "ps": "پارکینګ",
+  "ru": "парковка"
+ },
+ "Le réseau d'assainissement": {
+  "en": "sewer network",
+  "ar": "شبكة الصرف الصحي",
+  "fa": "شبکه فاضلاب",
+  "ps": "د فاضلابو شبکه",
+  "ru": "канализационная сеть"
+ },
+ "Le réseau d'eau potable": {
+  "en": "drinking water network",
+  "ar": "شبكة مياه الشرب",
+  "fa": "شبکه آب آشامیدنی",
+  "ps": "د څښاک اوبو شبکه",
+  "ru": "сеть питьевой воды"
+ },
+ "La piste cyclable": {
+  "en": "cycle path",
+  "ar": "مسار الدراجات",
+  "fa": "مسیر دوچرخه",
+  "ps": "د بایسکل لار",
+  "ru": "велодорожка"
+ },
+ "Le rond-point (le giratoire)": {
+  "en": "roundabout",
+  "ar": "دوار",
+  "fa": "چهارراه گردان/دوران",
+  "ps": "ګرد چوک",
+  "ru": "круговой перекрёсток"
+ },
+ "La place / l'esplanade pavée": {
+  "en": "paved square",
+  "ar": "ساحة مرصوفة",
+  "fa": "میدان سنگفرش",
+  "ps": "فرش شوی چوک",
+  "ru": "мощёная площадь"
+ },
+ "La fondation": {
+  "en": "foundation",
+  "ar": "الأساس",
+  "fa": "پی/بنیاد",
+  "ps": "بنسټ",
+  "ru": "фундамент"
+ },
+ "Le remblai": {
+  "en": "backfill",
+  "ar": "ردم",
+  "fa": "خاکریز",
+  "ps": "بیرته ډکول",
+  "ru": "обратная засыпка"
+ },
+ "Le mur": {
+  "en": "wall",
+  "ar": "جدار",
+  "fa": "دیوار",
+  "ps": "دیوال",
+  "ru": "стена"
+ },
+ "La cloison": {
+  "en": "partition wall",
+  "ar": "جدار فاصل",
+  "fa": "دیوار جداکننده",
+  "ps": "بېلوونکی دیوال",
+  "ru": "перегородка"
+ },
+ "La dalle": {
+  "en": "slab",
+  "ar": "بلاطة",
+  "fa": "دال",
+  "ps": "دال",
+  "ru": "плита (перекрытие)"
+ },
+ "La chape": {
+  "en": "screed",
+  "ar": "طبقة تسوية",
+  "fa": "شمشه/کفسازی",
+  "ps": "شمشه",
+  "ru": "стяжка"
+ },
+ "Le poteau": {
+  "en": "column / post",
+  "ar": "عمود",
+  "fa": "ستون",
+  "ps": "ستن",
+  "ru": "колонна"
+ },
+ "La poutre": {
+  "en": "beam",
+  "ar": "عارضة/جسر",
+  "fa": "تیر",
+  "ps": "تیر",
+  "ru": "балка"
+ },
+ "Le linteau": {
+  "en": "lintel",
+  "ar": "عتب",
+  "fa": "نعل درگاه",
+  "ps": "د دروازې تیر",
+  "ru": "перемычка"
+ },
+ "L'escalier en béton": {
+  "en": "concrete stairs",
+  "ar": "درج خرساني",
+  "fa": "پله بتنی",
+  "ps": "بتني زینه",
+  "ru": "бетонная лестница"
+ },
+ "Le plancher": {
+  "en": "floor (storey)",
+  "ar": "أرضية الطابق",
+  "fa": "کف طبقه",
+  "ps": "د پوړ فرش",
+  "ru": "перекрытие (этаж)"
+ }
+};
+const LANGS = [["fr","Français 🇫🇷"],["ar","العربية"],["fa","دری"],["ps","پښتو"],["ru","Русский"],["en","English"]];
+const RTL = ["ar","fa","ps"];
+const CATS = ["EPI","Outils","Machines","Matériaux","Techniques","Ouvrages finaux","Éléments d'ouvrage"];
+const CATEMO = {"EPI":"🦺","Outils":"🔧","Machines":"🚜","Matériaux":"🧱","Techniques":"🛠️","Ouvrages finaux":"🏠","Éléments d'ouvrage":"📐"};
+const CATVAR = {"EPI":"--epi","Outils":"--outils","Machines":"--machines","Matériaux":"--materiaux","Techniques":"--techniques","Ouvrages finaux":"--ouvrages","Éléments d'ouvrage":"--elements"};
+let state = {screen:"home", appui: localStorage.getItem("maf_lex_appui")||"fr", cat:null, exo:null};
+
+// prénom partagé
+let prenom = localStorage.getItem("maf_commun")||"";
+function hello(){
+  const h=document.getElementById("hello");
+  if(prenom){h.textContent="Salut "+prenom+" ! 👋";}
+  else{h.innerHTML='<button class="langbtn" onclick="askName()">✏️ Dis-moi ton prénom</button>';}
+}
+function askName(){const p=prompt("Ton prénom ?");if(p){prenom=p.trim();localStorage.setItem("maf_commun",prenom);hello();}}
+
+function speak(t){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="fr-FR";u.rate=.9;speechSynthesis.speak(u);}catch(e){}}
+
+function setAppui(l){state.appui=l;localStorage.setItem("maf_lex_appui",l);renderLangRows();if(state.screen=="imagier-gal")renderGal();}
+function renderLangRows(){
+  ["langrow-home","langrow-gal"].forEach(id=>{
+    const el=document.getElementById(id); if(!el)return; el.innerHTML="";
+    LANGS.forEach(([code,label])=>{
+      const b=document.createElement("button");b.className="langbtn"+(state.appui==code?" on":"");
+      b.textContent=label; if(RTL.includes(code))b.classList.add("rtl");
+      b.onclick=()=>setAppui(code); el.appendChild(b);
+    });
+  });
+}
+
+function go(scr){
+  state.screen=scr;
+  ["home","imagier-cat","imagier-gal","detail","exo-cat","exo-type","exo-play"].forEach(s=>{
+    document.getElementById("s-"+s).classList.toggle("hidden", s!=scr);
+  });
+  window.scrollTo(0,0);
+  if(scr=="imagier-cat")renderCats("imagier-cats","gotoGal");
+  if(scr=="exo-cat")renderCats("exo-cats","gotoExoType");
+  if(scr=="home"){hello();renderLangRows();}
+}
+function renderCats(elId, cb){
+  const el=document.getElementById(elId);el.innerHTML="";
+  const all=document.createElement("button");all.className="cat-tile";all.style.background="linear-gradient(135deg,#374151,#111827)";
+  all.innerHTML='🗂️ Tout<small>'+DATA.length+' mots</small>';all.onclick=()=>window[cb](null);el.appendChild(all);
+  CATS.forEach(c=>{
+    const n=DATA.filter(e=>e.cat==c).length; if(!n)return;
+    const b=document.createElement("button");b.className="cat-tile";
+    b.style.background="var("+CATVAR[c]+")";
+    b.innerHTML=CATEMO[c]+" "+c+"<small>"+n+" mots</small>";
+    b.onclick=()=>window[cb](c);el.appendChild(b);
+  });
+}
+function items(cat){return cat?DATA.filter(e=>e.cat==cat):DATA.slice();}
+
+// ---- IMAGIER ----
+function gotoGal(cat){state.cat=cat;document.getElementById("search").value="";document.getElementById("gal-title").textContent=cat?(CATEMO[cat]+" "+cat):"🗂️ Tout";go("imagier-gal");renderLangRows();renderGal();}
+function renderGal(){
+  const q=(document.getElementById("search").value||"").toLowerCase().trim();
+  let list=items(state.cat);
+  if(q)list=list.filter(e=>e.nom.toLowerCase().includes(q)||(TRAD[e.nom]&&Object.values(TRAD[e.nom]).some(v=>v.toLowerCase().includes(q))));
+  document.getElementById("gal-count").textContent=list.length+" mot"+(list.length>1?"s":"");
+  const g=document.getElementById("gal");g.innerHTML="";
+  list.forEach(e=>{
+    const c=document.createElement("div");c.className="card";c.onclick=()=>showDetail(e.id);
+    let tr="";
+    if(state.appui!="fr"&&TRAD[e.nom]){const t=TRAD[e.nom][state.appui];tr='<div class="tr'+(RTL.includes(state.appui)?" rtl":"")+'">'+t+'</div>';}
+    c.innerHTML='<img loading="lazy" src="'+e.img+'"><div class="nm">'+e.nom+'</div>'+tr;
+    g.appendChild(c);
+  });
+}
+function showDetail(id){
+  const e=DATA.find(x=>x.id==id);state.lastId=id;
+  const d=document.getElementById("detail");
+  const met=e.metier?'<span class="met">'+e.metier+'</span>':"";
+  let trbox="";
+  if(state.appui!="fr"&&TRAD[e.nom]){
+    const t=TRAD[e.nom][state.appui];const cls=RTL.includes(state.appui)?" rtl":"";
+    const lab=LANGS.find(l=>l[0]==state.appui)[1];
+    trbox='<div class="trbox"><div class="lbl">'+lab+'</div><div class="tn'+cls+'">'+t+'</div></div><div class="warn">⚠️ Traduction à faire vérifier par un locuteur.</div>';
+  }
+  d.innerHTML='<img src="'+e.img+'"><div class="body"><div class="nm">'+e.nom+' '+met+
+    '<button class="spk" onclick="speak(\''+e.nom.replace(/'/g,"\\'")+'\')">🔊</button></div>'+
+    '<div class="usage">'+e.usage+'</div>'+trbox+'</div>';
+  go("detail");
+}
+
+// ---- EXERCICES ----
+function gotoExoType(cat){state.cat=cat;document.getElementById("exotype-title").textContent=cat?(CATEMO[cat]+" "+cat):"🗂️ Tout";go("exo-type");}
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+let score=0,qn=0,qtot=0;
+function startExo(type){
+  state.exo=type;score=0;qn=0;
+  const titles={relier:"🔗 Relier les 3",photo2nom:"🖼️ Photo → Nom",nom2photo:"🔤 Nom → Photo",usage2nom:"💬 Usage → Nom"};
+  document.getElementById("play-title").textContent=titles[type];
+  document.getElementById("msg").textContent="";
+  go("exo-play");
+  qtot = (type=="relier")?5:8;
+  updateScore();
+  if(type=="relier")roundRelier();else roundQcm();
+}
+function updateScore(){document.getElementById("score").textContent=score;document.getElementById("progress").textContent="Question "+Math.min(qn+1,qtot)+" / "+qtot;}
+function pool(){let p=items(state.cat).filter(e=>e.img);return p;}
+function endRound(){
+  const a=document.getElementById("play-area");
+  a.innerHTML='<div class="qbox"><div class="qtext">Terminé ! 🎉</div><div style="font-size:20px;font-weight:800;color:#059669">Score : '+score+' / '+qtot+'</div>'+
+    '<button class="btn" onclick="startExo(state.exo)">Rejouer</button> <button class="btn sec" onclick="go(\'exo-type\')">Autre exercice</button></div>';
+  document.getElementById("progress").textContent="Fini";
+}
+// QCM
+function roundQcm(){
+  if(qn>=qtot){endRound();return;}
+  updateScore();document.getElementById("msg").textContent="";
+  const p=pool();const good=p[Math.floor(Math.random()*p.length)];
+  let others=shuffle(p.filter(e=>e.id!=good.id)).slice(0,3);
+  const opts=shuffle([good,...others]);
+  const a=document.getElementById("play-area");const type=state.exo;
+  let head="";
+  if(type=="photo2nom")head='<img class="qimg" src="'+good.img+'">';
+  else if(type=="nom2photo")head='<div class="qtext">'+good.nom+' <button class="spk" onclick="speak(\''+good.nom.replace(/\x27/g,"\\x27")+'\')">🔊</button></div>';
+  else if(type=="usage2nom")head='<div class="qtext" style="font-size:17px">'+good.usage+'</div>';
+  let html='<div class="qbox">'+head+'<div class="opts" id="opts"></div></div>';
+  a.innerHTML=html;
+  const oc=document.getElementById("opts");
+  opts.forEach(e=>{
+    const b=document.createElement("button");b.className="opt";
+    if(type=="nom2photo")b.innerHTML='<img src="'+e.img+'">';else b.textContent=e.nom;
+    b.onclick=()=>{
+      if(b.dataset.done)return;
+      [...oc.children].forEach(x=>x.dataset.done=1);
+      if(e.id==good.id){b.classList.add("good");score++;document.getElementById("msg").className="msg ok";document.getElementById("msg").textContent="Bravo ! 👍";}
+      else{b.classList.add("bad");[...oc.children].forEach(x=>{if(x.textContent==good.nom||(type=="nom2photo"&&x.querySelector("img")&&x.querySelector("img").src.endsWith(good.img)))x.classList.add("good");});
+        document.getElementById("msg").className="msg no";document.getElementById("msg").textContent="Réponse : "+good.nom;}
+      qn++;setTimeout(()=>roundQcm(),1300);
+    };
+    oc.appendChild(b);
+  });
+}
+// RELIER les 3
+let rSel={photo:null,nom:null,usage:null},rItems=[];
+function roundRelier(){
+  updateScore();document.getElementById("msg").textContent="";
+  const p=shuffle(pool()).slice(0,4);rItems=p;rSel={photo:null,nom:null,usage:null};
+  const a=document.getElementById("play-area");
+  const cols={photo:shuffle(p),nom:shuffle(p),usage:shuffle(p)};
+  let html='<div class="qbox"><div style="font-size:13px;color:#6B7280;font-weight:700;margin-bottom:8px">Touche une photo, son nom, puis son usage.</div><div class="relier">';
+  html+='<div><div class="col-lbl">Photo</div><div id="col-photo"></div></div>';
+  html+='<div><div class="col-lbl">Nom</div><div id="col-nom"></div></div>';
+  html+='<div><div class="col-lbl">Usage</div><div id="col-usage"></div></div></div></div>';
+  a.innerHTML=html;
+  ["photo","nom","usage"].forEach(kind=>{
+    const c=document.getElementById("col-"+kind);
+    cols[kind].forEach(e=>{
+      const d=document.createElement("div");d.className="ritem";d.dataset.id=e.id;d.dataset.kind=kind;
+      if(kind=="photo")d.innerHTML='<img src="'+e.img+'">';
+      else if(kind=="nom")d.textContent=e.nom;
+      else d.textContent=e.usage.length>60?e.usage.slice(0,58)+"…":e.usage;
+      d.onclick=()=>pickRelier(d,kind,e.id);c.appendChild(d);
+    });
+  });
+}
+function pickRelier(el,kind,id){
+  const col=el.parentElement;
+  [...col.children].forEach(x=>{if(x!=el)x.classList.remove("sel");});
+  if(rSel[kind]==el){el.classList.remove("sel");rSel[kind]=null;return;}
+  el.classList.add("sel");rSel[kind]=el;
+  if(rSel.photo&&rSel.nom&&rSel.usage){
+    const ids=[rSel.photo.dataset.id,rSel.nom.dataset.id,rSel.usage.dataset.id];
+    if(ids[0]==ids[1]&&ids[1]==ids[2]){
+      [rSel.photo,rSel.nom,rSel.usage].forEach(x=>{x.classList.remove("sel");x.classList.add("done");});
+      score++;updateScore();
+      rSel={photo:null,nom:null,usage:null};
+      if(document.querySelectorAll("#play-area .ritem.done").length>=rItems.length*3){
+        qn=qtot;document.getElementById("msg").className="msg ok";document.getElementById("msg").textContent="Tout relié ! 🎉";
+        setTimeout(endRound,1000);
+      }
+    } else {
+      const sel=[rSel.photo,rSel.nom,rSel.usage];
+      sel.forEach(x=>x.classList.add("flash-bad"));
+      document.getElementById("msg").className="msg no";document.getElementById("msg").textContent="Pas ensemble, réessaie.";
+      setTimeout(()=>{sel.forEach(x=>{x.classList.remove("flash-bad","sel");});rSel={photo:null,nom:null,usage:null};document.getElementById("msg").textContent="";},700);
+    }
+  }
+}
+hello();renderLangRows();
+</script></body></html>
