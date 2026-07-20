@@ -23,6 +23,7 @@
        padding:16px;font-family:'Baloo 2';font-weight:700;font-size:19px;color:#fff;background:#2563EB;margin-bottom:12px}
   .btn.vert{background:#16A34A}.btn.violet{background:#7C3AED}.btn.gris{background:#78716C}
   .btn.blanc{background:#fff;color:#2563EB;border:2px solid #DDE7FA}
+  .plus{display:inline-flex;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.28);align-items:center;justify-content:center;font-size:25px;font-weight:800;line-height:1}
   .btn:active{transform:scale(.98)}
 
   .card{background:#fff;border:1px solid #EDEAE3;border-radius:18px;padding:15px;margin-bottom:14px}
@@ -522,7 +523,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var n,r,i,a,
 /* ============ DONNÉES DE RÉFÉRENCE ============ */
 const MOODS=[{k:'super',e:'😀',l:'Super'},{k:'ok',e:'🙂',l:'Ça va'},{k:'bof',e:'😐',l:'Bof'},{k:'dur',e:'😟',l:'Difficile'}];
 const AVEC=[{k:'seul',e:'🧍',l:'Tout seul'},{k:'chef',e:'👷',l:'Avec le chef'},{k:'equipe',e:'🧑‍🤝‍🧑',l:"Avec l'équipe"},{k:'collegue',e:'🤝',l:'Un collègue'}];
-const SOUCIS=[{k:'securite',e:'⛑️',l:'Sécurité'},{k:'horaires',e:'🕗',l:'Horaires'},{k:'paie',e:'💶',l:'Paie'},{k:'autre',e:'❓',l:'Autre'}];
+const SOUCIS=[{k:'securite',e:'⛑️',l:'Sécurité'},{k:'horaires',e:'🕗',l:'Horaires'},{k:'compris',e:'😕',l:"J'ai pas compris"},{k:'autre',e:'❓',l:'Autre'}];
 const LANGS=[{k:'',l:'FR'},{k:'ar',l:'عربي'},{k:'fa',l:'دری'},{k:'ps',l:'پښتو'},{k:'ru',l:'Рус'},{k:'en',l:'EN'}];
 const EMOACT={x01:'🧨',x02:'🔨',x03:'🧹',x04:'🖌️'};
 const byId={}; [...LEX.actions,...LEX.outils].forEach(o=>byId[o.id]=o);
@@ -571,12 +572,11 @@ function accueil(){
     return `<button class="jour-item" data-open="${k}"><span class="je">${m?m.e:'📝'}</span><span class="jt">${cap(jourCourt(k))}</span>${e.souci&&e.souci.on?'<span class="jf">🚩</span>':''}<span class="jf">✏️</span></button>`}).join('')+'</div>';}
   app.innerHTML=`
     <div class="head"><div class="t">🏗️ Mon Carnet de Stage</div><div class="b">Bonjour ${escapeHTML(PRENOM||'')} 👋</div></div>
-    <button class="btn" id="today">➕ Ma journée d'aujourd'hui</button>
+    <button class="btn" id="today"><span class="plus">+</span> Ma journée d'aujourd'hui</button>
     <div class="lang-row">${langBtns}</div>
     <div class="consigne" style="justify-content:space-between">📅 Mes journées <span class="spk" data-say="Mes journées">🔊</span></div>
     ${liste}
-    <button class="btn vert" id="rapport" style="margin-top:16px">📤 Créer et envoyer mon rapport</button>
-    <div class="liensuite"><a href="index.html">◀ Mes coachs</a></div>`;
+    <button class="btn vert" id="rapport" style="margin-top:16px">📤 Créer et envoyer mon rapport</button>`;
   $('#today').onclick=()=>ouvrirJournee(dkey(new Date()));
   $('#rapport').onclick=ecranRapport;
   app.querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>ouvrirJournee(b.dataset.open));
@@ -588,13 +588,21 @@ function accueil(){
 let E, EK;
 function ouvrirJournee(k){
   EK=k;
-  E=S.entries[k]?JSON.parse(JSON.stringify(S.entries[k])):{arrivee:'',depart:'',pause:'0',actions:[],outils:[],avecQui:'',humeur:'',comment:{type:'texte',text:''},souci:{on:false,cat:'',note:''},photos:[]};
-  if(!E.comment)E.comment={type:'texte',text:''};if(!E.souci)E.souci={on:false,cat:'',note:''};if(!E.photos)E.photos=[];
+  E=S.entries[k]?JSON.parse(JSON.stringify(S.entries[k])):{arrivee:'',depart:'',pause:'0',actions:[],outils:[],avecQui:[],humeur:'',comment:{type:'texte',text:''},appris:{type:'texte',text:''},question:{type:'texte',text:''},souci:{on:false,cat:'',note:''},photos:[]};
+  if(!E.comment)E.comment={type:'texte',text:''};if(!E.appris)E.appris={type:'texte',text:''};if(!E.question)E.question={type:'texte',text:''};if(!E.souci)E.souci={on:false,cat:'',note:''};if(!E.photos)E.photos=[];
+  if(typeof E.avecQui==='string')E.avecQui=E.avecQui?[E.avecQui]:[];if(!Array.isArray(E.avecQui))E.avecQui=[];
   renderJournee();
 }
 function tuileHTML(o){
   const t=tr(o);const media=o.img?`<img class="timg" src="${o.img}" alt="">`:`<div class="temo">${EMOACT[o.id]||'🛠️'}</div>`;
   return `<div class="tile" data-tile="${o.id}"><span class="tspk" data-spk="${escapeHTML(o.nom)}">🔊</span>${media}<div class="tnom">${escapeHTML(o.nom)}</div><div class="ttr">${escapeHTML(t)}</div><span class="tchk">✓</span></div>`;
+}
+function champVocalCard(field,icon,text,say){
+  return `<div class="card">
+      <div class="consigne">${icon} ${text} <span class="spk" data-say="${say}">🔊</span></div>
+      <div class="seg" data-segfor="${field}"><button data-seg="texte">✍️ Écrire</button><button data-seg="audio">🎤 Parler</button></div>
+      <div id="zone_${field}"></div>
+    </div>`;
 }
 function renderJournee(){
   const trav=calcTravaille(E);
@@ -637,11 +645,9 @@ function renderJournee(){
       <div class="mood-row">${moods}</div>
     </div>
 
-    <div class="card">
-      <div class="consigne">💬 Un commentaire <span class="spk" data-say="Je peux écrire ou parler.">🔊</span></div>
-      <div class="seg"><button data-seg="texte">✍️ Écrire</button><button data-seg="audio">🎤 Parler</button></div>
-      <div id="commZone"></div>
-    </div>
+    ${champVocalCard('comment','💬','Un commentaire',"Je peux écrire ou parler.")}
+    ${champVocalCard('appris','💡',"Qu'est-ce que j'ai appris ?","Ce que j'ai appris aujourd'hui. Je peux écrire ou parler. C'est facultatif.")}
+    ${champVocalCard('question','❓',"Une question que j'ai posée ?","Une question que j'ai posée sur le chantier. C'est facultatif.")}
 
     <div class="card">
       <div class="switch" id="soswitch"><span class="sw"></span><span>🚩 Un souci aujourd'hui ?</span><span class="spk" data-say="Est-ce qu'il y a eu un souci aujourd'hui ?" style="margin-left:auto">🔊</span></div>
@@ -670,10 +676,14 @@ function renderJournee(){
     if(arr.includes(id))t.classList.add('on');
     t.onclick=()=>{const list=(byId[id].cat==='Techniques'||id.startsWith('x'))?E.actions:E.outils;const i=list.indexOf(id);if(i>=0)list.splice(i,1);else list.push(id);t.classList.toggle('on')};
   });
-  app.querySelectorAll('[data-avec]').forEach(o=>{if(E.avecQui===o.dataset.avec)o.classList.add('on');o.onclick=()=>{E.avecQui=E.avecQui===o.dataset.avec?'':o.dataset.avec;app.querySelectorAll('[data-avec]').forEach(x=>x.classList.toggle('on',x.dataset.avec===E.avecQui))}});
+  app.querySelectorAll('[data-avec]').forEach(o=>{if(E.avecQui.includes(o.dataset.avec))o.classList.add('on');o.onclick=()=>{const k=o.dataset.avec;const i=E.avecQui.indexOf(k);if(i>=0)E.avecQui.splice(i,1);else E.avecQui.push(k);o.classList.toggle('on')}});
   app.querySelectorAll('[data-mood]').forEach(o=>{if(E.humeur===o.dataset.mood)o.classList.add('on');o.onclick=()=>{E.humeur=o.dataset.mood;app.querySelectorAll('[data-mood]').forEach(x=>x.classList.toggle('on',x.dataset.mood===E.humeur))}});
 
-  renderComm();app.querySelectorAll('[data-seg]').forEach(b=>{b.classList.toggle('on',b.dataset.seg===E.comment.type);b.onclick=()=>{E.comment.type=b.dataset.seg;app.querySelectorAll('[data-seg]').forEach(x=>x.classList.toggle('on',x.dataset.seg===E.comment.type));renderComm()}});
+  ['comment','appris','question'].forEach(f=>{
+    renderChamp(f);
+    const seg=app.querySelector('[data-segfor="'+f+'"]');
+    seg.querySelectorAll('[data-seg]').forEach(b=>{b.classList.toggle('on',b.dataset.seg===E[f].type);b.onclick=()=>{E[f].type=b.dataset.seg;seg.querySelectorAll('[data-seg]').forEach(x=>x.classList.toggle('on',x.dataset.seg===E[f].type));renderChamp(f)}});
+  });
 
   const sos=$('#soswitch');sos.classList.toggle('on',E.souci.on);sos.onclick=ev=>{if(ev.target.closest('[data-say]'))return;E.souci.on=!E.souci.on;sos.classList.toggle('on',E.souci.on);renderSouci()};
   renderSouci();
@@ -681,24 +691,27 @@ function renderJournee(){
 }
 function majTrav(){const t=calcTravaille(E);const el=$('#trav');if(t){el.style.display='';el.innerHTML='<span class="h">Temps travaillé</span> '+t}else el.style.display='none'}
 
-function renderComm(){
-  const z=$('#commZone');
-  if(E.comment.type==='texte'){z.innerHTML=`<textarea id="ctxt" placeholder="J'écris ce que j'ai fait, ce que j'ai aimé…">${escapeHTML(E.comment.text||'')}</textarea>`;$('#ctxt').oninput=e=>E.comment.text=e.target.value;}
+const AUDIO_PREFIX={comment:'a_',appris:'ap_',question:'qu_'};
+const PLACE={comment:"J'écris ce que j'ai fait, ce que j'ai aimé…",appris:"Ce que j'ai appris aujourd'hui… (facultatif)",question:"Une question que j'ai posée… (facultatif)"};
+function renderChamp(field){
+  const z=$('#zone_'+field);const F=E[field];
+  if(F.type==='texte'){z.innerHTML=`<textarea placeholder="${PLACE[field]}">${escapeHTML(F.text||'')}</textarea>`;z.querySelector('textarea').oninput=e=>F.text=e.target.value;}
   else{
-    z.innerHTML=`<div class="rec"><button class="rbtn" id="recBtn">🎤 Enregistrer</button><audio id="recPlay" controls ${E.comment.audioKey?'':'style="display:none"'}></audio></div><div class="note">Le vocal sera joint au mail, à part.</div>`;
-    if(E.comment.audioKey)mediaGet(E.comment.audioKey).then(b=>{if(b)$('#recPlay').src=URL.createObjectURL(b)});
-    setupRec();
+    z.innerHTML=`<div class="rec"><button class="rbtn">🎤 Enregistrer</button><audio controls ${F.audioKey?'':'style="display:none"'}></audio></div><div class="note">Le vocal sera joint au mail, à part.</div>`;
+    const pl=z.querySelector('audio');
+    if(F.audioKey)mediaGet(F.audioKey).then(b=>{if(b)pl.src=URL.createObjectURL(b)});
+    setupRec(field,z.querySelector('.rbtn'),pl);
   }
 }
-let mediaRec,chunks;
-function setupRec(){
-  const btn=$('#recBtn');
+let recMap={};
+function setupRec(field,btn,pl){
   btn.onclick=async()=>{
-    if(mediaRec&&mediaRec.state==='recording'){mediaRec.stop();return}
-    try{const st=await navigator.mediaDevices.getUserMedia({audio:true});chunks=[];mediaRec=new MediaRecorder(st);
-      mediaRec.ondataavailable=e=>chunks.push(e.data);
-      mediaRec.onstop=async()=>{const blob=new Blob(chunks,{type:mediaRec.mimeType||'audio/webm'});const key='a_'+EK;await mediaPut(key,blob);E.comment.audioKey=key;st.getTracks().forEach(t=>t.stop());const pl=$('#recPlay');pl.style.display='';pl.src=URL.createObjectURL(blob);btn.textContent='🎤 Recommencer';btn.classList.remove('stop')};
-      mediaRec.start();btn.textContent='⏹ Arrêter';btn.classList.add('stop');
+    const cur=recMap[field];
+    if(cur&&cur.state==='recording'){cur.stop();return}
+    try{const st=await navigator.mediaDevices.getUserMedia({audio:true});const chunks=[];const mr=new MediaRecorder(st);recMap[field]=mr;
+      mr.ondataavailable=e=>chunks.push(e.data);
+      mr.onstop=async()=>{const blob=new Blob(chunks,{type:mr.mimeType||'audio/webm'});const key=AUDIO_PREFIX[field]+EK;await mediaPut(key,blob);E[field].audioKey=key;st.getTracks().forEach(t=>t.stop());pl.style.display='';pl.src=URL.createObjectURL(blob);btn.textContent='🎤 Recommencer';btn.classList.remove('stop')};
+      mr.start();btn.textContent='⏹ Arrêter';btn.classList.add('stop');
     }catch(e){alert("Le micro n'est pas disponible.")}
   };
 }
@@ -757,7 +770,10 @@ async function buildReportDOM(dates){
       if(soucis.length)head+=`<div class="ralert">🚩 ${soucis.length} souci(s) signalé(s) : ${soucis.map(x=>jourCourt(x).split(' ')[0]).join(', ')}</div>`;
     }
     const trav=calcTravaille(e);
-    const m=MOODS.find(x=>x.k===e.humeur);const av=AVEC.find(x=>x.k===e.avecQui);
+    const m=MOODS.find(x=>x.k===e.humeur);
+    const avList=Array.isArray(e.avecQui)?e.avecQui:(e.avecQui?[e.avecQui]:[]);
+    const avTxt=avList.map(k=>{const a=AVEC.find(x=>x.k===k);return a?a.e+' '+a.l:''}).filter(Boolean).join(', ');
+    const champLigne=(F,icon,lbl)=>{if(!F)return'';let v='';if(F.type==='audio'&&F.audioKey)v='<span class="raudio">🎤 vocal joint</span>';else if(F.text)v='« '+escapeHTML(F.text)+' »';else return '';return `<div class="rline"><div class="rlbl">${icon} ${lbl}</div><div class="rval">${v}</div></div>`};
     const actions=(e.actions||[]).map(id=>pill(id,false)).join('')||'<span style="color:#B4B2A9">—</span>';
     const outils=(e.outils||[]).map(id=>pill(id,true)).join('')||'<span style="color:#B4B2A9">—</span>';
     let comm='';
@@ -774,9 +790,11 @@ async function buildReportDOM(dates){
           ${trav?`<div class="rline"><div class="rlbl">🕗 Horaires</div><div class="rval"><span class="rtag"><span class="h">Arrivée</span>${e.arrivee}</span><span class="rtag"><span class="h">Départ</span>${e.depart}</span><span class="rtag"><span class="h">Pause</span>${e.pause} min</span><span class="rtag"><span class="h">Travaillé</span>${trav}</span></div></div>`:''}
           <div class="rline"><div class="rlbl">👷 J'ai fait</div><div class="rval">${actions}</div></div>
           <div class="rline"><div class="rlbl">🔧 Utilisé</div><div class="rval">${outils}</div></div>
-          ${av?`<div class="rline"><div class="rlbl">🧑 Avec qui</div><div class="rval">${av.e} ${av.l}</div></div>`:''}
+          ${avTxt?`<div class="rline"><div class="rlbl">🧑 Avec qui</div><div class="rval">${avTxt}</div></div>`:''}
           ${m?`<div class="rline"><div class="rlbl">😀 Humeur</div><div class="rval">${m.e} ${m.l}</div></div>`:''}
           <div class="rline"><div class="rlbl">💬 Note</div><div class="rval">${comm}</div></div>
+          ${champLigne(e.appris,'💡','Appris')}
+          ${champLigne(e.question,'❓','Question')}
           ${photosHTML}
         </div>
       </div>
@@ -802,7 +820,7 @@ async function genererEtEnvoyer(dates){
   const range=dates[0]+'_'+dates[dates.length-1];
   const pdfName=`Carnet_${(PRENOM||'stage').replace(/\s+/g,'')}_${range}.pdf`;
   const files=[new File([pdfBlob],pdfName,{type:'application/pdf'})];
-  for(const k of dates){const e=S.entries[k];if(e.comment&&e.comment.type==='audio'&&e.comment.audioKey){const b=await mediaGet(e.comment.audioKey);if(b)files.push(new File([b],`Vocal_${(PRENOM||'').replace(/\s+/g,'')}_${k}.webm`,{type:b.type||'audio/webm'}))}}
+  for(const k of dates){const e=S.entries[k];for(const [f,tag] of [['comment','note'],['appris','appris'],['question','question']]){const F=e[f];if(F&&F.type==='audio'&&F.audioKey){const b=await mediaGet(F.audioKey);if(b)files.push(new File([b],`Vocal-${tag}_${(PRENOM||'').replace(/\s+/g,'')}_${k}.webm`,{type:b.type||'audio/webm'}))}}}
   const sujet=`Carnet de stage — ${PRENOM||''} — ${jourCourt(dates[0])}`;
   if(navigator.canShare&&navigator.canShare({files})){
     try{await navigator.share({files,title:'Carnet de stage',text:sujet});return}catch(e){if(e&&e.name==='AbortError')return}
