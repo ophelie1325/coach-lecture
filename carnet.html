@@ -804,6 +804,19 @@ async function buildReportDOM(dates){
   }
   return [...root.querySelectorAll('.rpage')];
 }
+function buildPayload(dates){
+  if(!S.uid){S.uid='u'+Date.now().toString(36)+Math.random().toString(36).slice(2,7);save();}
+  const champ=F=>{if(!F)return null;if(F.type==='audio'&&F.audioKey)return{mode:'audio'};if(F.text)return{mode:'texte',text:F.text};return null};
+  return {app:'carnet-stage',v:1,uid:S.uid,prenom:PRENOM||'',generatedAt:new Date().toISOString(),
+    days:dates.map(k=>{const e=S.entries[k];return{
+      date:k,arrivee:e.arrivee||'',depart:e.depart||'',pause:+e.pause||0,travaille:calcTravaille(e)||'',
+      actions:(e.actions||[]).map(id=>({id,nom:byId[id]?byId[id].nom:id})),
+      outils:(e.outils||[]).map(id=>({id,nom:byId[id]?byId[id].nom:id})),
+      avecQui:Array.isArray(e.avecQui)?e.avecQui:(e.avecQui?[e.avecQui]:[]),
+      humeur:e.humeur||'',comment:champ(e.comment),appris:champ(e.appris),question:champ(e.question),
+      souci:(e.souci&&e.souci.on)?{cat:e.souci.cat||'',note:e.souci.note||''}:null,
+      photos:(e.photos||[]).length};})};
+}
 async function genererEtEnvoyer(dates){
   const pages=await buildReportDOM(dates);
   await new Promise(r=>setTimeout(r,120));
@@ -820,13 +833,14 @@ async function genererEtEnvoyer(dates){
   const range=dates[0]+'_'+dates[dates.length-1];
   const pdfName=`Carnet_${(PRENOM||'stage').replace(/\s+/g,'')}_${range}.pdf`;
   const files=[new File([pdfBlob],pdfName,{type:'application/pdf'})];
+  files.push(new File([JSON.stringify(buildPayload(dates))],`Data_${(PRENOM||'stage').replace(/\s+/g,'')}_${range}.json`,{type:'application/json'}));
   for(const k of dates){const e=S.entries[k];for(const [f,tag] of [['comment','note'],['appris','appris'],['question','question']]){const F=e[f];if(F&&F.type==='audio'&&F.audioKey){const b=await mediaGet(F.audioKey);if(b)files.push(new File([b],`Vocal-${tag}_${(PRENOM||'').replace(/\s+/g,'')}_${k}.webm`,{type:b.type||'audio/webm'}))}}}
   const sujet=`Carnet de stage — ${PRENOM||''} — ${jourCourt(dates[0])}`;
   if(navigator.canShare&&navigator.canShare({files})){
     try{await navigator.share({files,title:'Carnet de stage',text:sujet});return}catch(e){if(e&&e.name==='AbortError')return}
   }
   files.forEach(f=>{const a=document.createElement('a');a.href=URL.createObjectURL(f);a.download=f.name;document.body.appendChild(a);a.click();a.remove()});
-  const body=encodeURIComponent("Bonjour,\nVoici mon carnet de stage.\n(Joindre le PDF"+(files.length>1?" et le(s) vocal(aux)":"")+" qui viennent d'être téléchargés.)\n\n"+(PRENOM||''));
+  const body=encodeURIComponent("Bonjour,\nVoici mon carnet de stage.\n(Joindre les fichiers qui viennent d'être téléchargés.)\n\n"+(PRENOM||''));
   setTimeout(()=>{window.location.href='mailto:?subject='+encodeURIComponent(sujet)+'&body='+body},400);
 }
 
