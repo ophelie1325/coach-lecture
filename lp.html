@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#E9500E">
+<title>Chercher un logement — entraînement</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script src="images.js" onerror="void 0"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--or:#E9500E;--or-cl:#FFF1E9;--navy:#16324F;--txt:#1A2B45;--gris:#5C6B80;--bordl:#E3E7EC;
+--fond:#F1F3F6;--vert:#1A7F37;--violet:#7B2FE0;--rouge:#B3261E;--rouge-f:#FCE9E7;--bleu-cl:#EAF2FB}
+html{-webkit-text-size-adjust:100%}
+body{font-family:'Nunito Sans',Arial,sans-serif;color:var(--txt);background:#fff;font-size:16px;
+line-height:1.45;padding-bottom:150px}
+.bandeau{background:var(--or-cl);border-bottom:2px solid var(--or);padding:7px 14px;font-size:12.5px;
+font-weight:700;color:#9A3A08;text-align:center}
+/* ---------- BARRE APP ---------- */
+.appbar{display:flex;align-items:center;gap:10px;padding:10px 12px;background:#fff}
+.logo{font-size:23px;font-weight:800;color:var(--or);letter-spacing:-.5px;margin:0 auto}
+.back{background:none;border:none;font-size:23px;cursor:pointer;color:var(--txt);
+width:44px;height:44px;display:flex;align-items:center;justify-content:center}
+.titre{font-size:19px;font-weight:800;flex:1}
+.recbar{display:flex;align-items:center;gap:10px;background:var(--fond);border-radius:30px;
+padding:12px 16px;margin:0 12px 12px;font-size:15px;color:var(--gris);font-weight:600}
+.recbar .ic{margin-left:auto;display:flex;gap:14px;font-size:17px;color:var(--txt)}
+/* ---------- ACCUEIL ---------- */
+.cats{display:flex;justify-content:space-around;padding:6px 8px 16px}
+.cat{text-align:center;background:none;border:none;font-family:inherit;cursor:pointer}
+.cat .rd{width:62px;height:62px;border-radius:50%;background:var(--fond);display:flex;align-items:center;
+justify-content:center;font-size:25px;margin-bottom:6px}
+.cat span{font-size:12.5px;font-weight:700;color:var(--txt)}
+/* ---------- LISTES ---------- */
+.liste{padding:0 4px}
+.li{display:flex;align-items:center;flex-wrap:wrap;gap:10px;width:100%;background:none;border:none;
+border-bottom:1px solid var(--bordl);padding:17px 12px;font-family:inherit;font-size:16.5px;
+font-weight:600;color:var(--txt);cursor:pointer;text-align:left;min-height:58px}
+.li .fl{margin-left:auto;color:var(--gris);font-size:19px}
+.li .nb{margin-left:auto;font-size:13.5px;color:var(--gris);font-weight:600}
+.li .val{margin-left:auto;color:var(--navy);font-size:15.5px;font-weight:600;max-width:40%;
+overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.li.sel{background:var(--bleu-cl)}
+.li.sel:after{content:"✓";color:var(--or);font-weight:800;margin-left:10px}
+.sect{font-size:20px;font-weight:800;padding:20px 12px 6px;display:flex;align-items:center;flex-wrap:wrap}
+.sous{font-size:14.5px;color:var(--gris);padding:0 12px 10px;font-weight:600}
+/* ---------- FILTRES ---------- */
+.pills{display:flex;gap:12px;padding:4px 12px 14px}
+.pill{flex:1;min-width:0;border:1.5px solid var(--gris);border-radius:30px;padding:14px 18px;font-family:inherit;
+font-size:15.5px;background:#fff;color:var(--txt);min-height:52px}
+.pill::placeholder{color:var(--gris)}
+.ronds{display:flex;flex-wrap:wrap;gap:11px;padding:4px 12px 16px}
+.rond{width:52px;height:52px;border-radius:50%;border:1.5px solid #B9C2CE;background:#fff;
+font-family:inherit;font-size:16px;font-weight:600;cursor:pointer;color:var(--txt)}
+.rond.on{background:var(--navy);border-color:var(--navy);color:#fff}
+.cocheL{display:flex;align-items:flex-start;gap:14px;padding:13px 12px;font-size:15.5px;
+font-weight:600;cursor:pointer;min-height:52px}
+.cocheL input{width:23px;height:23px;flex:0 0 23px;accent-color:var(--navy);margin-top:2px}
+.sep{height:1px;background:var(--bordl);margin:4px 12px}
+/* ---------- RÉSULTATS ---------- */
+.chips{display:flex;gap:9px;overflow-x:auto;padding:10px 12px;background:#fff}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:0 0 auto;display:flex;align-items:center;gap:7px;border:1.5px solid var(--navy);
+border-radius:30px;padding:9px 15px;font-size:14.5px;font-weight:700;background:#fff;color:var(--navy);
+white-space:nowrap;min-height:44px;font-family:inherit;cursor:pointer}
+.chip.plein{background:var(--bleu-cl)}
+.onglets{display:flex;border-bottom:1px solid var(--bordl)}
+.ong{flex:1;background:none;border:none;border-bottom:3px solid transparent;padding:14px 4px;
+font-family:inherit;font-size:16px;font-weight:700;color:var(--gris);cursor:pointer;min-height:52px;
+display:flex;align-items:center;justify-content:center;gap:7px}
+.ong.on{color:var(--navy);border-bottom-color:var(--navy)}
+.ong .bd2{background:var(--or);color:#fff;border-radius:50%;width:22px;height:22px;font-size:12.5px;
+display:flex;align-items:center;justify-content:center}
+.rcarte{border:1px solid var(--bordl);border-radius:14px;margin:0 12px 14px;overflow:hidden}
+.rcarte .h{padding:14px;cursor:pointer}
+.rcarte .cat2{display:inline-block;background:var(--fond);border-radius:7px;padding:4px 10px;
+font-size:13.5px;font-weight:700;margin-bottom:9px}
+.rcarte .nom{font-size:20px;font-weight:800;margin-bottom:5px}
+.rcarte .cr{font-size:16px;font-weight:600}
+.rcarte .bas{display:flex;align-items:flex-end;gap:10px;font-size:14px;color:var(--gris);font-weight:600;margin-top:8px}
+.rcarte .nb2{margin-left:auto;background:var(--or);color:#fff;border-radius:20px;min-width:40px;height:40px;
+display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px}
+.rcarte .alerte{border-top:1px solid var(--bordl);padding:14px;display:flex;align-items:center;gap:12px;
+font-size:16px;font-weight:700}
+.rcarte .rd2{width:46px;height:46px;border-radius:50%;background:var(--fond);display:flex;
+align-items:center;justify-content:center;font-size:19px;cursor:pointer;border:2px solid transparent;flex:0 0 46px}
+.rcarte .rd2.on{background:var(--or-cl);border-color:var(--or)}
+.dbtn{background:#fff;border:1.5px solid var(--navy);color:var(--navy);border-radius:50%;
+width:38px;height:38px;font-family:inherit;font-size:16px;font-weight:700;cursor:pointer;
+margin-left:8px;vertical-align:middle;line-height:1;padding:0;flex:0 0 38px}
+.dexp{display:none;background:var(--bleu-cl);border-left:4px solid var(--navy);padding:12px 13px;
+font-size:14.5px;margin:0 12px 12px;border-radius:0 8px 8px 0;font-weight:600}
+.dexp.on{display:block}
+.dexp b{color:var(--or)}
+.astuce{margin:0 12px 10px;font-size:15px;font-weight:700;color:var(--or);
+display:flex;align-items:center}
+.neuf{position:absolute;top:10px;left:10px;background:var(--or);color:#fff;font-size:12.5px;
+font-weight:800;padding:5px 11px;border-radius:6px}
+.chip .bd{background:var(--navy);color:#fff;border-radius:50%;width:22px;height:22px;font-size:12.5px;
+display:flex;align-items:center;justify-content:center}
+.nbres{font-size:20px;font-weight:800;padding:14px 12px 8px}
+.ann{border-bottom:1px solid var(--bordl);padding:0 12px 16px;cursor:pointer}
+.ann .ph{position:relative;border-radius:10px;overflow:hidden;background:var(--fond);height:210px;
+display:flex;align-items:center;justify-content:center;font-size:44px;margin-bottom:9px}
+.ann .ph img{width:100%;height:100%;object-fit:cover}
+.ann .une{position:absolute;top:10px;left:10px;background:var(--violet);color:#fff;font-size:13px;
+font-weight:700;padding:5px 11px;border-radius:6px}
+.ann .fav{position:absolute;top:9px;right:9px;width:42px;height:42px;border-radius:50%;background:#fff;
+display:flex;align-items:center;justify-content:center;font-size:19px}
+.ann .px{font-size:21px;font-weight:800;margin-bottom:3px}
+.ann .px.baisse{color:var(--vert)}
+.ann .desc{font-size:15.5px;font-weight:600;margin-bottom:6px}
+.ann .tags{display:flex;align-items:center;gap:9px;flex-wrap:wrap;font-size:14.5px;font-weight:600;margin-bottom:5px}
+.dpe{background:#A9D18E;color:#1A2B45;font-weight:800;padding:2px 9px;border-radius:3px 8px 8px 3px;font-size:14px}
+.ann .loc{font-size:14px;color:var(--gris);font-weight:600}
+.ico{display:inline-flex;align-items:center;gap:6px}
+.ico i{width:26px;height:26px;border-radius:50%;background:var(--fond);display:flex;align-items:center;
+justify-content:center;font-style:normal;font-size:13px}
+/* ---------- ANNONCE ---------- */
+.hero{position:relative;height:260px;background:var(--fond);display:flex;align-items:center;
+justify-content:center;font-size:54px}
+.hero img{width:100%;height:100%;object-fit:cover}
+.hero .cpt{position:absolute;right:12px;bottom:12px;background:var(--navy);color:#fff;font-size:13px;
+font-weight:700;padding:5px 10px;border-radius:6px}
+.carte{background:#fff;border:1px solid var(--bordl);border-radius:14px;padding:16px;margin:14px 12px}
+.prix{font-size:27px;font-weight:800;color:var(--vert)}
+.sstitre{font-size:19px;font-weight:800;margin:7px 0}
+.pro{display:inline-block;border:1.5px solid var(--navy);border-radius:6px;padding:2px 10px;
+font-size:13.5px;font-weight:700}
+h2{font-size:21px;font-weight:800;margin:22px 12px 10px}
+.lignes{margin:0 12px}
+.lg{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--bordl);font-size:15.5px}
+.lg .k{color:var(--gris);font-weight:600;flex:1}
+.lg .v{font-weight:800;text-align:right}
+.prixbox{border:1px solid var(--bordl);border-radius:14px;padding:15px;margin:0 12px 14px}
+.prixbox .l{display:flex;justify-content:space-between;gap:12px;padding:7px 0;font-size:15.5px}
+.prixbox .l b{font-weight:800}
+.prixbox .l.grand{font-size:17px}
+.prixbox .l.sec{color:var(--gris);font-size:14.5px}
+.prixbox hr{border:none;border-top:1px solid var(--bordl);margin:9px 0}
+.vide{display:inline-flex;align-items:center;justify-content:center;min-width:96px;border:2px dashed var(--or);
+border-radius:8px;color:var(--or);font-weight:800;padding:5px 10px;cursor:pointer;background:#fff;font-family:inherit;font-size:16px}
+.vide.ok{border:2px solid var(--vert);color:var(--vert);background:#EAF7EE;cursor:default}
+.vide.cible{background:var(--or-cl)}
+.bleuinfo{background:var(--bleu-cl);border-radius:10px;padding:14px;margin:0 12px 14px;font-size:15px;font-weight:600}
+.bleuinfo a{color:var(--navy);font-weight:800;text-decoration:underline}
+.vendeur{display:flex;align-items:center;gap:14px;margin-bottom:12px}
+.vendeur .av{width:64px;height:64px;border-radius:50%;background:#9AA6B4;color:#fff;display:flex;
+align-items:center;justify-content:center;font-size:27px;font-weight:800}
+.vendeur .nom{font-size:20px;font-weight:800}
+.meta{font-size:15px;font-weight:600;margin:4px 0;display:flex;gap:9px;align-items:center}
+.badges{display:flex;gap:26px;margin-top:14px}
+.badge{text-align:center;font-size:12.5px;font-weight:600;width:88px}
+.badge .rd{width:56px;height:56px;border-radius:50%;background:var(--or-cl);display:flex;align-items:center;
+justify-content:center;font-size:23px;margin:0 auto 6px}
+.dpescale{display:flex;font-size:13px;font-weight:800}
+.dpescale span{padding:4px 7px;color:#1A2B45}
+.dpescale span.on{outline:2.5px solid #1A2B45;border-radius:3px;position:relative;z-index:2}
+/* ---------- BOUTONS ---------- */
+.btn{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;background:var(--or);
+color:#fff;border:none;border-radius:30px;padding:15px;font-family:inherit;font-size:16.5px;
+font-weight:800;min-height:54px;cursor:pointer}
+.btn.nav{background:var(--navy);border-radius:30px}
+.btn.blanc{background:#fff;color:var(--navy);border:1.5px solid var(--navy)}
+.btn.plat{border-radius:10px}
+.basbar{position:fixed;left:0;right:0;bottom:66px;background:#fff;border-top:1px solid var(--bordl);
+padding:10px 12px;display:flex;gap:11px;z-index:50}
+.basbar .btn{flex:1}
+.tabbar{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--bordl);
+display:flex;padding:6px 0 calc(6px + env(safe-area-inset-bottom));z-index:55}
+.tab{flex:1;text-align:center;font-size:11.5px;font-weight:700;color:var(--txt);background:none;
+border:none;font-family:inherit;cursor:pointer;padding:4px 0}
+.tab .i{font-size:21px;display:block;margin-bottom:2px;position:relative}
+.tab .bg{position:absolute;top:-3px;right:-11px;background:var(--rouge);color:#fff;font-size:10px;
+border-radius:50%;width:17px;height:17px;display:flex;align-items:center;justify-content:center}
+/* ---------- MISSION / PÉDAGO ---------- */
+.mission{background:#F3EEFB;border:2px solid var(--violet);border-radius:14px;padding:12px 14px;margin:10px 12px}
+.mission.reduit ul,.mission.reduit .go{display:none}
+.mission .plier{float:right;background:none;border:none;font-size:21px;cursor:pointer;color:var(--violet);font-family:inherit;width:44px;height:44px}
+.mission .t{font-size:17px;font-weight:800;color:var(--violet);margin-bottom:5px}
+.mission ul{margin:6px 0 0 19px;font-size:15px}
+.mission li{margin-bottom:3px}
+.msg{display:none;padding:13px 15px;font-size:15px;margin:12px;border-radius:10px;font-weight:600}
+.msg.on{display:block}
+.msg.ok{background:#EAF7EE;border-left:5px solid var(--vert)}
+.msg.no{background:var(--rouge-f);border-left:5px solid var(--rouge)}
+.ecran{display:none}.ecran.on{display:block}
+.etape{display:none}.etape.on{display:block}
+.jauge{display:flex;gap:3px;margin:10px 12px}
+.jauge i{flex:1;height:6px;background:var(--bordl);border-radius:4px}
+.jauge i.on{background:var(--or)}
+.etq{font-size:12px;color:var(--gris);font-weight:700;text-transform:uppercase;padding:12px 12px 0}
+/* ---------- MESSAGE (étape 3) ---------- */
+.etiq{display:flex;flex-wrap:wrap;gap:9px;margin:0 12px 12px}
+.et{background:#fff;border:1.5px solid var(--bordl);border-radius:10px;padding:11px 13px;font-size:15px;
+font-weight:600;cursor:pointer;min-height:46px;display:flex;align-items:center;text-align:left;font-family:inherit}
+.et.use{display:none}
+.zone{background:var(--fond);border-radius:10px;padding:13px;margin:0 12px;min-height:110px;font-size:15px;line-height:1.7}
+.zone .l{display:block;padding:3px 0}
+.trous{background:#fff;border:1.5px solid var(--bordl);border-radius:10px;padding:14px;margin:0 12px;
+font-size:16px;line-height:2.1}
+.trou{display:inline-block;min-width:104px;border-bottom:3px solid var(--violet);text-align:center;
+color:var(--gris);cursor:pointer;padding:0 6px;font-weight:700}
+.trou.sel{background:#F3EEFB}
+.trou.ok{border-color:var(--vert);color:var(--vert)}
+textarea{width:calc(100% - 24px);margin:0 12px;min-height:180px;font-family:inherit;font-size:16px;
+padding:12px;border:1.5px solid var(--bordl);border-radius:10px;line-height:1.55}
+.check{list-style:none;margin:10px 12px}
+.check li{display:flex;gap:9px;padding:8px 0;font-size:15px;font-weight:700;border-bottom:1px solid var(--bordl);color:var(--gris)}
+.check li.ok{color:var(--vert)}
+/* ---------- CALCULATRICE ---------- */
+.calc{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:90;display:none;align-items:flex-end}
+.calc.on{display:flex}
+.calc .in{background:#fff;width:100%;border-radius:16px 16px 0 0;padding:14px 12px calc(14px + env(safe-area-inset-bottom))}
+.calc .ec{background:var(--txt);color:#fff;border-radius:10px;padding:14px;text-align:right;font-size:29px;
+font-weight:800;min-height:60px;margin-bottom:6px;word-break:break-all}
+.calc .lg2{font-size:13.5px;color:var(--gris);font-weight:700;text-align:center;margin-bottom:10px}
+.pave{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.pave button{background:var(--fond);border:1.5px solid var(--bordl);border-radius:11px;font-family:inherit;
+font-size:21px;font-weight:800;min-height:56px;cursor:pointer;color:var(--txt)}
+.pave button.op{background:#fff;color:var(--or);border-color:var(--or)}
+.pave button.val{background:var(--vert);color:#fff;border-color:var(--vert);font-size:16px}
+.pave button.eff{background:#fff;color:var(--rouge);border-color:var(--rouge)}
+@media(min-width:760px){body{max-width:520px;margin:0 auto;border-left:1px solid var(--bordl);border-right:1px solid var(--bordl)}}
+</style>
+</head>
+<body>
+
+<div class="bandeau">⚠️ Exercice — les annonces sont inventées, on ne contacte personne.</div>
+<div class="etq">Étape <span id="sn">1</span> sur 3 — <span id="stit">Chercher une annonce</span></div>
+<div class="jauge" id="jauge"><i class="on"></i><i></i><i></i></div>
+
+<!-- ================= ÉTAPE 1 : L'APPLICATION ================= -->
+<section class="etape on" id="e1">
+  <div class="mission" id="mission"></div>
+
+  <!-- écran ACCUEIL -->
+  <div class="ecran on" id="ec-accueil">
+    <div class="appbar"><span style="width:44px"></span><div class="logo">annonces</div><span style="font-size:21px">🔔</span></div>
+    <div class="recbar">🔍 Rechercher sur l'appli…<span class="ic">📷 🎙️</span></div>
+    <div class="cats">
+      <button class="cat" onclick="ecran('categorie')"><div class="rd">🏠</div><span>Immobilier</span></button>
+      <button class="cat" onclick="rien()"><div class="rd">🚗</div><span>Véhicules</span></button>
+      <button class="cat" onclick="rien()"><div class="rd">🔧</div><span>Matériel Pro</span></button>
+      <button class="cat" onclick="ecran('categorie')"><div class="rd">•••</div><span>Autres</span></button>
+    </div>
+    <div class="sect">Vos coups de cœur</div>
+    <div class="sous">Touchez <b>Immobilier</b> pour commencer votre recherche.</div>
+  </div>
+
+  <!-- écran CATÉGORIE -->
+  <div class="ecran" id="ec-categorie">
+    <div class="appbar"><button class="back" onclick="ecran('accueil')">←</button><div class="titre">Catégorie</div></div>
+    <div class="liste">
+      <button class="li" onclick="rien()">••• Toutes catégories</button>
+      <button class="li" onclick="ecran('immo')">🏠 Immobilier <span class="fl">›</span></button>
+      <button class="li" onclick="rien()">🚗 Véhicules <span class="fl">›</span></button>
+      <button class="li" onclick="rien()">🔧 Matériel professionnel <span class="fl">›</span></button>
+      <button class="li" onclick="rien()">📱 Électronique <span class="fl">›</span></button>
+      <button class="li" onclick="rien()">🛋️ Maison & jardin <span class="fl">›</span></button>
+      <button class="li" onclick="rien()">👶 Famille <span class="fl">›</span></button>
+      <button class="li" onclick="rien()">👕 Mode <span class="fl">›</span></button>
+      <button class="li" onclick="rien()">⚽ Loisirs <span class="fl">›</span></button>
+      <button class="li" onclick="rien()">🐾 Animaux <span class="fl">›</span></button>
+      <button class="li" onclick="rien()">🏖️ Locations de vacances <span class="fl">›</span></button>
+      <button class="li" onclick="rien()">💼 Emploi <span class="fl">›</span></button>
+    </div>
+  </div>
+
+  <!-- écran IMMOBILIER -->
+  <div class="ecran" id="ec-immo">
+    <div class="appbar"><button class="back" onclick="ecran('categorie')">←</button><div class="titre">Catégorie</div></div>
+    <div class="sect" style="padding-left:12px">🏠 Immobilier</div>
+    <div class="liste">
+      <button class="li" onclick="rien()">Ventes immobilières</button>
+      <button class="li" onclick="rien()">Immobilier neuf</button>
+      <button class="li" onclick="choixLoc()">Locations</button>
+      <button class="li" onclick="rien()">Colocations</button>
+      <button class="li" onclick="rien()">Bureaux & commerces</button>
+      <button class="li" onclick="rien()">Services de déménagement</button>
+    </div>
+    <div class="msg no" id="mimmo"></div>
+  </div>
+
+  <!-- écran FILTRES -->
+  <div class="ecran" id="ec-filtres">
+    <div class="appbar"><button class="back" onclick="ecran('accueil')">←</button>
+      <div class="recbar" style="margin:0;flex:1">🔍 Rechercher sur l'appli…</div></div>
+    <div class="liste">
+      <button class="li" data-exp="categorie" onclick="rien()">Catégorie <span class="val">Locations</span><span class="fl">→</span></button>
+      <button class="li" data-exp="localisation" onclick="ecran('f-loc')">Localisation <span class="val" id="v-loc">—</span><span class="fl">→</span></button>
+      <button class="li" onclick="ecran('f-type')">Type de bien <span class="val" id="v-type">—</span><span class="fl">→</span></button>
+    </div>
+    <div class="sect" data-exp="loyer">Loyer</div>
+    <div class="pills">
+      <input class="pill" id="f-lmin" inputmode="numeric" placeholder="Loyer minimum">
+      <input class="pill" id="f-lmax" inputmode="numeric" placeholder="Loyer maximum" oninput="maj()">
+    </div>
+    <label class="cocheL"><input type="checkbox" id="f-marge"> Inclure des biens autour du budget (±5 %)</label>
+    <div class="sep"></div>
+    <div class="sect" data-exp="pieces">Pièces</div>
+    <div class="sous">Sélectionnez un minimum et un maximum</div>
+    <div class="ronds" id="f-pieces"></div>
+    <div class="sep"></div>
+    <div class="sect" data-exp="surface">Surface habitable</div>
+    <div class="pills">
+      <input class="pill" id="f-smin" inputmode="numeric" placeholder="Surface min">
+      <input class="pill" id="f-smax" inputmode="numeric" placeholder="Surface max">
+    </div>
+    <div class="sep"></div>
+    <div class="liste">
+      <button class="li" data-exp="meuble" onclick="ecran('f-meuble')">Meublé / Non meublé <span class="val" id="v-meuble">—</span><span class="fl">→</span></button>
+      <button class="li" data-exp="exterieur" onclick="ecran('f-ext')">Extérieur <span class="val" id="v-ext">—</span><span class="fl">→</span></button>
+      <button class="li" data-exp="etage" onclick="ecran('f-etage')">Étage de l'appartement <span class="val" id="v-etage">—</span><span class="fl">→</span></button>
+      <button class="li" data-exp="ascenseur" onclick="ecran('f-asc')">Avec ascenseur <span class="val" id="v-asc">—</span><span class="fl">→</span></button>
+      <button class="li" data-exp="caract" onclick="ecran('f-carac')">Caractéristiques <span class="val" id="v-carac">—</span><span class="fl">→</span></button>
+      <button class="li" onclick="rien()">Classe énergie <span class="fl">→</span></button>
+    </div>
+    <div class="sect" data-exp="typeann">Type d'annonce</div>
+    <label class="cocheL"><input type="checkbox" id="f-part" checked onchange="maj()"> Particuliers</label>
+    <label class="cocheL"><input type="checkbox" id="f-pro" checked onchange="maj()"> Professionnels</label>
+    <label class="cocheL"><input type="checkbox"> Recherche dans le titre uniquement</label>
+    <label class="cocheL"><input type="checkbox"> Urgent</label>
+  </div>
+
+  <!-- sous-écrans de filtres -->
+  <div class="ecran" id="ec-f-loc">
+    <div class="appbar"><button class="back" onclick="ecran('filtres')">←</button><div class="titre">Localisation</div></div>
+    <div class="recbar">🔍 Rechercher une ville</div>
+    <div class="liste" id="l-loc"></div>
+  </div>
+  <div class="ecran" id="ec-f-type">
+    <div class="appbar"><button class="back" onclick="ecran('filtres')">←</button><div class="titre">Type de bien</div></div>
+    <div class="liste" id="l-type"></div>
+  </div>
+  <div class="ecran" id="ec-f-meuble">
+    <div class="appbar"><button class="back" onclick="ecran('filtres')">←</button><div class="titre">Meublé / Non meublé</div></div>
+    <div class="liste" id="l-meuble"></div>
+  </div>
+  <div class="ecran" id="ec-f-ext">
+    <div class="appbar"><button class="back" onclick="ecran('filtres')">←</button><div class="titre">Extérieur</div></div>
+    <div class="liste" id="l-ext"></div>
+  </div>
+  <div class="ecran" id="ec-f-etage">
+    <div class="appbar"><button class="back" onclick="ecran('filtres')">←</button><div class="titre">Étage de l'appartement</div></div>
+    <div class="liste" id="l-etage"></div>
+  </div>
+  <div class="ecran" id="ec-f-asc">
+    <div class="appbar"><button class="back" onclick="ecran('filtres')">←</button><div class="titre">Avec ascenseur</div></div>
+    <div class="liste" id="l-asc"></div>
+  </div>
+  <div class="ecran" id="ec-f-carac">
+    <div class="appbar"><button class="back" onclick="ecran('filtres')">←</button><div class="titre">Caractéristiques</div></div>
+    <div class="recbar">🔍 Rechercher</div>
+    <div class="liste" id="l-carac"></div>
+  </div>
+
+  <!-- écran RÉSULTATS -->
+  <div class="ecran" id="ec-resultats">
+    <div class="appbar"><button class="back" onclick="ecran('filtres')">←</button>
+      <div class="recbar" style="margin:0;flex:1">🔍 Rechercher sur l'appli…</div></div>
+    <div class="chips">
+      <button class="chip">🗺️ Carte</button>
+      <button class="chip plein" onclick="ecran('filtres')">Filtres <span class="bd" id="nbf">0</span></button>
+      <button class="chip plein" onclick="ecran('f-loc')">📍 <span id="chip-loc">Tarbes (65000)</span></button>
+    </div>
+    <div class="nbres" id="nbres">0 annonce</div>
+    <div class="astuce" data-exp="sauver">💡 Astuce : sauvegarder la recherche</div>
+    <div id="liste-ann"></div>
+    <div class="msg" id="mrech"></div>
+  </div>
+
+  <!-- écran FAVORIS -->
+  <div class="ecran" id="ec-favoris">
+    <div class="appbar"><div class="titre" style="font-size:24px">Favoris</div></div>
+    <div class="onglets">
+      <button class="ong" onclick="rien()">Annonces</button>
+      <button class="ong on">Recherches <span class="bd2" id="ong-nb">0</span></button>
+      <button class="ong" onclick="rien()">Vendeurs</button>
+    </div>
+    <div style="padding:12px"><button class="chip">↕ Tri : nouveaux résultats</button></div>
+    <div id="info-rech"></div>
+    <div id="l-rech"></div>
+  </div>
+
+  <!-- écran ANNONCE -->
+  <div class="ecran" id="ec-annonce">
+    <div class="appbar"><button class="back" onclick="ecran('resultats')">←</button>
+      <div class="titre" id="a-titre">Annonce</div><span style="font-size:19px">🤍</span></div>
+    <div class="hero" id="a-hero"><span class="cpt">📷 1/8</span></div>
+    <div class="carte">
+      <div class="prix" id="a-prix">—</div>
+      <div style="font-size:15px;color:var(--gris);font-weight:700" id="a-cc">Charges comprises</div>
+      <div class="sstitre" id="a-sous">—</div>
+      <div style="font-size:15px;font-weight:600;margin-bottom:10px" id="a-desc1">—</div>
+      <div id="a-pro"></div>
+    </div>
+    <h2>Description</h2>
+    <div style="margin:0 12px;font-size:15.5px;white-space:pre-line" id="a-desc"></div>
+    <h2>Localisation</h2>
+    <div class="bleuinfo">Le bailleur a choisi de ne pas indiquer l'adresse exacte.<br>
+      <a href="#" onclick="return false">Demander l'adresse exacte</a></div>
+    <div class="carte" id="a-transp"></div>
+    <h2 data-exp="cc">Détail du prix</h2>
+    <div class="prixbox" id="a-prixbox"></div>
+    <h2>Les informations clés</h2>
+    <div class="lignes" id="a-infos"></div>
+    <h2 data-exp="dpe">Diagnostics</h2>
+    <div class="lignes"><div class="lg"><span class="k">Classe énergie</span>
+      <span class="dpescale" id="a-dpe"></span></div></div>
+    <h2>Proposé par</h2>
+    <div class="carte" id="a-vendeur"></div>
+    <div style="margin:18px 12px;font-size:15.5px;font-weight:700">🚩 Signaler l'annonce</div>
+    <div style="margin:0 12px 20px;font-size:15.5px;font-weight:700">ℹ️ Vos droits et obligations</div>
+    <div class="msg" id="mann"></div>
+  </div>
+</section>
+
+<!-- ================= ÉTAPE 2 : LE VRAI PRIX ================= -->
+<section class="etape" id="e2">
+  <h2 style="margin-top:14px">Le détail du prix</h2>
+  <p style="margin:0 12px 12px;font-size:15.5px">C'est le tableau que l'application affiche en bas de
+    chaque annonce. <b>Touchez les cases orange</b> et calculez.</p>
+  <div class="prixbox">
+    <div style="font-weight:800;margin-bottom:6px">Annonce n° 3 — T2 Ormeau (agence)</div>
+    <div class="l grand"><span>Loyer <span style="color:var(--gris);font-weight:600">(charges comprises)</span></span><b>495 € / mois</b></div>
+    <div class="l sec"><span>Loyer hors charges</span><b>455 €</b></div>
+    <div class="l sec"><span>Charges prévisionnelles</span><b>40 €</b></div>
+    <hr>
+    <div style="font-weight:800;margin-bottom:4px">Autres frais</div>
+    <div class="l"><span>Honoraires d'agence</span><b>330 €</b></div>
+    <div class="l sec"><span>Dont frais d'état des lieux</span><b>90 €</b></div>
+    <div class="l"><span>Dépôt de garantie</span><b>450 €</b></div>
+    <hr>
+    <div class="l grand"><span><b>À payer le 1<sup>er</sup> jour</b></span>
+      <button class="vide" data-r="1275">?</button></div>
+  </div>
+  <div class="prixbox">
+    <div style="font-weight:800;margin-bottom:6px">Annonce n° 6 — T1 meublé Saint-Antoine (particulier)</div>
+    <div class="l grand"><span>Loyer <span style="color:var(--gris);font-weight:600">(charges comprises)</span></span><b>440 € / mois</b></div>
+    <div class="l sec"><span>Loyer hors charges</span><b>405 €</b></div>
+    <div class="l sec"><span>Charges prévisionnelles</span><b>35 €</b></div>
+    <hr>
+    <div style="font-weight:800;margin-bottom:4px">Autres frais</div>
+    <div class="l"><span>Honoraires d'agence</span><b>0 €</b></div>
+    <div class="l"><span>Dépôt de garantie</span><b>440 €</b></div>
+    <hr>
+    <div class="l grand"><span><b>À payer le 1<sup>er</sup> jour</b></span>
+      <button class="vide" data-r="880">?</button></div>
+  </div>
+  <div class="prixbox">
+    <div style="font-weight:800;margin-bottom:6px">Annonce n° 4 — T2 Foirail (particulier)</div>
+    <div class="l grand"><span>Loyer <span style="color:var(--gris);font-weight:600">(hors charges)</span></span><b>420 € / mois</b></div>
+    <div class="l sec"><span>Charges prévisionnelles</span><b>45 €</b></div>
+    <div class="l"><span><b>Loyer réel par mois</b></span><button class="vide" data-r="465">?</button></div>
+    <hr>
+    <div class="l"><span>Dépôt de garantie</span><b>420 €</b></div>
+    <div class="l grand"><span><b>À payer le 1<sup>er</sup> jour</b></span>
+      <button class="vide" data-r="885">?</button></div>
+  </div>
+  <div style="margin:0 12px"><button class="btn blanc plat" onclick="calc(null)">🧮 Ouvrir la calculatrice</button></div>
+  <div class="msg" id="mcalc"></div>
+  <div class="carte">
+    <div style="font-weight:800;font-size:16.5px;margin-bottom:9px">Amir a 950 € d'économies.
+      Quelles annonces peut-il prendre ?</div>
+    <div id="cmpRep"></div>
+    <div class="msg" id="mcmp"></div>
+  </div>
+</section>
+
+<!-- ================= ÉTAPE 3 : LE MESSAGE ================= -->
+<section class="etape" id="e3">
+  <div class="bleuinfo" style="margin-top:14px">Amir a trouvé son annonce. Il touche <b>Message</b>.
+    On va écrire en trois fois : remettre dans l'ordre, compléter, puis écrire soi-même.</div>
+  <h2>1. Remettre le message dans l'ordre</h2>
+  <div class="etiq" id="etiq"></div>
+  <div class="zone" id="zone"></div>
+  <div style="margin:12px"><button class="btn blanc plat" onclick="razOrdre()">↺ Recommencer</button></div>
+  <div class="msg" id="mord"></div>
+  <h2>2. Compléter le message</h2>
+  <div class="trous" id="trous"></div>
+  <div class="etiq" id="mots" style="margin-top:11px"></div>
+  <div class="msg" id="mtr"></div>
+  <h2>3. À vous d'écrire</h2>
+  <p style="margin:0 12px 8px;font-size:15px;color:var(--gris);font-weight:600">La liste se coche toute seule.</p>
+  <textarea id="prod" placeholder="Bonjour…"></textarea>
+  <ul class="check" id="check"></ul>
+  <div style="margin:12px"><button class="btn nav" onclick="copier()">📋 Copier mon message</button></div>
+  <div class="msg" id="mcopy"></div>
+  <div class="bleuinfo" style="background:var(--rouge-f)">⚠️ On ne donne jamais son numéro de sécurité sociale
+    ni sa carte bancaire dans un message. Et on ne verse jamais d'argent avant d'avoir visité.</div>
+</section>
+
+<!-- calculatrice -->
+<div class="calc" id="cal" onclick="if(event.target===this)calc(0)">
+  <div class="in">
+    <div class="ec" id="ecran">0</div>
+    <div class="lg2" id="lgcalc">Calculez, puis touchez « Valider »</div>
+    <div class="pave">
+      <button onclick="tape('7')">7</button><button onclick="tape('8')">8</button>
+      <button onclick="tape('9')">9</button><button class="op" onclick="tape('+')">+</button>
+      <button onclick="tape('4')">4</button><button onclick="tape('5')">5</button>
+      <button onclick="tape('6')">6</button><button class="op" onclick="tape('-')">−</button>
+      <button onclick="tape('1')">1</button><button onclick="tape('2')">2</button>
+      <button onclick="tape('3')">3</button><button class="op" onclick="egal()">=</button>
+      <button onclick="tape('0')">0</button><button class="eff" onclick="efface()">C</button>
+      <button class="eff" onclick="retour()">⌫</button><button class="val" onclick="valider()">Valider</button>
+    </div>
+  </div>
+</div>
+
+<div class="basbar" id="basbar"></div>
+<div class="tabbar">
+  <button class="tab" onclick="ecran('accueil')"><span class="i">🔍</span>Recherche</button>
+  <button class="tab" onclick="ecran('favoris')"><span class="i">🤍<span class="bg" id="bgfav" style="display:none">1</span></span>Favoris</button>
+  <button class="tab" onclick="rien()"><span class="i">➕</span>Publier</button>
+  <button class="tab" onclick="rien()"><span class="i">💬</span>Messages</button>
+  <button class="tab" onclick="rien()"><span class="i" style="color:var(--or)">◉</span>Compte</button>
+</div>
+
+<script>
+const IMG=(typeof window.IMG==='object'&&window.IMG)?window.IMG:{};
+function ph(k,em){return IMG[k]?'<img src="'+IMG[k]+'" alt="">':em;}
+function rien(){alert('Exercice : cette partie n\u2019est pas active.');}
+
+/* ---------- étapes ---------- */
+const TIT=['Chercher une annonce','Le vrai prix','Écrire au propriétaire'];
+let et=0;
+function setEtape(i){
+  et=Math.max(0,Math.min(2,i));
+  ['e1','e2','e3'].forEach((id,k)=>document.getElementById(id).classList.toggle('on',k===et));
+  document.getElementById('sn').textContent=et+1;
+  document.getElementById('stit').textContent=TIT[et];
+  [...document.querySelectorAll('#jauge i')].forEach((x,k)=>x.classList.toggle('on',k<=et));
+  majBas();window.scrollTo(0,0);
+}
+/* ---------- écrans de l'appli ---------- */
+let ecCourant='accueil';
+function ecran(n){
+  ecCourant=n;
+  document.querySelectorAll('.ecran').forEach(e=>e.classList.remove('on'));
+  const e=document.getElementById('ec-'+n); if(e)e.classList.add('on');
+  if(n==='resultats')maj();
+  majBas();window.scrollTo(0,0);
+}
+function majBas(){
+  const b=document.getElementById('basbar');
+  if(et>0){b.innerHTML='<button class="btn blanc" onclick="setEtape('+(et-1)+')">Précédent</button>'+
+    (et<2?'<button class="btn" onclick="setEtape('+(et+1)+')">Suivant</button>':'');return;}
+  if(ecCourant==='filtres'||ecCourant.indexOf('f-')===0){
+    b.innerHTML='<button class="btn blanc" onclick="effacer()">Effacer</button>'+
+      '<button class="btn" onclick="ecran(\'resultats\')">Rechercher ('+filtrer().length+')</button>';
+  } else if(ecCourant==='resultats'){
+    b.innerHTML='<button class="btn blanc" onclick="ecran(\'filtres\')">Filtres</button>'+
+      '<button class="btn" onclick="sauverRecherche()">🔔 Sauvegarder la recherche</button>';
+
+  } else if(ecCourant==='favoris'){
+    b.innerHTML='<button class="btn" onclick="ecran(\'accueil\')">Retour à la recherche</button>';
+  } else if(ecCourant==='annonce'){
+    b.innerHTML='<button class="btn blanc" onclick="rien()">Voir le numéro</button>'+
+      '<button class="btn nav" onclick="choisir()">Message</button>';
+  } else {
+    b.innerHTML='<button class="btn" onclick="setEtape(1)">Passer à l\u2019étape 2</button>';
+  }
+}
+function choixLoc(){
+  document.getElementById('mimmo').className='msg ok on';
+  document.getElementById('mimmo').innerHTML='✅ Bon choix : <b>Locations</b>. « Ventes » c\u2019est pour acheter, « Colocations » pour partager.';
+  setTimeout(()=>ecran('filtres'),1500);
+}
+
+/* ---------- LES ANNONCES ---------- */
+const ADS=[
+ {n:1,k:'studio',em:'🏠',t:'Studio meublé 22 m² — centre-ville',com:'Tarbes',q:'Centre-ville',px:365,hc:340,ch:25,typ:'Appartement',pieces:1,srf:22,meu:1,asc:0,park:0,rdc:0,ext:'',disp:'1er décembre',pro:0,hono:0,dep:730,dpe:'D',coloc:0,une:0,d:'Appartement de 1 pièce, 22 m². Meublé. Disponible 1er décembre. Dépôt de garantie : 730 €.'},
+ {n:2,k:'immeuble',em:'🏢',t:'Appartement 2 pièces 35 m² — Sainte-Anne',com:'Tarbes',q:'Sainte-Anne',px:450,hc:410,ch:40,typ:'Appartement',pieces:2,srf:35,meu:0,asc:0,park:0,rdc:0,ext:'',disp:'le 1er du mois prochain',pro:0,hono:0,dep:450,dpe:'D',coloc:0,une:0,d:'Appartement de 2 pièces, 35 m². Non meublé (vide). Disponible le 1er du mois prochain. Dépôt de garantie : 450 €.'},
+ {n:3,k:'balcon',em:'🌿',t:'Appartement 2 pièces 31 m² — Ormeau-Figarol',com:'Tarbes',q:'Ormeau-Figarol',px:495,hc:455,ch:40,typ:'Appartement',pieces:2,srf:31,meu:0,asc:0,park:1,rdc:0,ext:'Balcon',disp:'tout de suite',pro:1,hono:330,dep:450,dpe:'C',coloc:0,une:1,d:'Appartement de 2 pièces, 31 m². Non meublé (vide). Avec : place de parking, balcon. Disponible tout de suite. \nHonoraires à la charge du locataire : 330 € TTC. Dépôt de garantie : 450 €.'},
+ {n:4,k:'sejour',em:'🛋️',t:'Appartement 2 pièces 45 m² — Foirail',com:'Tarbes',q:'Foirail',px:465,hc:420,ch:45,typ:'Appartement',pieces:2,srf:45,meu:0,asc:0,park:0,rdc:0,ext:'',disp:'tout de suite',pro:0,hono:0,dep:420,dpe:'E',coloc:0,une:0,d:'Appartement de 2 pièces, 45 m². Non meublé (vide). Disponible tout de suite. Dépôt de garantie : 420 €.'},
+ {n:5,k:'ascenseur',em:'🛗',t:'Appartement 3 pièces 60 m² — Vignemale',com:'Tarbes',q:'Vignemale-Martinet',px:530,hc:480,ch:50,typ:'Appartement',pieces:3,srf:60,meu:0,asc:1,park:0,rdc:0,ext:'',disp:'tout de suite',pro:1,hono:390,dep:530,dpe:'C',coloc:0,une:0,d:'Appartement de 3 pièces, 60 m². Non meublé (vide). Avec : ascenseur. Disponible tout de suite. \nHonoraires à la charge du locataire : 390 € TTC. Dépôt de garantie : 530 €.'},
+ {n:6,k:'chambre',em:'🛏️',t:'Appartement 1 pièce meublé 26 m² — Saint-Antoine',com:'Tarbes',q:'Saint-Antoine',px:440,hc:405,ch:35,typ:'Appartement',pieces:1,srf:26,meu:1,asc:0,park:0,rdc:1,ext:'',disp:'tout de suite',pro:0,hono:0,dep:440,dpe:'D',coloc:0,une:0,d:'Appartement de 1 pièce, 26 m². Meublé. Avec : rez-de-chaussée. Disponible tout de suite. Dépôt de garantie : 440 €.'},
+ {n:7,k:'terrasse',em:'🌿',t:'Appartement 3 pièces 63 m² — Urac',com:'Tarbes',q:'Urac',px:695,hc:640,ch:55,typ:'Appartement',pieces:3,srf:63,meu:0,asc:1,park:1,rdc:0,ext:'Balcon',disp:'tout de suite',pro:1,hono:450,dep:695,dpe:'B',coloc:0,une:1,d:'Appartement de 3 pièces, 63 m². Non meublé (vide). Avec : ascenseur, place de parking, balcon. Disponible tout de suite. \nHonoraires à la charge du locataire : 450 € TTC. Dépôt de garantie : 695 €.'},
+ {n:8,k:'cuisine',em:'🏘️',t:'Chambre en colocation 12 m² — centre-ville',com:'Tarbes',q:'Centre-ville',px:320,hc:300,ch:20,typ:'Appartement',pieces:1,srf:12,meu:1,asc:0,park:0,rdc:0,ext:'',disp:'tout de suite',pro:0,hono:0,dep:320,dpe:'E',coloc:1,une:0,d:'Appartement de 1 pièce, 12 m². Meublé. Disponible tout de suite. Dépôt de garantie : 320 €.'},
+ {n:9,k:'maison',em:'🏠',t:'Maison 3 pièces 70 m² avec jardin — Aureilhan',com:'Aureilhan',q:'Aureilhan',px:640,hc:600,ch:40,typ:'Maison',pieces:3,srf:70,meu:0,asc:0,park:1,rdc:1,ext:'Jardin',disp:'tout de suite',pro:1,hono:420,dep:640,dpe:'D',coloc:0,une:0,d:'Maison de 3 pièces, 70 m². Non meublé (vide). Avec : rez-de-chaussée, place de parking, jardin. Disponible tout de suite. \nHonoraires à la charge du locataire : 420 € TTC. Dépôt de garantie : 640 €.'},
+ {n:10,k:'sdb',em:'🚿',t:'Appartement 2 pièces 38 m² rénové — Séméac',com:'Séméac',q:'Séméac',px:480,hc:440,ch:40,typ:'Appartement',pieces:2,srf:38,meu:0,asc:1,park:1,rdc:0,ext:'',disp:'tout de suite',pro:0,hono:0,dep:480,dpe:'C',coloc:0,une:0,d:'Appartement de 2 pièces, 38 m². Non meublé (vide). Avec : ascenseur, place de parking. Disponible tout de suite. Dépôt de garantie : 480 €.'},
+ {n:11,k:'couloir',em:'🚪',t:'Appartement 1 pièce meublé 24 m² — Lourdes',com:'Lourdes',q:'Lourdes centre',px:390,hc:360,ch:30,typ:'Appartement',pieces:1,srf:24,meu:1,asc:0,park:0,rdc:0,ext:'',disp:'tout de suite',pro:0,hono:0,dep:390,dpe:'E',coloc:0,une:0,d:'Appartement de 1 pièce, 24 m². Meublé. Disponible tout de suite. Dépôt de garantie : 390 €.'},
+ {n:12,k:'garage',em:'🚗',t:'Appartement 2 pièces 40 m² avec garage — Ibos',com:'Ibos',q:'Ibos',px:520,hc:480,ch:40,typ:'Appartement',pieces:2,srf:40,meu:0,asc:0,park:1,rdc:0,ext:'',disp:'tout de suite',pro:0,hono:0,dep:520,dpe:'D',coloc:0,une:0,d:'Appartement de 2 pièces, 40 m². Non meublé (vide). Avec : place de parking. Disponible tout de suite. Dépôt de garantie : 520 €.'},
+ {n:13,k:'sejour',em:'🛋️',t:'Appartement 2 pièces 34 m² — Marcadieu',com:'Tarbes',q:'Marcadieu',px:520,hc:475,ch:45,typ:'Appartement',pieces:2,srf:34,meu:1,asc:1,park:0,rdc:0,ext:'',disp:'tout de suite',pro:1,hono:340,dep:520,dpe:'D',coloc:0,une:0,d:'Appartement de 2 pièces, 34 m². Meublé. Avec : ascenseur. Disponible tout de suite. \nHonoraires à la charge du locataire : 340 € TTC. Dépôt de garantie : 520 €.'},
+ {n:14,k:'balcon',em:'🌿',t:'Appartement 3 pièces 58 m² — Laubadère',com:'Tarbes',q:'Laubadère',px:560,hc:515,ch:45,typ:'Appartement',pieces:3,srf:58,meu:0,asc:0,park:0,rdc:0,ext:'Balcon',disp:'tout de suite',pro:0,hono:0,dep:560,dpe:'E',coloc:0,une:0,d:'Appartement de 3 pièces, 58 m². Non meublé (vide). Avec : balcon. Disponible tout de suite. Dépôt de garantie : 560 €.'},
+ {n:15,k:'jardin',em:'🌳',t:'Appartement 2 pièces 40 m² rez-de-chaussée — Solazur',com:'Tarbes',q:'Solazur',px:470,hc:430,ch:40,typ:'Appartement',pieces:2,srf:40,meu:0,asc:0,park:0,rdc:1,ext:'Jardin',disp:'tout de suite',pro:0,hono:0,dep:470,dpe:'D',coloc:0,une:0,d:'Appartement de 2 pièces, 40 m². Non meublé (vide). Avec : rez-de-chaussée, jardin. Disponible tout de suite. Dépôt de garantie : 470 €.'},
+ {n:16,k:'immeuble',em:'🏢',t:'Appartement 4 pièces 78 m² — Bel Air',com:'Tarbes',q:'Bel Air',px:750,hc:690,ch:60,typ:'Appartement',pieces:4,srf:78,meu:0,asc:1,park:1,rdc:0,ext:'Balcon',disp:'tout de suite',pro:1,hono:520,dep:750,dpe:'C',coloc:0,une:0,d:'Appartement de 4 pièces, 78 m². Non meublé (vide). Avec : ascenseur, place de parking, balcon. Disponible tout de suite. \nHonoraires à la charge du locataire : 520 € TTC. Dépôt de garantie : 750 €.'},
+ {n:17,k:'cuisine',em:'🏘️',t:'Chambre en colocation 14 m² — Gespe',com:'Tarbes',q:'Gespe',px:340,hc:320,ch:20,typ:'Appartement',pieces:1,srf:14,meu:1,asc:0,park:0,rdc:0,ext:'',disp:'dans 3 mois',pro:0,hono:0,dep:340,dpe:'D',coloc:1,une:0,d:'Appartement de 1 pièce, 14 m². Meublé. Disponible dans 3 mois. Dépôt de garantie : 340 €.'},
+ {n:18,k:'studio',em:'🏠',t:'Studio meublé 20 m² — Saint-Jean',com:'Tarbes',q:'Saint-Jean',px:395,hc:370,ch:25,typ:'Appartement',pieces:1,srf:20,meu:1,asc:0,park:0,rdc:0,ext:'',disp:'tout de suite',pro:1,hono:300,dep:395,dpe:'E',coloc:0,une:0,d:'Appartement de 1 pièce, 20 m². Meublé. Disponible tout de suite. \nHonoraires à la charge du locataire : 300 € TTC. Dépôt de garantie : 395 €.'},
+ {n:19,k:'garage',em:'🚗',t:'Appartement 2 pièces 37 m² avec parking — Théâtre',com:'Tarbes',q:'Théâtre',px:545,hc:500,ch:45,typ:'Appartement',pieces:2,srf:37,meu:1,asc:0,park:1,rdc:0,ext:'',disp:'tout de suite',pro:0,hono:0,dep:545,dpe:'D',coloc:0,une:0,d:'Appartement de 2 pièces, 37 m². Meublé. Avec : place de parking. Disponible tout de suite. Dépôt de garantie : 545 €.'},
+ {n:20,k:'maison',em:'🏠',t:'Maison 4 pièces 85 m² avec jardin — Bordères',com:'Bordères',q:'Bordères-sur-l’Échez',px:720,hc:670,ch:50,typ:'Maison',pieces:4,srf:85,meu:0,asc:0,park:1,rdc:1,ext:'Jardin',disp:'tout de suite',pro:0,hono:0,dep:720,dpe:'E',coloc:0,une:0,d:'Maison de 4 pièces, 85 m². Non meublé (vide). Avec : rez-de-chaussée, place de parking, jardin. Disponible tout de suite. Dépôt de garantie : 720 €.'},
+ {n:21,k:'ascenseur',em:'🛗',t:'Appartement 3 pièces 55 m² avec ascenseur — Arsenal',com:'Tarbes',q:'Arsenal',px:590,hc:545,ch:45,typ:'Appartement',pieces:3,srf:55,meu:0,asc:1,park:0,rdc:0,ext:'',disp:'dans 3 mois',pro:1,hono:380,dep:590,dpe:'D',coloc:0,une:0,d:'Appartement de 3 pièces, 55 m². Non meublé (vide). Avec : ascenseur. Disponible dans 3 mois. \nHonoraires à la charge du locataire : 380 € TTC. Dépôt de garantie : 590 €.'},
+ {n:22,k:'chambre',em:'🛏️',t:'Appartement 2 pièces 36 m² — Aureilhan',com:'Aureilhan',q:'Aureilhan',px:430,hc:395,ch:35,typ:'Appartement',pieces:2,srf:36,meu:0,asc:0,park:0,rdc:1,ext:'',disp:'tout de suite',pro:0,hono:0,dep:430,dpe:'D',coloc:0,une:0,d:'Appartement de 2 pièces, 36 m². Non meublé (vide). Avec : rez-de-chaussée. Disponible tout de suite. Dépôt de garantie : 430 €.'},
+ {n:23,k:'chambre',em:'🛏️',t:'Appartement 1 pièce meublé 28 m² — Ormeau',com:'Tarbes',q:'Ormeau',px:480,hc:445,ch:35,typ:'Appartement',pieces:1,srf:28,meu:1,asc:1,park:0,rdc:0,ext:'',disp:'dans 3 mois',pro:0,hono:0,dep:480,dpe:'C',coloc:0,une:0,d:'Appartement de 1 pièce, 28 m². Meublé. Avec : ascenseur. Disponible dans 3 mois. Dépôt de garantie : 480 €.'},
+ {n:24,k:'maison',em:'🏠',t:'Maison 3 pièces 65 m² — Séméac',com:'Séméac',q:'Séméac',px:610,hc:570,ch:40,typ:'Maison',pieces:3,srf:65,meu:0,asc:0,park:1,rdc:1,ext:'Jardin',disp:'tout de suite',pro:1,hono:400,dep:610,dpe:'E',coloc:0,une:0,d:'Maison de 3 pièces, 65 m². Non meublé (vide). Avec : rez-de-chaussée, place de parking, jardin. Disponible tout de suite. \nHonoraires à la charge du locataire : 400 € TTC. Dépôt de garantie : 610 €.'}
+];
+/* ---------- FILTRES ---------- */
+const F={loc:'',typ:'',lmax:0,pieces:[],meu:null,ext:'',etage:'',asc:0,carac:[],part:1,pro:1};
+function opts(id,arr,cb){
+  const z=document.getElementById(id);z.innerHTML='';
+  arr.forEach(([lab,val,nb])=>{
+    const b=document.createElement('button');b.className='li';b.dataset.v=val;
+    b.innerHTML=lab+(nb?'<span class="nb">'+nb+'</span>':'');
+    b.onclick=()=>{cb(val);
+      z.querySelectorAll('.li').forEach(x=>x.classList.remove('sel'));
+      b.classList.add('sel');maj();setTimeout(()=>ecran('filtres'),350);};
+    z.appendChild(b);});
+}
+opts('l-loc',[['Tarbes (65000)','Tarbes'],['Aureilhan (65800)','Aureilhan'],['Séméac (65600)','Séméac'],
+  ['Ibos (65420)','Ibos'],['Lourdes (65100)','Lourdes'],['Toute la France','']],
+  v=>{F.loc=v;txt('v-loc',v||'Toute la France');txt('chip-loc',v||'France');});
+opts('l-type',[['Appartement','Appartement','100+'],['Maison','Maison','24'],['Toutes','','100+']],
+  v=>{F.typ=v;txt('v-type',v||'Tous');});
+opts('l-meuble',[['Meublé','1','100+'],['Non meublé','0','100+'],['Peu importe','','100+']],
+  v=>{F.meu=(v===''?null:+v);txt('v-meuble',v===''?'Peu importe':(v==='1'?'Meublé':'Non meublé'));});
+opts('l-ext',[['Balcon','Balcon','100+'],['Terrasse','Terrasse','78'],['Jardin','Jardin','43'],['Peu importe','','100+']],
+  v=>{F.ext=v;txt('v-ext',v||'Peu importe');});
+opts('l-etage',[['Rez-de-chaussée','rdc','12'],['Pas de rez-de-chaussée','autre','100+'],['Peu importe','','100+']],
+  v=>{F.etage=v;txt('v-etage',v==='rdc'?'Rez-de-chaussée':(v||'Peu importe'));});
+opts('l-asc',[['Annonces avec ascenseur uniquement','1','24'],['Peu importe','','100+']],
+  v=>{F.asc=v==='1'?1:0;txt('v-asc',v==='1'?'Avec ascenseur':'Peu importe');});
+opts('l-carac',[['Place(s) de parking','park','48'],['Cuisine équipée','cuis','100+'],
+  ['Cave','cave','36'],['Peu importe','','100+']],
+  v=>{F.carac=v?[v]:[];txt('v-carac',v==='park'?'Parking':(v==='cuis'?'Cuisine équipée':(v==='cave'?'Cave':'Peu importe')));});
+function txt(id,t){const e=document.getElementById(id);if(e)e.textContent=t;}
+(function(){
+  const z=document.getElementById('f-pieces');
+  [1,2,3,4,5,6,7,'8+'].forEach(n=>{
+    const b=document.createElement('button');b.className='rond';b.textContent=n;
+    b.onclick=()=>{const v=parseInt(n);const i=F.pieces.indexOf(v);
+      if(i<0)F.pieces.push(v);else F.pieces.splice(i,1);
+      b.classList.toggle('on');maj();};
+    z.appendChild(b);});
+})();
+function effacer(){
+  F.loc='';F.typ='';F.lmax=0;F.pieces=[];F.meu=null;F.ext='';F.etage='';F.asc=0;F.carac=[];
+  document.getElementById('f-lmax').value='';
+  document.querySelectorAll('.rond').forEach(r=>r.classList.remove('on'));
+  document.querySelectorAll('.li.sel').forEach(r=>r.classList.remove('sel'));
+  ['v-loc','v-type','v-meuble','v-ext','v-etage','v-asc','v-carac'].forEach(i=>txt(i,'—'));
+  maj();
+}
+function filtrer(){
+  F.lmax=+(document.getElementById('f-lmax').value||0);
+  F.part=document.getElementById('f-part').checked?1:0;
+  F.pro=document.getElementById('f-pro').checked?1:0;
+  return ADS.filter(a=>
+    (!F.loc||a.com===F.loc)&&(!F.typ||a.typ===F.typ)&&
+    (!F.lmax||a.px<=F.lmax)&&
+    (!F.pieces.length||F.pieces.indexOf(a.pieces)>=0)&&
+    (F.meu===null||a.meu===F.meu)&&
+    (!F.ext||a.ext===F.ext)&&
+    (!F.asc||a.asc)&&
+    (!F.carac.length||(F.carac[0]==='park'&&a.park))&&
+    ((a.pro&&F.pro)||(!a.pro&&F.part)));
+}
+function nbFiltres(){
+  return (F.loc?1:0)+(F.typ?1:0)+(F.lmax?1:0)+(F.pieces.length?1:0)+(F.meu!==null?1:0)+
+    (F.ext?1:0)+(F.etage?1:0)+F.asc+(F.carac.length?1:0);
+}
+function maj(){
+  const r=filtrer();
+  if(nouvelles&&r.length)r.unshift(ANN_NEUVE);
+  txt('nbf',nbFiltres());
+  txt('nbres',r.length+' annonce'+(r.length>1?'s':''));
+  const z=document.getElementById('liste-ann');z.innerHTML='';
+  if(!r.length){z.innerHTML='<div style="padding:26px 12px;text-align:center;color:#5C6B80;font-weight:700">Aucune annonce ne correspond.<br>Enlevez un filtre.</div>';}
+  r.forEach(a=>{
+    const d=document.createElement('div');d.className='ann';d.dataset.n=a.n;
+    d.innerHTML='<div class="ph">'+ph(a.k,a.em)+
+      (a.une?'<span class="une">À la une</span>':'')+
+      (a.neuf?'<span class="neuf">Nouveau</span>':'')+'<span class="fav">🤍</span></div>'+
+      '<div class="px">'+a.px+' €</div>'+
+      '<div class="desc">'+a.typ+' · '+a.pieces+' pièce'+(a.pieces>1?'s':'')+' · '+a.srf+' m²</div>'+
+      '<div class="tags"><span class="dpe">'+a.dpe+'</span>'+
+      (a.meu?'<span class="ico"><i>🛏️</i>Meublé</span>':'')+
+      (a.ext?'<span class="ico"><i>🌿</i>'+a.ext+'</span>':'')+
+      (a.asc?'<span class="ico"><i>🛗</i>Ascenseur</span>':'')+
+      (a.park?'<span class="ico"><i>🅿️</i>Parking</span>':'')+'</div>'+
+      '<div class="loc">'+a.com+' 65000 '+a.q+(a.pro?' · <b>Pro</b>':'')+'</div>';
+    d.onclick=()=>ouvrir(a);
+    z.appendChild(d);});
+  majBas();
+}
+/* ---------- ANNONCE ---------- */
+let annonceOuverte=null;
+function ouvrir(a){
+  annonceOuverte=a;
+  txt('a-titre',a.typ+' '+a.pieces+' piè…');
+  document.getElementById('a-hero').innerHTML=ph(a.k,a.em)+'<span class="cpt">📷 1/8</span>';
+  txt('a-prix',a.px+' €');
+  txt('a-cc','Charges comprises');
+  txt('a-sous',a.pieces+' pièce'+(a.pieces>1?'s':'')+' · '+a.srf+' m² · '+a.com+' 65000 '+a.q);
+  txt('a-desc1',a.t);
+  document.getElementById('a-pro').innerHTML=a.pro
+    ? '<div style="font-weight:800">Par AGENCE DES PYRÉNÉES</div><div style="font-size:14.5px;color:var(--gris);font-weight:600">★★★★☆ 145 avis · 44 annonces</div><span class="pro">Pro</span>'
+    : '<span class="pro">Particulier</span>';
+  document.getElementById('a-desc').textContent=a.d;
+  document.getElementById('a-transp').innerHTML='<div style="font-weight:800;margin-bottom:6px">🚌 Transports à proximité</div>'+
+    '<div style="font-size:15px;font-weight:600">Bus ligne 1 — arrêt '+a.q+'<br>Gare de Tarbes à 15 min</div>';
+  document.getElementById('a-prixbox').innerHTML=
+    '<div class="l grand"><span>Loyer <span style="color:var(--gris);font-weight:600">(charges comprises)</span></span><b>'+a.px+' € / mois</b></div>'+
+    '<div class="l sec"><span>Loyer hors charges</span><b>'+a.hc+' €</b></div>'+
+    '<div class="l sec"><span>Charges prévisionnelles</span><b>'+a.ch+' €</b></div><hr>'+
+    '<div style="font-weight:800;margin-bottom:4px">Autres frais</div>'+
+    '<div class="l"><span>Honoraires d\u2019agence</span><b>'+(a.hono?a.hono+' €':'Non renseigné')+'</b></div>'+
+    '<div class="l"><span>Dépôt de garantie</span><b>'+a.dep+' €</b></div>';
+  document.getElementById('a-infos').innerHTML=
+    [['Type de bien',a.typ],['Ce bien est :',a.meu?'Meublé':'Non meublé'],
+     ['Surface habitable',a.srf+' m²'],['Nombre de pièces',a.pieces],
+     ['Charges incluses','Oui'],['Disponible',a.disp],['Référence','33'+a.n+'1']]
+    .map(x=>'<div class="lg"><span class="k">'+x[0]+'</span><span class="v">'+x[1]+'</span></div>').join('');
+  document.getElementById('a-dpe').innerHTML=['A','B','C','D','E','F','G'].map(l=>
+    '<span class="'+(l===a.dpe?'on':'')+'" style="background:'+
+    ({A:'#00A06D',B:'#5CB85C',C:'#A9D18E',D:'#FFD966',E:'#F4A460',F:'#E8743B',G:'#D9342B'}[l])+'">'+l+'</span>').join('');
+  document.getElementById('a-vendeur').innerHTML= a.pro
+    ? '<div class="vendeur"><div class="av">A</div><div><div class="nom">Agence des Pyrénées</div>'+
+      '<div class="meta">N° SIRET : 48505339100044</div></div></div>'+
+      '<div class="meta">🕒 Dernière activité il y a 16 heures</div>'
+    : '<div class="vendeur"><div class="av">C</div><div><div class="nom">Claire</div>'+
+      '<div class="meta">📅 Membre depuis octobre 2014</div></div></div>'+
+      '<div class="meta">🕒 Dernière activité il y a 13 heures</div>'+
+      '<div class="meta">⏱️ Répond en moyenne en 3 heures</div>'+
+      '<div class="badges"><div class="badge"><div class="rd">💬</div>Réactif</div>'+
+      '<div class="badge"><div class="rd">📱</div>Numéro vérifié</div></div>';
+  document.getElementById('mann').className='msg';
+  ecran('annonce');
+}
+const DEF={
+ categorie:['La catégorie','Le site vend de tout : des voitures, des vêtements, des logements…<br>'+
+  '<b>Locations</b> = louer un logement et payer un loyer chaque mois.<br>'+
+  '<b>Ventes immobilières</b> = acheter. <b>Colocations</b> = partager un logement à plusieurs.'],
+ localisation:['La localisation','La ville où vous cherchez. Le « <b>- 10 km</b> » veut dire que le site montre '+
+  'aussi les villages autour, jusqu\u2019à 10 kilomètres. Attention sans voiture.'],
+ loyer:['Le loyer minimum / maximum','Le <b>maximum</b> est le plus important : c\u2019est le prix à ne pas dépasser. '+
+  'On compte en général qu\u2019un loyer ne doit pas dépasser un tiers de ce qu\u2019on gagne.<br>'+
+  'Attention : le prix affiché n\u2019est pas toujours charges comprises.'],
+ pieces:['Les pièces','On compte les pièces principales : chambres + salon. La cuisine, la salle de bain '+
+  'et les WC ne comptent pas.<br><b>1</b> = studio ou T1. <b>2</b> = T2. Pour une personne seule, 1 ou 2.'],
+ surface:['La surface habitable','La taille du logement, en mètres carrés (m²). Une chambre fait environ 10 m². '+
+  'Un studio fait 20 à 30 m².'],
+ meuble:['Meublé / Non meublé','<b>Meublé</b> : le lit, la table, l\u2019armoire et le frigo sont déjà là. '+
+  'On peut arriver avec juste une valise.<br><b>Non meublé (vide)</b> : il n\u2019y a rien, il faut tout acheter. '+
+  'Compter plusieurs centaines d\u2019euros.'],
+ exterieur:['L\u2019extérieur','<b>Balcon</b> : petit espace devant une fenêtre, en hauteur. '+
+  '<b>Terrasse</b> : plus grand, souvent au sol. <b>Jardin</b> : de l\u2019herbe, à soi.'],
+ etage:['L\u2019étage','<b>Rez-de-chaussée</b> : au niveau de la rue, aucun escalier. Pratique avec une poussette '+
+  'ou des courses lourdes.<br><b>Dernier étage</b> : plus calme, mais plus chaud en été.'],
+ ascenseur:['Avec ascenseur','Sans ascenseur, un 4<sup>e</sup> étage c\u2019est huit étages à monter et descendre '+
+  'chaque jour, avec les courses et les affaires de chantier.'],
+ caract:['Les caractéristiques','Ce que le logement a en plus.<br><b>Place de parking</b> : pour garer sa voiture. '+
+  '<b>Cuisine équipée</b> : le four, les plaques et le frigo sont là (mais ce n\u2019est pas « meublé »). '+
+  '<b>Cave</b> : une petite pièce au sous-sol pour ranger.'],
+ typeann:['Le type d\u2019annonce','<b>Particulier</b> : une personne loue son logement. Pas de frais en plus.<br>'+
+  '<b>Professionnel (Pro)</b> : une agence. Il faut payer des <b>honoraires</b>, souvent 300 à 500 €, '+
+  'en plus du premier loyer et du dépôt de garantie.'],
+ dpe:['La classe énergie (DPE)','Une lettre de <b>A à G</b>. A = le logement garde bien la chaleur, '+
+  'peu de chauffage à payer. <b>F ou G</b> = factures très chères en hiver, et ces logements ne peuvent '+
+  'même plus être loués.'],
+ cc:['Charges comprises','<b>Charges comprises (CC)</b> : l\u2019eau froide et les parties communes sont dans le prix.<br>'+
+  '<b>Hors charges (HC)</b> : il faudra <b>ajouter</b> les charges chaque mois. Le vrai prix est plus élevé que celui affiché.'],
+ honoraires:['Les honoraires d\u2019agence','L\u2019argent qu\u2019on paie à l\u2019agence, <b>une seule fois</b>, au début. '+
+  'On ne le récupère jamais. Avec un particulier, il n\u2019y en a pas.'],
+ depot:['Le dépôt de garantie','On dit souvent « la caution ». De l\u2019argent qu\u2019on donne le premier jour et '+
+  'qu\u2019on <b>récupère à la fin</b> si le logement est en bon état.<br>1 mois de loyer pour un logement vide, '+
+  '2 mois pour un meublé.'],
+ sauver:['Sauvegarder la recherche','Le site garde vos critères. Ensuite, avec la <b>cloche 🔔</b>, il vous '+
+  'prévient sur le téléphone <b>dès qu\u2019une nouvelle annonce arrive</b>.<br>C\u2019est très important : '+
+  'les bonnes annonces partent en un ou deux jours. Celui qui écrit le premier a plus de chances.'],
+ une:['« À la une »','Le propriétaire a <b>payé</b> pour que son annonce soit mise en avant. '+
+  'Ça ne veut pas dire que le logement est meilleur.'],
+ dispo:['Disponible','La date à partir de laquelle on peut entrer dans le logement. Une annonce parfaite mais '+
+  'libre dans trois mois ne sert à rien si on doit partir demain.']
+};
+function expl(cle,ap){
+  const b=document.createElement('button');b.className='dbtn';b.textContent='?';
+  const p=document.createElement('div');p.className='dexp';
+  p.innerHTML='<b>'+DEF[cle][0]+'</b><br>'+DEF[cle][1];
+  b.onclick=e=>{e.preventDefault();e.stopPropagation();p.classList.toggle('on');};
+  ap.appendChild(b);ap.insertAdjacentElement('afterend',p);
+}
+function poserExpl(){
+  document.querySelectorAll('[data-exp]').forEach(e=>{
+    if(e.dataset.fait)return;e.dataset.fait=1;expl(e.dataset.exp,e);});
+}
+/* ---------- RECHERCHES SAUVEGARDÉES ---------- */
+const ANN_NEUVE={n:25,k:'sejour',em:'🛋️',t:'Appartement 2 pièces meublé 33 m² — Sainte-Anne',
+ com:'Tarbes',q:'Sainte-Anne',px:455,hc:420,ch:35,typ:'Appartement',pieces:2,srf:33,meu:1,asc:0,park:0,
+ rdc:0,ext:'',disp:'tout de suite',pro:0,hono:0,dep:455,dpe:'C',coloc:0,une:0,neuf:1,
+ d:'Appartement de 2 pièces, 33 m². Meublé. Disponible tout de suite. Dépôt de garantie : 455 €.'};
+const RECHS=[]; let nouvelles=0;
+function resume(){
+  const p=[];
+  if(F.lmax)p.push('max. '+F.lmax+' €');
+  if(F.pieces.length)p.push(F.pieces.slice().sort((a,b)=>a-b).join(' - ')+' pièces');
+  if(F.meu===1)p.push('Meublé'); if(F.meu===0)p.push('Non meublé');
+  if(F.ext)p.push(F.ext); if(F.asc)p.push('Ascenseur');
+  if(F.carac.length)p.push(F.carac[0]==='park'?'Parking':'Cuisine équipée');
+  return p.length?p.join(' · '):'tous les critères';
+}
+function sauverRecherche(){
+  if(RECHS.length){alert('Une recherche avec les mêmes critères existe déjà dans vos recherches sauvegardées.');
+    ecran('favoris');return;}
+  RECHS.unshift({nom:'Locations',crit:resume(),loc:(F.loc||'Toute la France')+' - 10 km',
+    date:new Date().toLocaleDateString('fr-FR'),alerte:false,mail:false,neuf:0,
+    F:JSON.parse(JSON.stringify(F))});
+  majRechs();
+  const m=document.getElementById('mrech');m.className='msg ok on';
+  m.innerHTML='✅ <b>Recherche sauvegardée.</b> Elle est rangée dans <b>Favoris ▸ Recherches</b>.'+
+   '<br><br>👉 Allez-y et <b>activez la cloche 🔔</b> pour être prévenu à chaque nouvelle annonce.';
+  m.scrollIntoView({behavior:'smooth',block:'center'});
+  setTimeout(()=>ecran('favoris'),2400);
+}
+function majRechs(){
+  const z=document.getElementById('l-rech');
+  document.getElementById('ong-nb').textContent=RECHS.length;
+  if(!RECHS.length){z.innerHTML='<div style="padding:30px 14px;text-align:center;color:#5C6B80;font-weight:700">'+
+    'Aucune recherche sauvegardée.<br>Faites une recherche, puis touchez « Sauvegarder la recherche ».</div>';return;}
+  z.innerHTML='';
+  RECHS.forEach((r,i)=>{
+    const d=document.createElement('div');d.className='rcarte';
+    d.innerHTML='<div class="h"><span class="cat2">🏠 Locations</span><div class="nom">'+r.nom+'</div>'+
+      '<div class="cr">'+r.crit+'</div><div class="bas"><div>'+r.loc+'<br>'+r.date+'</div>'+
+      (r.neuf?'<span class="nb2">'+r.neuf+'</span>':'')+'</div></div>'+
+      '<div class="alerte"><span style="flex:1">Être alerté des nouvelles annonces</span>'+
+      '<span class="rd2'+(r.alerte?' on':'')+'" onclick="cloche('+i+')">🔔</span>'+
+      '<span class="rd2'+(r.mail?' on':'')+'" onclick="courriel('+i+')">✉️</span></div>';
+    d.querySelector('.h').onclick=()=>{for(const k in r.F)F[k]=r.F[k];appliquer();ecran('resultats');};
+    z.appendChild(d);});
+}
+function appliquer(){
+  document.getElementById('f-lmax').value=F.lmax||'';
+  document.querySelectorAll('.rond').forEach(b=>b.classList.toggle('on',F.pieces.indexOf(parseInt(b.textContent))>=0));
+  maj();
+}
+function cloche(i){
+  const r=RECHS[i];r.alerte=!r.alerte;majRechs();
+  const info=document.getElementById('info-rech');
+  if(!r.alerte){info.innerHTML='';return;}
+  info.innerHTML='<div class="msg ok on" style="margin:0 12px 14px">✅ <b>Alerte activée.</b> '+
+    'Le téléphone préviendra à chaque nouvelle annonce. Plus besoin de regarder dix fois par jour.</div>';
+  if(r.dejaAlerte)return;
+  r.dejaAlerte=1;
+  setTimeout(()=>{
+    r.neuf=1;nouvelles=1;majRechs();
+    const bg=document.getElementById('bgfav');if(bg)bg.style.display='flex';
+    info.innerHTML='<div class="msg ok on" style="margin:0 12px 14px">🔔 <b>Nouvelle annonce !</b> '+
+      'Une annonce vient d\u2019arriver et correspond à la recherche. Touchez la carte pour la voir.'+
+      (mi>=MISSIONS.length?'<br><br>🎉 <b>Mission 6 réussie.</b> Passez à l\u2019étape 2.':'')+'</div>';
+  },3500);
+}
+function courriel(i){RECHS[i].mail=!RECHS[i].mail;majRechs();}
+/* ---------- MISSIONS ---------- */
+const MISSIONS=[
+ {t:'Mission 1 — le logement d\u2019Amir',
+  li:['Il vit <b>seul</b>','Budget maximum : <b>500 €</b>','Il n\u2019a <b>aucun meuble</b>',
+      'Il doit emménager <b>tout de suite</b>','Il n\u2019a pas d\u2019économies pour une agence',
+      'Il travaille à Tarbes et n\u2019a <b>pas de voiture</b>'],
+  bon:6,e:'Le T1 meublé de Saint-Antoine : 440 €, meublé, libre tout de suite, particulier donc sans honoraires. Le studio n° 1 est meublé et moins cher, mais libre seulement en décembre.'},
+ {t:'Mission 2 — la famille de Carlos Mendes',
+  li:['Ils sont <b>quatre</b>','Budget maximum : <b>700 €</b>','Ils ont <b>une voiture</b> à garer',
+      'Ils ont déjà leurs meubles','Ils veulent rester <b>à Tarbes</b>'],
+  bon:7,e:'Le T3 d\u2019Urac : 695 €, ascenseur, balcon et surtout <b>une place de parking</b>. Le T3 de Vignemale est moins cher mais sans parking ; le T4 de Bel Air dépasse le budget.'},
+ {t:'Mission 3 — Kofi Mensah, apprenti',
+  li:['19 ans, apprenti','Budget maximum : <b>350 €</b>','Il n\u2019a pas de meubles',
+      'Il ne veut <b>pas vivre seul</b>','Il doit emménager <b>tout de suite</b>'],
+  bon:8,e:'La chambre en colocation du centre-ville : 320 €, meublée, partagée à trois, libre tout de suite. Celle de Gespe conviendrait aussi, mais seulement dans trois mois.'},
+ {t:'Mission 4 — Amira et son bébé',
+  li:['Elle vit seule avec <b>un bébé</b>','Avec la <b>poussette</b>, elle ne peut pas monter d\u2019escalier',
+      'Budget maximum : <b>600 €</b>','Elle cherche <b>2 pièces</b>','Elle a déjà ses meubles','À <b>Tarbes</b>'],
+  bon:15,e:'Le T2 de Solazur : <b>au rez-de-chaussée</b>, donc aucun escalier, 470 €, vide, avec un petit jardin. Les autres T2 de Tarbes dans son budget sont tous à l\u2019étage sans ascenseur.'},
+ {t:'Mission 5 — Ibrahima Diallo',
+  li:['Il vit <b>seul</b>','Il a <b>une voiture</b> à garer','Il a déjà tous ses meubles',
+      'Budget maximum : <b>550 €</b>','À <b>Tarbes</b>'],
+  bon:3,e:'Le T2 d\u2019Ormeau-Figarol : vide, avec <b>balcon et place de parking</b>, 495 €. Le T2 du Théâtre a aussi un parking, mais il est meublé — inutile pour lui, et plus cher.'}
+];
+let mi=0;
+function majMission(){
+  if(mi>=MISSIONS.length){
+    document.getElementById('mission').innerHTML=
+      '<button class="plier" onclick="plier()">⌃</button><div class="t">Mission 6 — l\u2019alerte</div>'+
+      '<ul><li>Amir n\u2019a rien trouvé aujourd\u2019hui.</li>'+
+      '<li>Il ne veut pas ouvrir l\u2019application dix fois par jour.</li>'+
+      '<li>Il veut être <b>prévenu tout de suite</b> quand une annonce arrive.</li></ul>'+
+      '<div class="go" style="margin-top:8px;font-weight:800;font-size:14.5px">👉 Réglez les filtres d\u2019Amir '+
+      '(Tarbes · 500 € maximum · meublé), touchez <b>🔔 Sauvegarder la recherche</b>, puis activez la cloche.</div>';
+    return;
+  }
+  const M=MISSIONS[mi];
+  document.getElementById('mission').innerHTML=
+    '<button class="plier" onclick="plier()">⌃</button><div class="t">'+M.t+'</div><ul>'+
+    M.li.map(x=>'<li>'+x+'</li>').join('')+'</ul>'+
+    '<div class="go" style="margin-top:8px;font-weight:800;font-size:14.5px">👉 Réglez les filtres, ouvrez la bonne annonce, puis touchez <b>Message</b>.</div>';
+}
+function choisir(){
+  const m=document.getElementById('mann');
+  if(mi>=MISSIONS.length){m.className='msg no on';
+    m.innerHTML='Pour cette mission, il ne faut pas envoyer un message : il faut <b>sauvegarder la recherche</b>.';
+    m.scrollIntoView({behavior:'smooth',block:'center'});return;}
+  const M=MISSIONS[mi];
+  if(annonceOuverte&&annonceOuverte.n===M.bon){
+    m.className='msg ok on';
+    m.innerHTML='✅ <b>Bravo.</b> '+M.e+(mi<MISSIONS.length-1?'<br><br>👉 Mission suivante…':
+      '<br><br>🎉 Les trois missions sont réussies. Touchez « Passer à l\u2019étape 2 ».');
+    if(mi<MISSIONS.length-1){mi++;setTimeout(()=>{effacer();majMission();ecran('accueil');},3000);}
+    else setTimeout(()=>{mi++;effacer();majMission();ecran('accueil');},3200);
+  } else {
+    m.className='msg no on';
+    m.innerHTML='❌ Relisez la mission : un point ne va pas avec cette annonce.';
+  }
+  m.scrollIntoView({behavior:'smooth',block:'center'});
+}
+function plier(){
+  const m=document.getElementById('mission');
+  m.classList.toggle('reduit');
+  m.querySelector('.plier').textContent=m.classList.contains('reduit')?'⌄':'⌃';
+}
+majRechs();majMission();maj();poserExpl();
+
+/* ---------- CALCULATRICE ---------- */
+let cible=null,ecr='0';
+document.querySelectorAll('.vide').forEach(td=>td.onclick=()=>{if(!td.classList.contains('ok'))calc(td);});
+function calc(td){
+  const c=document.getElementById('cal');
+  document.querySelectorAll('.vide').forEach(x=>x.classList.remove('cible'));
+  if(td===0){c.classList.remove('on');cible=null;return;}
+  cible=td||null;if(cible)cible.classList.add('cible');
+  document.getElementById('lgcalc').textContent=cible?'Calculez le montant, puis touchez « Valider »':'Calculatrice libre';
+  ecr='0';majEc();c.classList.add('on');
+}
+function majEc(){document.getElementById('ecran').textContent=ecr;}
+function tape(c){if('+-'.indexOf(c)>=0)ecr+=c;else ecr=(ecr==='0')?c:ecr+c;majEc();}
+function efface(){ecr='0';majEc();}
+function retour(){ecr=ecr.length>1?ecr.slice(0,-1):'0';majEc();}
+function egal(){
+  if(!/^[0-9+\-]+$/.test(ecr))return;
+  let total=0,signe=1,n='';
+  for(const ch of ecr+'+'){
+    if(ch>='0'&&ch<='9')n+=ch;
+    else{total+=signe*(+n||0);n='';signe=(ch==='-')?-1:1;}}
+  ecr=String(total);majEc();
+}
+function valider(){
+  egal();const m=document.getElementById('mcalc');
+  if(!cible){document.getElementById('cal').classList.remove('on');return;}
+  if(+ecr===+cible.dataset.r){
+    cible.textContent=cible.dataset.r+' €';cible.classList.remove('cible');cible.classList.add('ok');
+    document.getElementById('cal').classList.remove('on');cible=null;
+    const reste=document.querySelectorAll('.vide:not(.ok)').length;
+    m.className='msg ok on';
+    m.innerHTML=reste?'✅ Juste. Il reste '+reste+' case'+(reste>1?'s':'')+'.':
+      '✅ <b>Terminé.</b> La n° 3 demande <b>1 275 €</b> le premier jour, contre 885 € pour la n° 4 : 390 € de plus, à cause des honoraires d\u2019agence.';
+  } else {
+    document.getElementById('lgcalc').textContent='❌ Ce n\u2019est pas le bon montant. Reprenez ligne par ligne.';
+    ecr='0';majEc();
+  }
+}
+const CREP=[['Les trois',0],['La n° 6 et la n° 4',1],['Seulement la n° 3',0]];
+(function(){
+  const z=document.getElementById('cmpRep');
+  CREP.forEach(([t,ok])=>{
+    const b=document.createElement('button');b.className='btn blanc plat';b.style.marginBottom='9px';b.textContent=t;
+    b.onclick=()=>{const m=document.getElementById('mcmp');
+      if(ok){b.classList.remove('blanc');
+        m.className='msg ok on';
+        m.innerHTML='✅ La n° 6 (880 €) et la n° 4 (885 €) passent. La n° 3 demande <b>1 275 €</b> : Amir n\u2019a pas assez, même si le loyer lui plaisait.';}
+      else{m.className='msg no on';m.innerHTML='❌ Regardez la ligne « à payer le 1er jour », pas le loyer.';}};
+    z.appendChild(b);});
+})();
+
+/* ---------- MESSAGE ---------- */
+const PHRASES=[
+ 'Bonjour madame,',
+ 'Je vous écris pour votre annonce du T1 meublé à Saint-Antoine.',
+ 'Je m\u2019appelle Amir Rahimi, j\u2019ai 27 ans.',
+ 'Je suis en formation de maçon à l\u2019AFPA de Tarbes et je commence un contrat le mois prochain.',
+ 'J\u2019ai un garant : la garantie VISALE d\u2019Action Logement.',
+ 'Est-ce que l\u2019appartement est toujours disponible ?',
+ 'Je suis libre pour une visite samedi matin, ou en fin de journée en semaine.',
+ 'Merci beaucoup et bonne journée. Amir Rahimi — 06 12 34 56 78'
+];
+let ordre=0;
+function razOrdre(){
+  ordre=0;
+  document.getElementById('zone').innerHTML='<span style="color:#5C6B80;font-weight:700">Le message apparaîtra ici…</span>';
+  document.getElementById('mord').className='msg';
+  const z=document.getElementById('etiq');z.innerHTML='';
+  PHRASES.map((p,i)=>[p,i]).sort(()=>Math.random()-.5).forEach(([p,i])=>{
+    const d=document.createElement('button');d.className='et';d.textContent=p;d.dataset.i=i;
+    d.onclick=()=>{
+      if(+d.dataset.i===ordre){
+        d.classList.add('use');
+        if(ordre===0)document.getElementById('zone').innerHTML='';
+        const s=document.createElement('span');s.className='l';s.textContent=p;
+        document.getElementById('zone').appendChild(s);ordre++;
+        if(ordre===PHRASES.length){const m=document.getElementById('mord');m.className='msg ok on';
+          m.innerHTML='✅ <b>Le message est complet.</b> L\u2019ordre : bonjour, quelle annonce, qui je suis, ce que je fais, mon garant, ma question, mes disponibilités, merci et mon numéro.';}
+      } else {const m=document.getElementById('mord');m.className='msg no on';
+        m.innerHTML='❌ Pas encore celle-là. Qu\u2019est-ce qu\u2019on écrit à cet endroit ?';}
+    };
+    z.appendChild(d);});
+}
+razOrdre();
+const TXT=['Bonjour monsieur,\n\nJe vous écris pour votre ',{t:'annonce',d:['annonce','facture','ordonnance']},
+ ' du studio meublé.\nJe m\u2019appelle Youssef Amrani. Je suis en ',{t:'formation',d:['formation','vacances','retraite']},
+ ' de maçon à Tarbes.\nJ\u2019ai un ',{t:'garant',d:['garant','garage','magasin']},
+ ' : la garantie VISALE.\nEst-ce que le studio est toujours ',{t:'disponible',d:['disponible','fermé','vendu']},
+ ' ?\nJe suis ',{t:'libre',d:['libre','fatigué','absent']},
+ ' pour une visite samedi matin.\n\nMerci beaucoup,\nYoussef Amrani'];
+let selTrou=null,restT=0;
+(function(){
+  const z=document.getElementById('trous'),mz=document.getElementById('mots');
+  let h='',mots=[],i=0;
+  TXT.forEach(p=>{
+    if(typeof p==='string')h+=p.replace(/\n/g,'<br>');
+    else{h+='<span class="trou" data-i="'+i+'">…</span>';mots.push([p.t,i]);
+      p.d.forEach(x=>{if(x!==p.t)mots.push([x,-1]);});i++;}});
+  z.innerHTML=h;restT=i;
+  mots.sort(()=>Math.random()-.5).forEach(([m,idx])=>{
+    const d=document.createElement('button');d.className='et';d.textContent=m;d.dataset.i=idx;
+    d.onclick=()=>{if(!selTrou)return;
+      if(+d.dataset.i===+selTrou.dataset.i){
+        selTrou.textContent=m;selTrou.classList.remove('sel');selTrou.classList.add('ok');
+        d.classList.add('use');selTrou=null;restT--;
+        if(!restT){const mm=document.getElementById('mtr');mm.className='msg ok on';
+          mm.innerHTML='✅ Message complet. <b>Ces cinq mots reviennent dans tous les messages</b> : annonce, formation, garant, disponible, libre.';}
+      } else {d.style.borderColor='#B3261E';setTimeout(()=>d.style.borderColor='',600);}};
+    mz.appendChild(d);});
+  z.querySelectorAll('.trou').forEach(t=>t.onclick=()=>{
+    if(t.classList.contains('ok'))return;
+    z.querySelectorAll('.trou').forEach(x=>x.classList.remove('sel'));
+    t.classList.add('sel');selTrou=t;});
+})();
+const CHECKS=[
+ ['Je dis bonjour',t=>/bonjour|bonsoir/i.test(t)],
+ ['Je dis pour quelle annonce',t=>/annonce|studio|t1|t2|t3|appartement|logement/i.test(t)],
+ ['Je dis mon nom',t=>/je m.appelle|mon nom/i.test(t)],
+ ['Je dis ce que je fais',t=>/formation|travail|contrat|maçon|macon|apprenti|stage|salari/i.test(t)],
+ ['Je parle de mon garant',t=>/garant|visale|caution/i.test(t)],
+ ['Je pose ma question',t=>/\?/.test(t)],
+ ['Je donne mes disponibilités',t=>/lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche|matin|après-midi|soir|week/i.test(t)],
+ ['Je remercie et je laisse mon numéro',t=>/merci/i.test(t)&&/\d{2}[\s.]?\d{2}[\s.]?\d{2}[\s.]?\d{2}[\s.]?\d{2}/.test(t)]
+];
+const cz=document.getElementById('check');
+CHECKS.forEach(([l])=>{const li=document.createElement('li');
+ li.innerHTML='<span class="b">⬜</span><span>'+l+'</span>';cz.appendChild(li);});
+const ta=document.getElementById('prod');
+ta.addEventListener('input',()=>{const t=ta.value;
+  [...cz.children].forEach((li,i)=>{const ok=CHECKS[i][1](t);
+    li.classList.toggle('ok',ok);li.querySelector('.b').textContent=ok?'✅':'⬜';});});
+function copier(){
+  const m=document.getElementById('mcopy'),t=ta.value.trim();
+  if(t.length<20){m.className='msg no on';m.innerHTML='❌ Le message est trop court.';return;}
+  navigator.clipboard.writeText(t).then(()=>{m.className='msg ok on';
+    m.innerHTML='✅ Message copié. Vous pouvez le coller dans l\u2019application ou dans un SMS.';})
+   .catch(()=>{ta.select();m.className='msg ok on';m.innerHTML='Message sélectionné : appuyez longuement puis « Copier ».';});
+}
+setEtape(0);ecran('accueil');
+</script>
+</body>
+</html>

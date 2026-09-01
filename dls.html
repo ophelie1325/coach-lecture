@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#1F5A73">
+<title>Ma demande de logement social — entraînement</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--ocre:#A0561B;--ocre-h:#8A4917;--bleu:#4A89A8;--bleu-f:#3B7391;--bleu-clair:#BFE0EC;
+--petrol:#1F5A73;--txt:#161616;--gris:#5A5A5A;--bord:#8C8C8C;--bordl:#D8D8D8;--fond:#F5F5F5;
+--succes:#18753C;--succes-f:#E4F7E9;--err:#CE0500;--err-f:#FDECEC;--info-f:#EAF4F9;
+--att:#B34000;--att-f:#FDF0E7}
+html{-webkit-text-size-adjust:100%}
+body{font-family:'Poppins',Arial,sans-serif;color:var(--txt);background:#fff;font-size:16px;
+line-height:1.55;padding-bottom:96px}
+header{background:#fff;padding:10px 12px;display:flex;align-items:center;gap:9px;border-bottom:1px solid var(--bordl)}
+.rf{font-size:9px;font-weight:700;line-height:1.1;text-transform:uppercase;white-space:nowrap}
+.rf .dr{display:flex;gap:1px;margin-bottom:3px}
+.rf .dr i{width:7px;height:11px;display:block}
+.rf .dr i:nth-child(1){background:#000091}.rf .dr i:nth-child(2){background:#fff;border:.5px solid #ddd}
+.rf .dr i:nth-child(3){background:#E1000F}
+.rf em{display:block;font-style:italic;font-weight:400;text-transform:none;font-size:7.5px;color:#444;line-height:1.15;margin-top:2px}
+.ush{border:1.5px solid #C1272D;padding:2px 4px;font-size:7.5px;font-weight:700;line-height:1.15;color:var(--petrol);text-align:right}
+.ush b{color:#C1272D;display:block}
+.mdls{display:flex;align-items:center;gap:5px;min-width:0}
+.mdls .chev{width:26px;height:22px;flex:0 0 26px;position:relative}
+.mdls .chev:before{content:"";position:absolute;left:0;top:0;width:0;height:0;
+border-left:13px solid transparent;border-right:13px solid transparent;border-bottom:15px solid var(--bleu)}
+.mdls .chev:after{content:"";position:absolute;left:2px;bottom:0;width:22px;height:5px;background:#E8842A}
+.mdls .tx{font-size:9.5px;font-weight:600;line-height:1.15;color:var(--ocre);text-transform:uppercase}
+.mdls .tx span{display:block;color:var(--bleu)}
+header .ic{margin-left:auto;display:flex;gap:11px;font-size:18px;color:var(--bleu)}
+.bandeau{background:var(--att-f);border-bottom:2px solid var(--att);padding:8px 14px;font-size:12.5px;
+font-weight:600;color:var(--att);text-align:center}
+main{max-width:780px;margin:0 auto;padding:16px 12px}
+h1{font-size:27px;line-height:1.14;color:var(--ocre);font-weight:700;margin-bottom:14px}
+h2{font-size:19px;line-height:1.25;color:var(--bleu);font-weight:600;margin:20px 0 9px}
+h3{font-size:17px;font-weight:600;margin:20px 0 8px}
+p{margin-bottom:11px}
+.oblig{font-style:italic;font-size:14.5px;margin-bottom:15px}
+.etq{font-size:12px;color:var(--gris);font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+.jauge{display:flex;gap:3px;margin:6px 0 14px}
+.jauge i{flex:1;height:6px;background:var(--bordl)}
+.jauge i.on{background:var(--ocre)}
+.page{display:none}.page.on{display:block}
+/* --- accordéon de section --- */
+.sect{background:#fff;border-radius:14px;box-shadow:0 2px 10px rgba(0,0,0,.11);padding:14px 16px;
+margin-bottom:16px;display:flex;align-items:center;gap:12px;position:relative}
+.sect:before{content:"";position:absolute;left:20px;top:0;bottom:0;width:3px;background:var(--bleu-clair)}
+.sect .pt{width:15px;height:15px;border-radius:50%;background:var(--bleu);flex:0 0 15px;z-index:2;margin-left:5px}
+.sect .nm{font-size:17px;font-weight:500}
+.sect .ch{margin-left:auto;font-size:20px;color:var(--txt);line-height:.9}
+/* --- carte formulaire --- */
+.carte{background:#fff;border-radius:14px;box-shadow:0 2px 10px rgba(0,0,0,.11);padding:18px 16px;margin-bottom:18px}
+.champ{margin-bottom:19px}
+.champ label,.lbl{display:block;font-size:15.5px;font-weight:600;margin-bottom:3px}
+.champ .hint{font-size:14px;color:var(--txt);margin-bottom:7px}
+.ob{font-weight:700}
+input[type=text],select,textarea{width:100%;font-family:inherit;font-size:16px;padding:11px 12px;
+border:1.5px solid var(--bord);border-radius:3px;background:#fff;min-height:48px;color:var(--txt)}
+select{appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='10'><path d='M1 1l7 7 7-7' stroke='%234A89A8' stroke-width='2.2' fill='none'/></svg>");
+background-repeat:no-repeat;background-position:right 12px center;padding-right:38px}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--bleu);outline-offset:1px}
+.euro{display:flex;align-items:center;gap:9px}
+.euro span{font-size:19px;font-weight:600}
+.date3{display:flex;align-items:center;gap:8px}
+.date3 input{text-align:center;padding:11px 4px}
+.date3 .jj{max-width:78px}.date3 .mm{max-width:78px}.date3 .aa{max-width:104px}
+.date3 span{font-size:20px;font-weight:600}
+.avecbt{display:flex;gap:9px;align-items:stretch}
+.avecbt input{flex:1}
+.radio{display:flex;gap:26px;flex-wrap:wrap;margin-top:4px}
+.radio.col{flex-direction:column;gap:2px}
+.radio label{display:flex;align-items:center;gap:11px;font-size:15.5px;font-weight:500;
+min-height:48px;cursor:pointer;margin:0}
+.radio input{width:23px;height:23px;flex:0 0 23px;accent-color:var(--bleu)}
+.coche{display:flex;flex-direction:column;gap:1px}
+.coche label{display:flex;align-items:flex-start;gap:12px;padding:11px 3px;font-size:15.5px;
+min-height:48px;cursor:pointer;font-weight:500;margin:0;line-height:1.35}
+.coche input{width:23px;height:23px;flex:0 0 23px;accent-color:var(--bleu);margin-top:1px}
+.grp{font-size:16px;font-weight:600;margin:16px 0 4px}
+.dashed{border:2px dashed var(--bord);border-radius:4px;padding:13px 14px;display:flex;align-items:center;
+gap:11px;font-size:15px;font-weight:500;margin-bottom:10px;cursor:pointer;background:#fff;min-height:52px;
+width:100%;text-align:left;font-family:inherit}
+.dashed .ok{width:26px;height:26px;border-radius:50%;background:var(--bleu);color:#fff;flex:0 0 26px;
+display:flex;align-items:center;justify-content:center;font-size:15px}
+.dashed .cl{font-size:19px;color:var(--gris)}
+.dashed.fait{border-color:var(--succes);background:var(--succes-f)}
+.dashed.fait .cl{color:var(--succes)}
+.pref{border:1.5px solid var(--bordl);border-radius:4px;padding:14px;margin-bottom:14px;position:relative}
+.pref .tt{position:absolute;top:-11px;left:12px;background:#fff;padding:0 7px;font-size:15px;font-weight:500}
+.pref .ord{display:flex;gap:16px;justify-content:flex-end;font-size:21px;color:var(--txt);margin-top:8px}
+.warn{color:var(--ocre);font-weight:600;font-size:15px;margin:6px 0}
+.attention{font-size:14.5px;margin-bottom:9px}
+.tblres{width:100%;border-collapse:collapse;font-size:14.5px;margin-top:12px}
+.tblres tr:nth-child(odd) td{background:var(--info-f)}
+.tblres td{border:1px solid var(--bordl);padding:9px;text-align:center;font-weight:500}
+.tblres td.k{font-weight:600}
+/* --- boutons --- */
+.btn{display:inline-flex;align-items:center;justify-content:center;text-align:center;background:var(--ocre);
+color:#fff;border:none;border-radius:6px;padding:14px 18px;font-family:inherit;font-size:15px;font-weight:600;
+letter-spacing:.5px;text-transform:uppercase;cursor:pointer;min-height:52px;width:100%;margin-top:8px}
+.btn:active{background:var(--ocre-h)}
+.btn.bleu{background:var(--bleu)}
+.btn.clair{background:var(--bleu-clair);color:var(--txt);text-transform:uppercase}
+.btn.pours{flex-direction:column;align-items:flex-start;position:relative;padding:13px 52px 13px 20px;
+text-transform:none;letter-spacing:0}
+.btn.pours b{font-size:18px;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+.btn.pours i{font-style:normal;font-size:13.5px;font-weight:500}
+.btn.pours:after{content:"❯";position:absolute;right:20px;top:50%;transform:translateY(-50%);font-size:26px;font-weight:700}
+.btn.petit{width:auto;min-height:44px;padding:10px 18px;font-size:14px;margin:0}
+.rep{display:block;width:100%;text-align:left;background:#fff;border:1.5px solid var(--bleu);color:var(--petrol);
+border-radius:4px;padding:13px 15px;font-family:inherit;font-size:15.5px;font-weight:500;margin-bottom:9px;
+min-height:50px;cursor:pointer}
+.rep.juste{background:var(--succes-f);border:2px solid var(--succes);color:var(--succes);font-weight:600}
+.rep.faux{background:var(--err-f);border:2px solid var(--err);color:var(--err)}
+.msg{display:none;padding:13px 15px;font-size:15px;margin-top:13px;border-radius:4px}
+.msg.on{display:block}
+.msg.ok{background:var(--succes-f);border-left:5px solid var(--succes)}
+.msg.no{background:var(--err-f);border-left:5px solid var(--err)}
+.msg ul{margin:7px 0 0 18px}.msg li{margin-bottom:5px}
+.aidebtn{background:none;border:none;color:var(--bleu);font-family:inherit;font-size:14px;font-weight:600;
+text-decoration:underline;cursor:pointer;padding:7px 0;min-height:36px}
+.aide{display:none;border-left:4px solid var(--att);background:var(--att-f);padding:11px 13px;font-size:14.5px;margin-top:4px}
+.aide.on{display:block}
+.defbtn{background:#fff;border:1.5px solid var(--bleu);color:var(--bleu);border-radius:50%;width:30px;height:30px;
+font-family:inherit;font-size:15px;font-weight:600;cursor:pointer;margin-left:7px;vertical-align:middle;line-height:1;padding:0}
+.def{display:none;background:var(--info-f);border-left:4px solid var(--bleu);padding:11px 13px;font-size:14.5px;margin:7px 0 2px}
+.def.on{display:block}
+.def b{color:var(--petrol)}
+/* --- dialogue --- */
+.bulle{margin-bottom:12px;max-width:88%}
+.bulle .qui{font-size:11.5px;font-weight:600;color:var(--gris);text-transform:uppercase;margin-bottom:3px}
+.bulle .txt{padding:11px 13px;font-size:15.5px;line-height:1.45}
+.bulle.moi{margin-left:auto}
+.bulle.moi .qui{text-align:right}
+.bulle.moi .txt{background:var(--bleu-clair);border-radius:12px 2px 12px 12px}
+.bulle.as .txt{background:var(--fond);border-radius:2px 12px 12px 12px}
+/* --- captcha --- */
+.capt{display:flex;gap:9px;align-items:flex-start;margin-bottom:9px}
+.capt .img{flex:1;background:linear-gradient(105deg,#e8e8e8,#d2d2d2);height:62px;display:flex;
+align-items:center;justify-content:center;font-size:27px;font-weight:700;letter-spacing:5px;
+font-style:italic;text-decoration:line-through;user-select:none}
+.capt .bt{display:flex;flex-direction:column;gap:5px}
+.capt .bt button{width:46px;height:29px;background:var(--fond);border:1px solid var(--bordl);font-size:15px;cursor:pointer}
+/* --- pièces / récap --- */
+.piece{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:#fff;
+border:1.5px solid var(--bordl);border-left:5px solid var(--bordl);padding:13px 14px;margin-bottom:9px;
+font-family:inherit;font-size:15.5px;cursor:pointer;min-height:54px;border-radius:3px}
+.piece .c{width:23px;height:23px;flex:0 0 23px;border:2px solid var(--bord);display:flex;align-items:center;
+justify-content:center;font-size:14px;font-weight:700;border-radius:3px}
+.piece.ok{border-left-color:var(--succes);background:var(--succes-f)}
+.piece.ok .c{background:var(--succes);border-color:var(--succes);color:#fff}
+.piece.ko{border-left-color:var(--err);background:var(--err-f)}
+.dem{font-size:20px;font-weight:700;color:var(--bleu);word-break:break-all}
+.pastille{display:inline-flex;align-items:center;gap:8px;font-weight:500;margin:8px 0}
+.pastille i{width:15px;height:15px;border-radius:50%;background:#E8842A;display:block}
+.etape{display:flex;gap:13px;padding-bottom:17px;position:relative}
+.etape:not(:last-child):after{content:"";position:absolute;left:16px;top:36px;bottom:0;width:2px;background:var(--bordl)}
+.etape .n{flex:0 0 34px;height:34px;border-radius:50%;background:var(--ocre);color:#fff;display:flex;
+align-items:center;justify-content:center;font-weight:700;font-size:16px;z-index:2}
+.etape p{font-size:14.5px;color:#333;margin:0}
+.alerte{background:var(--err-f);border-left:5px solid var(--err);padding:14px 16px;margin:14px 0}
+.alerte h3{color:var(--err);margin-top:0}
+/* --- barres --- */
+.barre{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--bordl);
+box-shadow:0 -2px 10px rgba(0,0,0,.1);padding:9px 12px calc(9px + env(safe-area-inset-bottom));
+display:flex;gap:9px;z-index:60}
+.barre .btn{width:auto;flex:1;margin:0;font-size:14px;padding:12px 8px}
+.aidflot{position:fixed;right:0;bottom:calc(100px + env(safe-area-inset-bottom));z-index:55;background:var(--ocre);
+color:#fff;border:none;border-radius:8px 0 0 8px;padding:13px 14px;font-size:20px;cursor:pointer;
+box-shadow:0 3px 10px rgba(0,0,0,.3);min-height:50px}
+.fbtn{position:fixed;left:12px;bottom:calc(100px + env(safe-area-inset-bottom));z-index:55;background:var(--petrol);
+color:#fff;border:none;border-radius:50px;padding:12px 15px;font-family:inherit;font-size:13.5px;font-weight:600;
+box-shadow:0 3px 10px rgba(0,0,0,.28);cursor:pointer;min-height:46px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:100;display:none;align-items:flex-end}
+.modal.on{display:flex}
+.modal .in{background:#fff;width:100%;max-height:86vh;overflow-y:auto;padding:18px 16px calc(18px + env(safe-area-inset-bottom));
+border-radius:14px 14px 0 0}
+dl{font-size:15.5px}
+dt{font-size:12px;color:var(--gris);font-weight:600;text-transform:uppercase;margin-top:13px}
+dd{font-weight:500}
+footer{background:var(--petrol);color:#fff;padding:24px 16px;margin-top:26px;text-align:center;font-size:13px}
+footer a{color:#fff;text-decoration:none;font-weight:600;text-transform:uppercase}
+footer .l{margin-bottom:14px;line-height:2.1}
+footer .cop{font-weight:700;margin:14px 0}
+footer .v{margin-top:14px;font-size:12px;color:#9FC2D0}
+@media(min-width:760px){main{padding:22px 24px}h1{font-size:33px}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="rf"><div class="dr"><i></i><i></i><i></i></div>République<br>Française<em>Liberté<br>Égalité<br>Fraternité</em></div>
+  <div class="ush"><b>L'UNION</b>SOCIALE<br>POUR<br><b>L'HABITAT</b></div>
+  <div class="mdls"><div class="chev"></div><div class="tx">Ma demande<span>de logement social</span></div></div>
+  <div class="ic">👤 ☰</div>
+</header>
+<div class="bandeau">⚠️ Ceci est un exercice. Ce n'est pas le vrai site : rien n'est envoyé.</div>
+
+<main>
+  <div class="etq">Étape <span id="sn">1</span> sur 11</div>
+  <div class="jauge" id="jauge"></div>
+
+  <!-- 1 · DIALOGUE -->
+  <section class="page on">
+    <h1>Amir voit l'assistante sociale</h1>
+    <p>Amir cherche un logement. Tout est trop cher. Il va voir l'assistante sociale.<br><b>Lisez, puis répondez.</b></p>
+    <div class="bulle moi"><div class="qui">Moi (Amir)</div><div class="txt">Bonjour madame. Je cherche un logement, mais tout est trop cher.</div></div>
+    <div class="bulle as"><div class="qui">L'assistante sociale</div><div class="txt">Vous pouvez faire une demande de logement social. C'est gratuit, sur internet. Je peux vous aider.</div></div>
+    <div class="bulle moi"><div class="qui">Moi (Amir)</div><div class="txt">Il faut aller dans une agence ?</div></div>
+    <div class="bulle as"><div class="qui">L'assistante sociale</div><div class="txt">Non. <b>Une seule demande</b> pour tous les bailleurs du département, avec un <b>numéro unique</b>.</div></div>
+    <div class="bulle moi"><div class="qui">Moi (Amir)</div><div class="txt">Et j'ai un logement quand ?</div></div>
+    <div class="bulle as"><div class="qui">L'assistante sociale</div><div class="txt">Il faut être patient : souvent <b>plus d'un an</b>. Continuez à chercher dans le privé en même temps.</div></div>
+    <div class="bulle moi"><div class="qui">Moi (Amir)</div><div class="txt">Et après, c'est fini ?</div></div>
+    <div class="bulle as"><div class="qui">L'assistante sociale</div><div class="txt">Non : <b>vous devez renouveler chaque année</b>. Si vous oubliez, la demande est annulée et vous repartez à zéro.</div></div>
+    <div class="bulle moi"><div class="qui">Moi (Amir)</div><div class="txt">Le formulaire est long ?</div></div>
+    <div class="bulle as"><div class="qui">L'assistante sociale</div><div class="txt">Très long. Mais <b>beaucoup de questions ne vous concernent pas</b> : les enfants, le conjoint, le handicap… Vous les laissez vides.</div></div>
+    <div class="bulle as"><div class="qui">L'assistante sociale</div><div class="txt">Et il y a une case pour mettre <b>mes coordonnées</b>, à moi : comme ça je reçois les informations en même temps que vous, et je peux vous aider.</div></div>
+    <h2>Les questions</h2>
+    <div id="qz"></div>
+  </section>
+
+  <!-- 2 · LOCALISATION -->
+  <section class="page">
+    <h1>Localisation de ma demande</h1>
+    <h2>Dans quelle commune souhaitez-vous demander un logement social ?</h2>
+    <p class="oblig">Les champs obligatoires sont indiqués par *</p>
+    <div class="champ" data-def="commune">
+      <label>Entrer le nom ou le code postal de la commune (format : 44000) <span class="ob">*</span></label>
+      <input type="text" id="g_com" autocomplete="off"></div>
+    <button class="btn clair" onclick="verifCom()">Choisir cette commune</button>
+    <div class="msg" id="mcom"></div>
+  </section>
+
+  <!-- 3 · ÉLIGIBILITÉ -->
+  <section class="page">
+    <h1>Je vérifie mon éligibilité</h1>
+    <h2>Je vérifie si ma situation est éligible à un logement social sur la ville de Tarbes</h2>
+    <p class="oblig">Les champs obligatoires sont indiqués par *</p>
+    <p>Je suis éligible si les revenus de mon foyer sont inférieurs au plafond de revenu, ou parce que ma
+      situation a évolué (logement insalubre, perte d'autonomie, divorce, etc.).</p>
+    <div class="champ" data-def="foyer"><label>Nombre de personnes habitant le logement <span class="ob">*</span></label>
+      <select id="g_nb"><option value="">Sélectionner</option><option>1</option><option>2</option>
+        <option>3</option><option>4</option><option>5</option></select></div>
+    <div class="champ" data-def="rev"><label>Revenu fiscal de référence de l'année 2024 <span class="ob">*</span></label>
+      <div class="euro"><input type="text" id="g_rev" inputmode="numeric"><span>€</span></div></div>
+    <button class="btn" onclick="verifElig()">Vérifier mon éligibilité</button>
+    <div class="msg" id="melig"></div>
+  </section>
+
+  <!-- 4 · COMPTE -->
+  <section class="page">
+    <h1>Je crée mon compte</h1>
+    <div style="background:#000091;color:#fff;border-radius:4px;padding:13px;text-align:center;font-weight:600;opacity:.5;margin-bottom:8px">
+      🇫🇷 S'identifier avec FranceConnect</div>
+    <div class="aide on"><b>Pourquoi ce bouton ne sert à rien pour nous ?</b><br>
+      FranceConnect utilise un compte des impôts, de l'Assurance maladie ou de La Poste qu'on a déjà.
+      Quand on arrive en France, on ne les a pas. <b>On passe par « je crée mon compte ».</b></div>
+    <h2>Je crée mon compte en remplissant les éléments demandés</h2>
+    <p class="oblig">Les champs obligatoires sont indiqués par *</p>
+    <div class="champ" data-def="ident"><label>Identifiant <span class="ob">*</span></label>
+      <div class="hint">(votre courriel, par exemple john@email.com, sur lequel vous recevrez votre code d'activation)</div>
+      <input type="text" id="g_mail" autocomplete="off"></div>
+    <div class="champ"><label>Confirmation de l'identifiant <span class="ob">*</span></label>
+      <div class="hint">(Veuillez ressaisir manuellement votre courriel)</div>
+      <input type="text" id="g_mail2" autocomplete="off"></div>
+    <div class="champ" data-def="nomn"><label>Nom de naissance <span class="ob">*</span></label>
+      <div class="hint">(Votre nom de naissance doit être strictement similaire à celui de votre pièce d'identité)</div>
+      <input type="text" id="g_nom" autocomplete="off"></div>
+    <div class="champ" data-def="usage"><label>Nom d'usage (si différent)</label>
+      <input type="text" id="g_usage" autocomplete="off"></div>
+    <div class="champ"><label>Prénom(s) <span class="ob">*</span></label><input type="text" id="g_pre" autocomplete="off"></div>
+    <div class="champ" data-def="nai"><label>Date de naissance <span class="ob">*</span></label>
+      <div class="hint">(format : JJ/MM/AAAA)</div>
+      <div class="date3"><input class="jj" type="text" id="g_jj" inputmode="numeric" placeholder="jj"><span>/</span>
+        <input class="mm" type="text" id="g_mm" inputmode="numeric" placeholder="mm"><span>/</span>
+        <input class="aa" type="text" id="g_aa" inputmode="numeric" placeholder="aaaa"></div></div>
+    <div class="champ" data-def="etranger"><label>Né(e) à l'étranger</label>
+      <div class="coche"><label><input type="checkbox" id="g_etr"> Oui</label></div></div>
+    <div class="champ"><label>Commune de naissance (Ville ou Code Postal) <span class="ob">*</span></label>
+      <input type="text" id="g_lieu" autocomplete="off"></div>
+    <div class="champ" data-def="captcha"><label>Code de sécurité (Captcha) <span class="ob">*</span></label>
+      <div class="hint">Veuillez saisir le code de sécurité ci-dessous (chiffres et lettres).</div>
+      <div class="capt"><div class="img" id="capt">XKD4TB</div>
+        <div class="bt"><button onclick="lireCapt()">🔊</button><button onclick="newCapt()">↻</button></div></div>
+      <input type="text" id="g_capt" autocomplete="off"></div>
+    <div class="coche"><label><input type="checkbox" id="g_cgu">
+      J'accepte les conditions générales d'utilisation et les règles de confidentialité <span class="ob">*</span></label></div>
+    <button class="btn" onclick="verifCompte()">Créer mon compte</button>
+    <div class="msg" id="mcompte"></div>
+  </section>
+
+  <!-- 5 · INFORMATIONS GÉNÉRALES -->
+  <section class="page">
+    <h1>Je saisis ma demande - Informations générales</h1>
+    <div class="sect"><span class="pt"></span><span class="nm">Informations générales</span><span class="ch">⌄</span></div>
+    <div class="carte">
+      <h3 style="margin-top:0">Votre identité</h3>
+      <p class="oblig">Les champs obligatoires sont indiqués par *</p>
+      <div class="champ" data-def="civ"><label>Civilité <span class="ob">*</span></label>
+        <div class="radio"><label><input type="radio" name="civ" value="M"> Monsieur</label>
+          <label><input type="radio" name="civ" value="Mme"> Madame</label></div></div>
+      <div class="champ"><label>Nom de naissance <span class="ob">*</span></label>
+        <input type="text" id="i_nom" autocomplete="off"></div>
+      <div class="champ"><label>Prénom(s) <span class="ob">*</span></label>
+        <input type="text" id="i_pre" autocomplete="off"></div>
+      <div class="champ" data-def="nir"><label>Numéro de sécurité sociale (NIR) <span class="ob">*</span></label>
+        <div class="hint">(format sur 15 chiffres)</div>
+        <div class="avecbt"><input type="text" id="i_nir" inputmode="numeric">
+          <button class="btn clair petit" onclick="verifNir()">Vérifier le NIR</button></div>
+        <div class="msg" id="mnir"></div></div>
+      <div class="champ" data-def="nat"><label>Nationalité <span class="ob">*</span></label>
+        <div class="radio col">
+          <label><input type="radio" name="nat" value="fr"> Française</label>
+          <label><input type="radio" name="nat" value="ue"> Union Européenne</label>
+          <label><input type="radio" name="nat" value="hue"> Hors Union Européenne</label></div>
+        <p style="margin-top:9px;font-size:14.5px">Veuillez vous assurer de charger le recto et le verso de
+          votre justificatif d'identité.</p>
+        <button class="dashed" id="d_sejour" onclick="joindre('d_sejour')">
+          <span class="cl">📎</span> Ajouter votre titre de séjour <span class="ob">*</span></button></div>
+      <div class="champ" data-def="codem"><label>Avec combien de co-demandeurs faites-vous cette demande ?</label>
+        <select id="i_codem"><option value="">Sélectionner</option><option>0</option><option>1</option><option>2</option></select></div>
+      <div class="champ" data-def="coloc"><label>Avec combien de colocataires faites-vous cette demande ?</label>
+        <div class="attention"><b>ATTENTION :</b> les colocataires inscrits sur la demande de logement social
+          devront eux aussi remplir une demande de logement social. Tous les colocataires doivent créer leur
+          demande individuelle et renseigner les rubriques « Colocataire » et « Le logement que vous recherchez ».</div>
+        <select id="i_coloc"><option value="">Sélectionner</option><option>0</option><option>1</option><option>2</option></select></div>
+
+      <h3>La composition de votre foyer</h3>
+      <div class="champ" data-def="charge"><label>Nombre de personnes fiscalement à votre charge ou à la charge
+        de votre conjoint ou du codemandeur, qui vivront dans le logement (hors futures naissances)</label>
+        <select id="i_charge"><option value="">Sélectionner</option><option>0</option><option>1</option>
+          <option>2</option><option>3</option></select></div>
+      <div class="champ" data-def="alternee"><label>Enfants en garde alternée ne figurant pas dans les personnes
+        fiscalement à charge</label>
+        <select id="i_alt"><option value="">Sélectionner</option><option>0</option><option>1</option><option>2</option></select></div>
+      <div class="champ" data-def="visite"><label>Enfants en droit de visite et d'hébergement ne figurant pas
+        dans les personnes fiscalement à charge</label>
+        <select id="i_vis"><option value="">Sélectionner</option><option>0</option><option>1</option><option>2</option></select></div>
+      <div class="champ" data-def="handnb"><label>Nombre de personnes en situation de handicap qui vivront dans
+        le logement (hors futures naissances)</label>
+        <select id="i_hand"><option value="">Sélectionner</option><option>0</option><option>1</option><option>2</option></select></div>
+      <div class="champ" data-def="naiss"><label>Attendez-vous une naissance ?</label>
+        <div class="radio"><label><input type="radio" name="naiss" value="non"> Non</label>
+          <label><input type="radio" name="naiss" value="oui"> Oui</label></div></div>
+      <button class="btn pours" onclick="verifInfo()"><b>Poursuivre</b><i>pour renforcer ma demande</i></button>
+      <button class="btn bleu" onclick="sauver()">Sauvegarder</button>
+      <div class="msg" id="minfo"></div>
+    </div>
+  </section>
+
+  <!-- 6 · COORDONNÉES -->
+  <section class="page">
+    <h1>Je saisis ma demande - Coordonnées</h1>
+    <div class="sect"><span class="pt"></span><span class="nm">Coordonnées</span><span class="ch">⌄</span></div>
+    <div class="carte">
+      <p class="oblig">Les champs obligatoires sont indiqués par *</p>
+      <h3 style="margin-top:0">Coordonnées téléphoniques</h3>
+      <div class="champ" data-def="teldom"><label>Tel. domicile ou professionnel</label>
+        <div class="hint">(format: 0000000000)</div><input type="text" id="c_tdom" inputmode="tel"></div>
+      <div class="champ"><label>Tel. portable</label>
+        <div class="hint">(format: 0000000000)</div><input type="text" id="c_tport" inputmode="tel"></div>
+      <div class="champ"><label>Courriel personnel</label>
+        <div class="hint">(par exemple john@email.com)</div><input type="text" id="c_mail"></div>
+      <div class="champ"><label>Je souhaite être notifié par :</label>
+        <div class="coche"><label><input type="checkbox" id="c_ncour"> Notifications par courriel</label>
+          <label><input type="checkbox" id="c_nsms"> Notifications par SMS</label></div></div>
+
+      <h3>Coordonnées d'une personne ou structure vous aidant dans les démarches</h3>
+      <div class="champ" data-def="aidant"><label>Téléphone d'une personne ou structure vous aidant dans les démarches</label>
+        <div class="hint">(format: 0000000000)</div><input type="text" id="c_atel" inputmode="tel"></div>
+      <div class="champ"><label>Courriel d'une personne ou structure vous aidant dans les démarches</label>
+        <input type="text" id="c_amail"></div>
+      <div class="champ"><label>Confirmez le courriel</label>
+        <input type="text" id="c_amail2"></div>
+      <div class="coche"><label><input type="checkbox" id="c_acc">
+        Acceptez-vous que la personne ou structure qui vous aide reçoive des informations ?</label></div>
+      <button class="btn pours" onclick="verifCoord()"><b>Poursuivre</b><i>pour renforcer ma demande</i></button>
+      <button class="btn bleu" onclick="sauver()">Sauvegarder</button>
+      <div class="msg" id="mcoord"></div>
+    </div>
+  </section>
+
+  <!-- 7 · SITUATION PROFESSIONNELLE -->
+  <section class="page">
+    <h1>Je saisis ma demande - Situation professionnelle</h1>
+    <div class="sect"><span class="pt"></span><span class="nm">Situation professionnelle</span><span class="ch">⌄</span></div>
+    <div class="carte">
+      <p class="oblig">Les champs obligatoires sont indiqués par *</p>
+      <div class="champ" data-def="sit"><label>Votre situation <span class="ob">*</span></label>
+        <select id="p_sit"><option value="">Sélectionner</option><option>CDI</option><option>CDD</option>
+          <option>Intérim</option><option>Apprentissage</option>
+          <option>Stagiaire de la formation professionnelle</option><option>Chômage</option>
+          <option>Retraite</option><option>Étudiant</option><option>Sans profession</option></select>
+        <button class="aidebtn" onclick="aide('a1')">Je ne sais pas quoi choisir</button>
+        <div class="aide" id="a1">Amir est en <b>formation POEI</b>. Il n'a pas de contrat de travail et il n'est
+          pas au chômage : il est <b>stagiaire de la formation professionnelle</b>.</div></div>
+      <div class="champ" data-def="prof"><label>Votre profession</label>
+        <input type="text" id="p_prof" autocomplete="off"></div>
+      <h3>Où se situe votre lieu de travail principal ?</h3>
+      <div class="champ"><label>Votre lieu de travail se situe en France ?</label>
+        <div class="radio"><label><input type="radio" name="lt" value="non"> Non</label>
+          <label><input type="radio" name="lt" value="oui"> Oui</label></div></div>
+      <div class="champ"><label>Commune ou code postal (format : 44000)</label>
+        <input type="text" id="p_lieu" autocomplete="off"></div>
+      <div class="champ" data-def="siret"><label>Si vous êtes salarié ou apprenti dans une entreprise privée et
+        que vous travaillez dans un établissement situé en France, précisez le numéro SIRET de votre employeur
+        principal (format : 00000000000000).</label>
+        <input type="text" id="p_siret" inputmode="numeric"></div>
+      <div class="champ"><label>Êtes-vous en CDD ou en intérim ?</label>
+        <div class="radio"><label><input type="radio" name="cdd" value="non"> Non</label>
+          <label><input type="radio" name="cdd" value="oui"> Oui</label></div></div>
+      <div class="champ" data-def="chomlong"><label>Avez-vous vécu une période de chômage de plus d'un an ?</label>
+        <div class="radio"><label><input type="radio" name="chl" value="non"> Non</label>
+          <label><input type="radio" name="chl" value="oui"> Oui</label></div></div>
+      <button class="dashed" id="d_att" onclick="joindre('d_att')"><span class="cl">📎</span>
+        Ajouter votre attestation de formation ou autre justificatif de situation</button>
+      <button class="btn pours" onclick="verifPro()"><b>Poursuivre</b><i>pour renforcer ma demande</i></button>
+      <button class="btn bleu" onclick="sauver()">Sauvegarder</button>
+      <div class="msg" id="mpro"></div>
+    </div>
+  </section>
+
+  <!-- 8 · RESSOURCES -->
+  <section class="page">
+    <h1>Je saisis ma demande - Ressources</h1>
+    <div class="sect"><span class="pt"></span><span class="nm">Ressources</span><span class="ch">⌄</span></div>
+    <div class="carte">
+      <p class="oblig">Les champs obligatoires sont indiqués par *</p>
+      <div class="champ" data-def="ressm"><label>Percevez-vous des ressources mensuelles ? <span class="ob">*</span></label>
+        <div class="radio"><label><input type="radio" name="rm" value="non"> Non</label>
+          <label><input type="radio" name="rm" value="oui"> Oui</label></div></div>
+      <div class="champ" data-def="salaire"><label>Salaire ou revenu d'activité</label>
+        <div class="hint">Salaire avant prélèvement à la source</div>
+        <div class="euro"><input type="text" id="r_sal" inputmode="numeric"><span>€</span></div></div>
+      <div class="champ"><label>Allocations familiales</label>
+        <div class="euro"><input type="text" id="r_af" inputmode="numeric"><span>€</span></div></div>
+      <h3>Autres ressources</h3>
+      <div class="champ"><label>Ressources reçues</label>
+        <select id="r_type"><option value="">Sélectionnez une ressource</option>
+          <option>Revenu de solidarité active (RSA)</option><option>Prime d'activité</option>
+          <option>Allocation adulte handicapé (AAH)</option><option>Rémunération de formation</option>
+          <option>Autres</option></select></div>
+      <div class="champ"><label>Montant</label>
+        <div class="euro"><input type="text" id="r_mt" inputmode="numeric"><span>€</span></div></div>
+      <button class="btn clair petit" onclick="ajoutRes()">Ajouter</button>
+      <table class="tblres" id="tres"></table>
+
+      <h3>Revenus du dernier avis d'imposition</h3>
+      <div class="champ" data-def="annee"><label>Impôt sur les revenus de l'année</label>
+        <select id="r_an" onchange="verifAnnee()"><option value="">Sélectionner</option>
+          <option>2022</option><option>2023</option><option>2024</option><option>2025</option></select>
+        <div class="warn" id="wan" style="display:none">Merci de mettre à jour vos revenus.
+          L'année à sélectionner est 2025.</div></div>
+      <div class="champ"><label>Revenu fiscal de référence</label>
+        <div class="euro"><input type="text" id="r_rfr" inputmode="numeric"><span>€</span></div></div>
+      <button class="dashed" id="d_avis" onclick="joindre('d_avis')"><span class="cl">📎</span>
+        Ajouter votre dernier avis d'imposition</button>
+      <button class="btn pours" onclick="verifRes()"><b>Poursuivre</b><i>pour renforcer ma demande</i></button>
+      <button class="btn bleu" onclick="sauver()">Sauvegarder</button>
+      <div class="msg" id="mres"></div>
+    </div>
+  </section>
+
+  <!-- 9 · LOGEMENT ACTUEL -->
+  <section class="page">
+    <h1>Je saisis ma demande - Logement actuel</h1>
+    <div class="sect"><span class="pt"></span><span class="nm">Logement actuel</span><span class="ch">⌄</span></div>
+    <div class="carte">
+      <p class="oblig">Les champs obligatoires sont indiqués par *</p>
+      <div class="champ" data-def="situact"><label style="font-size:17px">Votre situation actuelle
+        <span class="ob">*</span> (cochez au moins un choix)</label>
+        <div class="grp">Vous êtes locataire</div>
+        <div class="coche" id="l_sit">
+          <label><input type="checkbox" value="hlm"> Locataire d'un logement social (HLM)</label>
+          <label><input type="checkbox" value="prive"> Locataire ou sous locataire d'un logement privé</label>
+          <label><input type="checkbox" value="foyer"> Logé en logement-foyer (FJT, FTM, FPA, FPH), en résidence sociale ou en pension de famille</label>
+          <label><input type="checkbox" value="etud"> En résidence étudiante ou universitaire</label>
+        </div>
+        <div class="grp">Vous êtes hébergé</div>
+        <div class="coche" id="l_sit2">
+          <label><input type="checkbox" value="rhvs"> En résidence hôtelière à vocation sociale (RHVS)</label>
+          <label><input type="checkbox" value="chrs"> En structure d'hébergement (CHRS, CHU, CADA…)</label>
+          <label><input type="checkbox" value="parents"> Chez vos parents ou chez vos enfants</label>
+          <label><input type="checkbox" value="particulier"> Chez un particulier</label>
+          <label><input type="checkbox" value="hotel"> À l'hôtel</label>
+          <label><input type="checkbox" value="tempo"> En logement temporaire</label>
+        </div>
+        <div class="grp">Autres</div>
+        <div class="coche" id="l_sit3">
+          <label><input type="checkbox" value="fonction"> En logement de fonction</label>
+          <label><input type="checkbox" value="camping"> En camping</label>
+          <label><input type="checkbox" value="sansabri"> Sans abri, habitat de fortune, bidonville</label>
+          <label><input type="checkbox" value="squat"> Occupant sans titre, squat</label>
+        </div></div>
+      <h3>Adresse du logement où vous vivez actuellement</h3>
+      <div class="champ"><label>Numéro</label><input type="text" id="l_num" inputmode="numeric"></div>
+      <div class="champ"><label>Voie <span class="ob">*</span></label><input type="text" id="l_voie"></div>
+      <div class="champ"><label>Complément adresse</label><input type="text" id="l_comp"></div>
+      <div class="champ"><label>Commune ou code postal (format : 44000) <span class="ob">*</span></label>
+        <input type="text" id="l_com"></div>
+      <div class="champ" data-def="hebergeant"><label>Si vous êtes hébergé, personne ou structure hébergeante</label>
+        <input type="text" id="l_heb" placeholder="Chez …"></div>
+      <button class="btn pours" onclick="verifLog()"><b>Poursuivre</b><i>pour renforcer ma demande</i></button>
+      <button class="btn bleu" onclick="sauver()">Sauvegarder</button>
+      <div class="msg" id="mlog"></div>
+    </div>
+  </section>
+
+  <!-- 10 · LOGEMENT RECHERCHÉ -->
+  <section class="page">
+    <h1>Je saisis ma demande - Le logement que vous recherchez</h1>
+    <div class="sect"><span class="pt"></span><span class="nm">Le logement recherché</span><span class="ch">⌄</span></div>
+    <div class="carte">
+      <p class="oblig">Les champs obligatoires sont indiqués par *</p>
+      <div class="champ" data-def="typel"><label>Type de logement recherché <span class="ob">*</span></label>
+        <select id="s_typ"><option value="">Sélectionner</option><option>T1</option><option>T2</option>
+          <option>T3</option><option>T4</option></select></div>
+      <div class="champ" data-def="prefs"><label style="font-size:17px">Dans quelle(s) commune(s) souhaitez-vous
+        demander un logement social ? Vous pouvez sélectionner jusque 17 communes.</label></div>
+      <div id="prefs"></div>
+      <button class="btn clair petit" onclick="ajoutPref()">Ajouter un choix</button>
+      <div class="champ" data-def="elargie" style="margin-top:18px">
+        <label>Acceptez-vous que votre demande soit élargie à d'autres communes ou quartiers proches ?
+          <span class="ob">*</span></label>
+        <div class="radio"><label><input type="radio" name="elar" value="non"> Non</label>
+          <label><input type="radio" name="elar" value="oui"> Oui</label></div></div>
+      <div class="champ" data-def="motif"><label>Motif principal de la demande <span class="ob">*</span></label>
+        <select id="s_mot"><option value="">Sélectionner</option>
+          <option>Sans logement / hébergé chez un tiers</option><option>Logement trop cher</option>
+          <option>Logement trop petit</option><option>Logement insalubre</option>
+          <option>Rapprochement du lieu de travail</option></select></div>
+      <button class="btn pours" onclick="verifRech()"><b>Poursuivre</b><i>pour renforcer ma demande</i></button>
+      <button class="btn bleu" onclick="sauver()">Sauvegarder</button>
+      <div class="msg" id="mrech"></div>
+    </div>
+  </section>
+
+  <!-- 11 · GÉRER MES DEMANDES -->
+  <section class="page">
+    <h1>Gérer mes demandes</h1>
+    <p><b>Vous avez 1 demande en cours</b></p>
+    <div class="carte">
+      <div class="dem" id="nud">Demande n° 65-2026-00000</div>
+      <div class="pastille"><i></i> Active (jusqu'au <span id="dtren">—</span>)</div>
+      <p style="margin:6px 0"><b>Ancienneté :</b> 0 mois</p>
+      <p style="margin:0"><b>Départements de recherche :</b> Hautes-Pyrénées (65)</p>
+      <button class="btn clair" onclick="alert('Exercice : bouton non actif.')">Actualiser ma demande</button>
+      <button class="btn clair" onclick="alert('Exercice : bouton non actif.')">Télécharger mon CERFA</button>
+      <table class="tblres" id="rec" style="margin-top:16px"></table>
+    </div>
+
+    <h2>Les pièces justificatives à joindre</h2>
+    <p>Une demande sans les papiers est enregistrée, mais la commission <b>ne peut pas l'examiner</b>.</p>
+    <div id="pieces"></div>
+    <div class="msg" id="mpiece"></div>
+
+    <h2>Et après ?</h2>
+    <div class="etape"><div class="n">1</div><div><h3 style="margin:0">Je dépose ma demande</h3>
+      <p>Une seule fois. C'est gratuit.</p></div></div>
+    <div class="etape"><div class="n">2</div><div><h3 style="margin:0">Je reçois mon numéro unique</h3>
+      <p>Sous un mois. C'est la preuve que ma demande existe.</p></div></div>
+    <div class="etape"><div class="n">3</div><div><h3 style="margin:0">J'attends</h3>
+      <p>Souvent plus d'un an. Mon <b>ancienneté</b> augmente chaque mois : c'est un point pour moi.</p></div></div>
+    <div class="etape"><div class="n">4</div><div><h3 style="margin:0">La commission d'attribution (CAL)</h3>
+      <p>Le bailleur, la commune et des associations étudient trois dossiers pour un logement, et décident à la majorité.</p></div></div>
+    <div class="etape"><div class="n">5</div><div><h3 style="margin:0">On me propose un logement</h3>
+      <p>J'ai droit à <b>3 propositions</b>. Si je refuse, ma demande reste valable jusqu'à la date de renouvellement.</p></div></div>
+
+    <div class="alerte"><h3>⚠️ L'erreur qui coûte un an</h3>
+      <p>Amir oublie de renouveler au bout d'un an. Sa demande est <b>annulée automatiquement</b>.
+        Il perd toute son ancienneté.</p>
+      <p style="margin:8px 0 0"><b>Le jour du dépôt, mettez un rappel sur votre téléphone, onze mois plus tard.</b></p></div>
+    <button class="btn bleu" onclick="window.print()">Garder cette page</button>
+  </section>
+</main>
+
+<footer>
+  <div class="l"><a href="#">Aide et contact</a> | <a href="#">Plan du site</a><br>
+    <a href="#">Accessibilité : partiellement conforme</a><br>
+    <a href="#">Mentions légales et conditions générales d'utilisation</a><br>
+    <a href="#">Vie privée</a> | <a href="#">Statistiques</a></div>
+  <div class="cop">Exercice pédagogique — HOPE 2026, AFPA Tarbes</div>
+  <div>Aucune donnée n'est envoyée ni conservée.<br>Pour une vraie demande : demande-logement-social.gouv.fr</div>
+  <div class="v">v13.58.2 — simulation</div>
+</footer>
+
+<button class="fbtn" id="fbtn" onclick="modal(1)">📋 Fiche d'Amir</button>
+<button class="aidflot" onclick="glossaire(1)">💬</button>
+
+<div class="modal" id="mod" onclick="if(event.target===this)modal(0)">
+  <div class="in"><h2 style="margin-top:0;color:var(--ocre)">📋 La fiche d'Amir</h2>
+    <dl>
+      <dt>Civilité</dt><dd>Monsieur</dd>
+      <dt>Nom, prénom</dt><dd>RAHIMI Amir</dd>
+      <dt>Né le</dt><dd>12 mars 1999, à Kaboul (Afghanistan)</dd>
+      <dt>Nationalité</dt><dd>afghane — titre de séjour en cours de validité</dd>
+      <dt>N° de sécurité sociale</dt><dd>1 99 03 99 123 456 78</dd>
+      <dt>Courriel</dt><dd>amir.rahimi@email.com</dd>
+      <dt>Téléphone portable</dt><dd>06 12 34 56 78</dd>
+      <dt>Situation familiale</dt><dd>célibataire, sans enfant, sans conjoint, pas de colocataire</dd>
+      <dt>Aujourd'hui</dt><dd>hébergé chez son ami Karim, 12 rue Larrey à Tarbes (65000), depuis mai 2026.
+        Il ne paie pas de loyer.</dd>
+      <dt>Ce qu'il fait</dt><dd>formation POEI maçon à l'AFPA de Tarbes (20/05/2026 → 04/09/2026)</dd>
+      <dt>Rémunération de formation</dt><dd>720 € par mois</dd>
+      <dt>Revenu fiscal de référence</dt><dd>8 460 € — avis d'imposition sur les revenus de <b>2025</b></dd>
+      <dt>Aides reçues</dt><dd>aucune (pas d'APL, pas de RSA, pas d'allocations familiales)</dd>
+      <dt>Qui l'aide</dt><dd>l'assistante sociale : 05 62 00 00 00 — social.afpa65@email.com</dd>
+      <dt>Il cherche</dt><dd>un T1 ou un T2 à Tarbes, puis Aureilhan, puis Séméac</dd>
+      <dt>Il n'a pas</dt><dd>de voiture, pas d'enfant, pas de handicap, pas d'employeur</dd>
+    </dl>
+    <button class="btn" onclick="modal(0)">Fermer</button></div>
+</div>
+
+<div class="modal" id="glo" onclick="if(event.target===this)glossaire(0)">
+  <div class="in"><h2 style="margin-top:0;color:var(--ocre)">📖 Les mots du formulaire</h2>
+    <div class="liste"></div>
+    <button class="btn" onclick="glossaire(0)">Fermer</button></div>
+</div>
+
+<div class="barre">
+  <button class="btn clair" id="bprec" onclick="go(cur-1)">Précédent</button>
+  <button class="btn" id="bsuiv" onclick="go(cur+1)">Suivant</button>
+</div>
+
+<script>
+const pages=[...document.querySelectorAll('.page')];
+const TIT=['Le dialogue','Localisation','Éligibilité','Créer mon compte','Informations générales',
+ 'Coordonnées','Situation professionnelle','Ressources','Logement actuel','Logement recherché','Gérer mes demandes'];
+const j=document.getElementById('jauge');
+TIT.forEach(()=>j.appendChild(document.createElement('i')));
+let cur=0;
+function go(i){
+  cur=Math.max(0,Math.min(pages.length-1,i));
+  pages.forEach((p,k)=>p.classList.toggle('on',k===cur));
+  document.getElementById('sn').textContent=cur+1;
+  [...j.children].forEach((x,k)=>x.classList.toggle('on',k<=cur));
+  document.getElementById('bprec').style.visibility=cur===0?'hidden':'visible';
+  document.getElementById('bsuiv').style.visibility=cur===TIT.length-1?'hidden':'visible';
+  document.getElementById('fbtn').style.display=(cur>=1&&cur<=9)?'block':'none';
+  window.scrollTo(0,0);
+}
+function aide(id){document.getElementById(id).classList.toggle('on');}
+function modal(o){document.getElementById('mod').classList.toggle('on',!!o);}
+function val(id){const e=document.getElementById(id);return e?(e.value||'').trim():'';}
+function num(id){return val(id).replace(/[^0-9]/g,'');}
+function radio(n){const e=document.querySelector('input[name="'+n+'"]:checked');return e?e.value:'';}
+function coches(id){return [...document.querySelectorAll('#'+id+' input:checked')].map(x=>x.value);}
+function erreurs(idmsg,pb,okTxt){
+  const m=document.getElementById(idmsg);
+  if(pb.length){m.className='msg no on';
+    m.innerHTML='<b>À corriger :</b><ul>'+pb.map(x=>'<li>'+x+'</li>').join('')+'</ul>';
+    m.scrollIntoView({behavior:'smooth',block:'center'});return false;}
+  m.className='msg ok on';m.innerHTML=okTxt;
+  m.scrollIntoView({behavior:'smooth',block:'center'});return true;
+}
+function sauver(){alert('Demande sauvegardée. Vous pourrez la reprendre plus tard.\n\n(Exercice : rien n\u2019est envoyé.)');}
+function joindre(id){
+  const b=document.getElementById(id);
+  b.classList.add('fait');
+  b.querySelector('.cl').textContent='✓';
+}
+
+/* --- questions du dialogue --- */
+const QZ=[
+ {q:'Combien de demandes faut-il faire pour tous les bailleurs sociaux ?',
+  r:['Une seule','Une par bailleur','Trois'],g:0,
+  e:'Une seule demande, valable dans tout le département, avec un numéro unique.'},
+ {q:'Combien de temps attend-on, dans les Hautes-Pyrénées ?',
+  r:['Deux semaines','Deux mois','Souvent plus d\u2019un an'],g:2,
+  e:'C\u2019est long : on cherche dans le privé en même temps.'},
+ {q:'Que faut-il faire chaque année ?',r:['Payer 20 €','Renouveler la demande','Changer de commune'],g:1,
+  e:'Renouveler. Sinon la demande est annulée et on perd son ancienneté.'},
+ {q:'Que fait-on des questions qui ne nous concernent pas ?',
+  r:['On invente une réponse','On les laisse vides','On écrit « je ne sais pas »'],g:1,
+  e:'On les laisse vides. Le formulaire sert à tout le monde : beaucoup de questions ne sont pas pour vous.'},
+ {q:'À quoi sert la case « personne qui vous aide dans les démarches » ?',
+  r:['À payer moins cher','À ce que cette personne reçoive aussi les informations','À aller plus vite'],g:1,
+  e:'L\u2019assistante sociale reçoit les mêmes informations que vous et peut vous aider au bon moment.'}
+];
+let qi=0;
+function qMaj(){
+  const z=document.getElementById('qz');z.innerHTML='';
+  if(qi>=QZ.length){z.innerHTML='<div class="msg ok on"><b>Terminé.</b> Touchez « Suivant ».</div>';return;}
+  const o=QZ[qi];
+  const h=document.createElement('div');
+  h.innerHTML='<p class="etq">Question '+(qi+1)+' sur '+QZ.length+'</p><p style="font-weight:600;font-size:16.5px">'+o.q+'</p>';
+  z.appendChild(h);
+  o.r.forEach((rep,k)=>{
+    const b=document.createElement('button');b.className='rep';b.textContent=rep;
+    b.onclick=()=>{
+      if(k===o.g){b.classList.add('juste');
+        const m=document.createElement('div');m.className='msg ok on';m.innerHTML='✅ '+o.e;
+        z.appendChild(m);qi++;setTimeout(qMaj,2500);}
+      else{b.classList.add('faux');setTimeout(()=>b.classList.remove('faux'),700);}};
+    z.appendChild(b);});
+}
+qMaj();
+
+/* --- commune / éligibilité --- */
+function verifCom(){
+  const v=val('g_com').toLowerCase().replace(/\s/g,'');
+  if(v==='tarbes'||v==='65000'){
+    erreurs('mcom',[],'✅ <b>Commune choisie : Tarbes (65000).</b>');setTimeout(()=>go(2),2000);
+  } else erreurs('mcom',['Amir travaille à <b>Tarbes</b>. Écrivez le nom de la ville, ou 65000.'],'');
+}
+const PLAFOND=30424;
+function verifElig(){
+  const pb=[];
+  if(val('g_nb')!=='1') pb.push('Amir vit seul : <b>1 personne</b>.');
+  if(num('g_rev')!=='8460') pb.push('Le <b>revenu fiscal de référence</b> est sur la fiche : 8 460 €.');
+  if(pb.length){erreurs('melig',pb,'');return;}
+  erreurs('melig',[],'✅ <b>Vous êtes éligible.</b> Le plafond pour 1 personne est de <b>'+
+    PLAFOND.toLocaleString('fr-FR')+' €</b> par an. Amir gagne 8 460 €.<br><br>⚠️ <i>Plafond à vérifier le jour J.</i>');
+  setTimeout(()=>go(3),3200);
+}
+/* --- captcha / compte --- */
+function newCapt(){
+  const L='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';let s='';
+  for(let i=0;i<6;i++)s+=L[Math.floor(Math.random()*L.length)];
+  document.getElementById('capt').textContent=s;document.getElementById('g_capt').value='';
+}
+function lireCapt(){
+  const t=document.getElementById('capt').textContent.split('').join(', ');
+  try{const u=new SpeechSynthesisUtterance(t);u.lang='fr-FR';u.rate=.7;speechSynthesis.speak(u);}
+  catch(e){alert('Le code est : '+t);}
+}
+function verifCompte(){
+  const pb=[],m1=val('g_mail').toLowerCase(),m2=val('g_mail2').toLowerCase();
+  if(m1.indexOf('@')<0) pb.push('L\u2019<b>identifiant</b> est une adresse courriel : celle d\u2019Amir est sur sa fiche.');
+  else if(m1!==m2) pb.push('Les deux courriels ne sont pas identiques.');
+  if(val('g_nom').toUpperCase()!=='RAHIMI') pb.push('Le <b>nom de naissance</b> est RAHIMI.');
+  if(val('g_usage')!=='') pb.push('Le <b>nom d\u2019usage</b> ne concerne pas Amir : case vide.');
+  if(val('g_pre').toLowerCase()!=='amir') pb.push('Le <b>prénom</b> est Amir.');
+  if(val('g_jj')!=='12'||val('g_mm')!=='03'||val('g_aa')!=='1999')
+    pb.push('La <b>date de naissance</b> : 12 / 03 / 1999.');
+  if(!document.getElementById('g_etr').checked) pb.push('Amir est né à Kaboul : cochez <b>Né(e) à l\u2019étranger</b>.');
+  if(val('g_lieu').toLowerCase().indexOf('kabou')<0) pb.push('La <b>commune de naissance</b> est Kaboul.');
+  if(val('g_capt').toUpperCase()!==document.getElementById('capt').textContent)
+    pb.push('Le <b>code de sécurité</b> ne correspond pas. ↻ en donne un autre.');
+  if(!document.getElementById('g_cgu').checked) pb.push('Cochez <b>j\u2019accepte les conditions générales</b>.');
+  if(erreurs('mcompte',pb,'✅ <b>Compte créé.</b> Un code d\u2019activation part sur le courriel.'))
+    setTimeout(()=>go(4),2600);
+}
+/* --- NIR --- */
+function verifNir(){
+  const n=num('i_nir'),m=document.getElementById('mnir');
+  if(n.length!==15){m.className='msg no on';
+    m.innerHTML='Le NIR fait <b>15 chiffres</b>. Vous en avez saisi '+n.length+'. Il est écrit sur la carte Vitale et sur l\u2019attestation de sécurité sociale.';return;}
+  if(n[0]!=='1'&&n[0]!=='2'){m.className='msg no on';
+    m.innerHTML='Un NIR commence par <b>1</b> (homme) ou <b>2</b> (femme).';return;}
+  m.className='msg ok on';m.innerHTML='✅ Numéro valide.';
+}
+/* --- infos générales --- */
+function verifInfo(){
+  const pb=[];
+  if(radio('civ')!=='M') pb.push('Amir est un homme : cochez <b>Monsieur</b>.');
+  if(val('i_nom').toUpperCase()!=='RAHIMI') pb.push('Le <b>nom de naissance</b> est RAHIMI.');
+  if(val('i_pre').toLowerCase()!=='amir') pb.push('Le <b>prénom</b> est Amir.');
+  if(num('i_nir').length!==15) pb.push('Le <b>numéro de sécurité sociale</b> fait 15 chiffres : il est sur la fiche d\u2019Amir.');
+  if(radio('nat')!=='hue') pb.push('L\u2019Afghanistan n\u2019est pas dans l\u2019Union européenne : <b>Hors Union Européenne</b>.');
+  if(!document.getElementById('d_sejour').classList.contains('fait'))
+    pb.push('Il faut <b>joindre le titre de séjour</b> (recto et verso).');
+  if(val('i_codem')!=='0') pb.push('Amir fait la demande seul : <b>0 co-demandeur</b>.');
+  if(val('i_coloc')!=='0') pb.push('Amir ne cherche pas en colocation : <b>0 colocataire</b>.');
+  if(val('i_charge')!=='0') pb.push('Personne n\u2019est fiscalement à sa charge : <b>0</b>.');
+  if(val('i_alt')!=='0') pb.push('Pas d\u2019enfant en garde alternée : <b>0</b>.');
+  if(val('i_vis')!=='0') pb.push('Pas d\u2019enfant en droit de visite : <b>0</b>.');
+  if(val('i_hand')!=='0') pb.push('Personne en situation de handicap : <b>0</b>.');
+  if(radio('naiss')!=='non') pb.push('Amir n\u2019attend pas de naissance : <b>Non</b>.');
+  if(erreurs('minfo',pb,'✅ <b>Enregistré.</b> Remarquez : six questions de suite auxquelles on répond <b>0</b> ou <b>Non</b>. C\u2019est normal — le formulaire est fait pour toutes les situations.'))
+    setTimeout(()=>go(5),3000);
+}
+/* --- coordonnées --- */
+function verifCoord(){
+  const pb=[];
+  if(val('c_tdom')!=='') pb.push('Amir n\u2019a pas de téléphone fixe ni professionnel : <b>case vide</b>.');
+  if(num('c_tport').length!==10) pb.push('Le <b>téléphone portable</b> fait 10 chiffres : 0612345678.');
+  if(val('c_mail').indexOf('@')<0) pb.push('Le <b>courriel personnel</b> est sur la fiche d\u2019Amir.');
+  if(!document.getElementById('c_ncour').checked||!document.getElementById('c_nsms').checked)
+    pb.push('Cochez <b>les deux</b> notifications : courriel et SMS. C\u2019est comme ça qu\u2019on est prévenu d\u2019une proposition.');
+  if(num('c_atel').length!==10) pb.push('Le <b>téléphone de la personne qui aide</b> : celui de l\u2019assistante sociale, sur la fiche.');
+  const a1=val('c_amail').toLowerCase(),a2=val('c_amail2').toLowerCase();
+  if(a1.indexOf('@')<0) pb.push('Le <b>courriel de la personne qui aide</b> est sur la fiche.');
+  else if(a1!==a2) pb.push('Les deux courriels de la personne qui aide ne sont pas identiques.');
+  if(!document.getElementById('c_acc').checked)
+    pb.push('Cochez <b>oui</b> : sinon l\u2019assistante sociale ne recevra aucune information et ne pourra pas aider.');
+  if(erreurs('mcoord',pb,'✅ <b>Enregistré.</b> L\u2019assistante sociale recevra les mêmes messages qu\u2019Amir.'))
+    setTimeout(()=>go(6),2600);
+}
+/* --- pro --- */
+function verifPro(){
+  const pb=[];
+  if(val('p_sit')!=='Stagiaire de la formation professionnelle')
+    pb.push('Amir n\u2019a pas de contrat de travail et n\u2019est pas au chômage. Touchez « Je ne sais pas quoi choisir ».');
+  if(val('p_prof').toLowerCase().indexOf('maçon')<0&&val('p_prof').toLowerCase().indexOf('macon')<0)
+    pb.push('La <b>profession</b> d\u2019Amir : maçon.');
+  if(radio('lt')!=='oui') pb.push('Son lieu de travail est <b>en France</b> : Oui.');
+  if(val('p_lieu').toLowerCase().replace(/\s/g,'')!=='tarbes'&&num('p_lieu')!=='65000')
+    pb.push('Le <b>lieu de travail</b> est Tarbes (65000).');
+  if(val('p_siret')!=='') pb.push('Amir n\u2019a pas d\u2019employeur : le <b>SIRET</b> reste vide.');
+  if(radio('cdd')!=='non') pb.push('Amir n\u2019est ni en CDD ni en intérim : <b>Non</b>.');
+  if(radio('chl')!=='non') pb.push('Amir n\u2019a pas eu un an de chômage : <b>Non</b>.');
+  if(!document.getElementById('d_att').classList.contains('fait'))
+    pb.push('Joignez <b>l\u2019attestation de formation</b> de l\u2019AFPA : c\u2019est son justificatif de situation.');
+  if(erreurs('mpro',pb,'✅ <b>Enregistré.</b> Sans contrat de travail, c\u2019est l\u2019attestation de formation qui prouve la situation.'))
+    setTimeout(()=>go(7),2800);
+}
+/* --- ressources --- */
+const RES=[];
+function ajoutRes(){
+  const t=val('r_type'),m=num('r_mt');
+  if(!t||!m){alert('Choisissez une ressource et un montant.');return;}
+  RES.push([t,m]);document.getElementById('r_type').value='';document.getElementById('r_mt').value='';
+  majRes();
+}
+function majRes(){
+  document.getElementById('tres').innerHTML=RES.map((r,i)=>
+    '<tr><td class="k">Type de ressource</td><td>'+r[0]+'</td></tr>'+
+    '<tr><td class="k">Montant</td><td>'+r[1]+' €</td></tr>'+
+    '<tr><td colspan="2" style="cursor:pointer" onclick="RES.splice('+i+',1);majRes()">🗑️</td></tr>').join('');
+}
+function verifAnnee(){
+  document.getElementById('wan').style.display = (val('r_an')&&val('r_an')!=='2025')?'block':'none';
+}
+function verifRes(){
+  const pb=[];
+  if(radio('rm')!=='oui') pb.push('Amir touche une rémunération de formation : <b>Oui</b>, il perçoit des ressources.');
+  if(val('r_sal')!=='') pb.push('Amir n\u2019a pas de salaire : sa rémunération de formation se met dans <b>Autres ressources</b>, pas ici.');
+  if(val('r_af')!=='') pb.push('Amir n\u2019a pas d\u2019enfant : pas d\u2019<b>allocations familiales</b>. Case vide.');
+  if(!RES.some(r=>r[0].indexOf('formation')>=0&&r[1]==='720'))
+    pb.push('Ajoutez la ressource : <b>Rémunération de formation, 720 €</b> (choisir, écrire le montant, puis « Ajouter »).');
+  if(val('r_an')!=='2025') pb.push('L\u2019année à sélectionner est <b>2025</b> — c\u2019est le dernier avis d\u2019imposition.');
+  if(num('r_rfr')!=='8460') pb.push('Le <b>revenu fiscal de référence</b> est 8 460 €.');
+  if(!document.getElementById('d_avis').classList.contains('fait'))
+    pb.push('Joignez <b>l\u2019avis d\u2019imposition</b>.');
+  if(erreurs('mres',pb,'✅ <b>Enregistré.</b> Attention à la différence : le <b>salaire</b> est mensuel, le <b>revenu fiscal de référence</b> est annuel.'))
+    setTimeout(()=>go(8),3000);
+}
+/* --- logement actuel --- */
+function verifLog(){
+  const pb=[],c=[].concat(coches('l_sit'),coches('l_sit2'),coches('l_sit3'));
+  if(c.length!==1||c[0]!=='particulier')
+    pb.push('Amir dort chez son ami Karim : une seule case, <b>Chez un particulier</b>.');
+  if(num('l_num')!=='12') pb.push('Le <b>numéro</b> de l\u2019adresse est 12.');
+  if(val('l_voie').toLowerCase().indexOf('larrey')<0) pb.push('La <b>voie</b> est « rue Larrey ».');
+  if(val('l_com').toLowerCase().replace(/\s/g,'')!=='tarbes'&&num('l_com')!=='65000')
+    pb.push('La <b>commune</b> est Tarbes (65000).');
+  if(val('l_heb').toLowerCase().indexOf('karim')<0)
+    pb.push('Amir est hébergé : écrivez <b>Chez Karim</b> dans « personne hébergeante ».');
+  if(erreurs('mlog',pb,'✅ <b>Enregistré.</b> « Chez un particulier » et le nom de l\u2019hébergeant : c\u2019est ce qui prouve qu\u2019Amir n\u2019a pas de logement à lui.'))
+    setTimeout(()=>go(9),2800);
+}
+/* --- logement recherché --- */
+let nbPref=0;
+function ajoutPref(){
+  if(nbPref>=17){alert('17 communes au maximum.');return;}
+  nbPref++;
+  const d=document.createElement('div');d.className='pref';
+  d.innerHTML='<span class="tt">Préférence '+nbPref+'</span>'+
+    '<div class="champ" style="margin-bottom:12px"><label>Commune ou code postal (format : 44000) <span class="ob">*</span></label>'+
+    '<input type="text" class="pcom" autocomplete="off"></div>'+
+    '<div class="champ" style="margin-bottom:0"><label>Quartier</label><input type="text" class="pq"></div>'+
+    '<div class="ord"><span>⌃</span><span>⌄</span><span onclick="this.closest(\'.pref\').remove()" style="cursor:pointer">🗑️</span></div>';
+  document.getElementById('prefs').appendChild(d);
+}
+ajoutPref();
+function verifRech(){
+  const pb=[];
+  const coms=[...document.querySelectorAll('.pcom')].map(x=>x.value.trim().toLowerCase()).filter(Boolean);
+  if(val('s_typ')!=='T1'&&val('s_typ')!=='T2') pb.push('Amir vit seul : il cherche un <b>T1</b> ou un <b>T2</b>.');
+  if(coms.length<2) pb.push('Ajoutez <b>au moins deux communes</b> : avec une seule, l\u2019attente est beaucoup plus longue. Touchez « Ajouter un choix ».');
+  if(coms.length&&coms[0].indexOf('tarbes')<0&&coms[0].indexOf('65000')<0)
+    pb.push('La <b>préférence 1</b> doit être Tarbes : Amir y travaille et n\u2019a pas de voiture.');
+  if(coms.some(c=>c.indexOf('lourdes')>=0)) pb.push('Lourdes est à 20 km et Amir n\u2019a pas de voiture : comment ira-t-il au chantier ?');
+  if(radio('elar')!=='oui') pb.push('Répondez <b>Oui</b> à l\u2019élargissement : plus de chances d\u2019avoir une proposition.');
+  if(val('s_mot')!=='Sans logement / hébergé chez un tiers')
+    pb.push('Amir est hébergé chez un ami : ce n\u2019est pas le bon <b>motif</b>.');
+  if(pb.length){erreurs('mrech',pb,'');return;}
+  erreurs('mrech',[],'✅ <b>Demande complète.</b> Les communes sont classées par ordre de préférence : la n° 1 passe en premier.');
+  const n='65-2026-'+String(Math.floor(Math.random()*90000)+10000);
+  document.getElementById('nud').textContent='Demande n° '+n;
+  const d=new Date();d.setFullYear(d.getFullYear()+1);
+  document.getElementById('dtren').textContent=d.toLocaleDateString('fr-FR');
+  const r=[['Demandeur','RAHIMI Amir'],['Situation','Stagiaire de la formation professionnelle'],
+    ['Logement actuel','Hébergé chez un particulier'],['Type recherché',val('s_typ')],
+    ['Communes',coms.join(', ')],['Motif',val('s_mot')]];
+  document.getElementById('rec').innerHTML=r.map(x=>'<tr><td class="k">'+x[0]+'</td><td>'+x[1]+'</td></tr>').join('');
+  setTimeout(()=>go(10),2800);
+}
+/* --- pièces --- */
+const PIECES=[
+ ['Une pièce d\u2019identité ou un titre de séjour (recto et verso)',1],
+ ['L\u2019avis d\u2019imposition de l\u2019année dernière',1],
+ ['L\u2019attestation de formation de l\u2019AFPA',1],
+ ['Une attestation d\u2019hébergement de Karim',1],
+ ['Le livret de famille, s\u2019il y a des enfants',1],
+ ['Le permis de conduire',0],['La carte Vitale',0],['Une photo d\u2019identité',0]
+];
+(function(){
+  const z=document.getElementById('pieces');
+  PIECES.slice().sort(()=>Math.random()-.5).forEach(([t,v])=>{
+    const d=document.createElement('button');d.className='piece';
+    d.innerHTML='<span class="c"></span><span>'+t+'</span>';
+    d.onclick=()=>{const m=document.getElementById('mpiece');
+      if(v){d.classList.add('ok');d.querySelector('.c').textContent='✓';
+        m.className='msg ok on';m.innerHTML='✅ Oui, ce papier fait partie du dossier.';}
+      else{d.classList.add('ko');setTimeout(()=>d.classList.remove('ko'),800);
+        m.className='msg no on';m.innerHTML='❌ Non. Ce papier n\u2019est pas demandé.';}};
+    z.appendChild(d);});
+})();
+
+/* ---------- LES MOTS DU FORMULAIRE ---------- */
+const DEF={
+ commune:['Une commune','C\u2019est une <b>ville ou un village</b>, avec sa mairie. On peut écrire son nom (Tarbes) ou son code postal (65000).'],
+ civ:['La civilité','<b>Monsieur</b> pour un homme, <b>Madame</b> pour une femme.'],
+ nir:['Le numéro de sécurité sociale (NIR)','Le numéro à <b>15 chiffres</b> qui est sur votre <b>carte Vitale</b> et sur votre attestation de sécurité sociale.<br>Il commence par <b>1</b> si vous êtes un homme, <b>2</b> si vous êtes une femme. Ensuite viennent l\u2019année et le mois de naissance.<br>Il ne se donne jamais par téléphone ni par message.'],
+ codem:['Un co-demandeur','Une <b>deuxième personne qui fait la demande avec vous</b> et signera le bail : mari, femme, concubin. Ce n\u2019est pas un ami qui vous héberge. Si vous êtes seul : <b>0</b>.'],
+ coloc:['Un colocataire','Une personne avec qui on veut <b>partager le même logement</b> en payant chacun sa part. Attention : chaque colocataire doit faire <b>sa propre demande</b> de son côté. Si vous cherchez seul : <b>0</b>.'],
+ charge:['Personne fiscalement à charge','Quelqu\u2019un que vous <b>déclarez aux impôts</b> parce que vous payez pour lui et qu\u2019il vit chez vous : le plus souvent vos enfants. Si vous vivez seul : <b>0</b>.'],
+ alternee:['La garde alternée','Après une séparation, l\u2019enfant vit <b>une semaine chez un parent, une semaine chez l\u2019autre</b>. Si vous n\u2019avez pas d\u2019enfant : 0.'],
+ visite:['Le droit de visite et d\u2019hébergement','Après une séparation, l\u2019enfant ne vit pas chez vous mais vient <b>certains week-ends et pendant les vacances</b>. Si vous n\u2019avez pas d\u2019enfant : 0.'],
+ handnb:['Personne en situation de handicap','Une personne dont le handicap est <b>reconnu par la MDPH</b>, une administration. Il faut un papier officiel.'],
+ naiss:['Attendez-vous une naissance ?','Est-ce que vous ou votre compagne <b>attendez un bébé</b> ? Un bébé qui va arriver compte pour la taille du logement.'],
+ teldom:['Tel. domicile ou professionnel','Un téléphone <b>fixe</b>, à la maison ou au travail. Beaucoup de gens n\u2019en ont pas : on laisse vide et on met seulement le portable.'],
+ aidant:['La personne qui vous aide','Une <b>assistante sociale, un formateur, une association</b> qui vous accompagne. Si vous donnez ses coordonnées et que vous cochez la case, <b>elle reçoit les mêmes informations que vous</b> et peut vous aider au bon moment.<br>C\u2019est très utile quand on ne lit pas encore bien le français.'],
+ prof:['La profession','Le <b>métier</b> que vous faites ou que vous apprenez : maçon, cuisinier, aide-soignante…'],
+ siret:['Le numéro SIRET','Le numéro à <b>14 chiffres</b> qui identifie une entreprise. Il est écrit sur le bulletin de salaire. Si vous n\u2019avez pas d\u2019employeur, on laisse vide.'],
+ chomlong:['Chômage de plus d\u2019un an','Avez-vous été <b>sans travail pendant plus de douze mois de suite</b> ? Si oui, ça compte pour la commission.'],
+ ressm:['Les ressources mensuelles','Tout l\u2019argent que vous recevez <b>chaque mois</b> : salaire, rémunération de formation, RSA, allocations…'],
+ salaire:['Salaire avant prélèvement à la source','Le salaire <b>avant</b> que les impôts soient enlevés. C\u2019est le chiffre « net à payer avant impôt » du bulletin de salaire.'],
+ annee:['L\u2019année des revenus','Attention : ce n\u2019est pas l\u2019année d\u2019aujourd\u2019hui. C\u2019est l\u2019année écrite sur votre <b>dernier avis d\u2019imposition</b>. Si le site affiche un message orange, c\u2019est qu\u2019il faut changer l\u2019année.'],
+ situact:['Votre situation actuelle','Où vous <b>dormez aujourd\u2019hui</b>.<br><b>Locataire</b> : je paie un loyer.<br><b>Logement-foyer, résidence sociale</b> : un bâtiment géré par une association, avec des petits logements.<br><b>CHRS, CHU, CADA</b> : des structures d\u2019hébergement, souvent pour les personnes en difficulté ou les demandeurs d\u2019asile.<br><b>Chez un particulier</b> : je dors chez quelqu\u2019un — un ami, une connaissance — sans contrat.<br><b>Sans abri</b> : je n\u2019ai aucun endroit.'],
+ hebergeant:['La personne hébergeante','La personne <b>chez qui vous dormez</b>. On écrit « Chez » + son nom. Elle devra écrire une <b>attestation d\u2019hébergement</b> : un papier signé qui dit qu\u2019elle vous loge.'],
+ typel:['Le type de logement','<b>T1</b> : une seule pièce. <b>T2</b> : deux pièces. La cuisine, la salle de bain et les WC ne comptent pas. On ne peut pas demander plus grand que ce dont on a besoin.'],
+ prefs:['Les préférences de communes','Vous pouvez donner <b>plusieurs villes, dans l\u2019ordre</b> : la préférence 1 est celle que vous voulez le plus. Plus vous en mettez, plus vous avez de chances — mais il faut pouvoir aller au travail.'],
+ elargie:['Élargir la demande','Accepter que le bailleur vous propose aussi un logement dans une <b>commune ou un quartier à côté</b>. Répondre oui augmente les chances.'],
+ motif:['Le motif de la demande','<b>Pourquoi</b> vous cherchez un logement. La commission le regarde pour décider qui passe en premier.<br><b>Logement insalubre</b> : dangereux pour la santé — humidité, moisissures, pas de chauffage.'],
+
+ nbp2:['Les personnes du foyer','Toutes les personnes qui vont vivre dans le logement, vous compris. On dit « le foyer » : les gens qui habitent ensemble et partagent l\u2019argent.'],
+ ident:['L\u2019identifiant','C\u2019est <b>votre adresse courriel</b> (votre adresse e-mail). C\u2019est elle qui servira à vous connecter, et c\u2019est là qu\u2019on vous enverra le code pour activer le compte. Il faut donc une adresse que vous savez ouvrir.'],
+ usage:['Le nom d\u2019usage','C\u2019est un nom qu\u2019on utilise tous les jours mais qui n\u2019est pas le nom de naissance : par exemple le nom de son mari après un mariage. Si vous n\u2019en avez pas, laissez vide.'],
+ etranger:['Né(e) à l\u2019étranger','« À l\u2019étranger » veut dire : <b>dans un autre pays que la France</b>. Si vous êtes né dans un autre pays, cochez cette case.'],
+ captcha:['Le code de sécurité (captcha)','Des lettres déformées à recopier. Ça sert à vérifier que vous êtes <b>une personne</b> et pas un robot. Si vous n\u2019arrivez pas à lire, touchez ↻ pour un autre code, ou 🔊 pour l\u2019écouter.'],
+
+ nom:['Le nom de famille','C\u2019est le nom écrit sur votre carte d\u2019identité ou votre titre de séjour, celui qui vient de vos parents. On l\u2019écrit en MAJUSCULES.'],
+ nomn:['Le nom de naissance','C\u2019est le nom qu\u2019on avait <b>en naissant</b>. Il change parfois après un mariage : une femme peut prendre le nom de son mari. Si votre nom n\u2019a jamais changé, cette case ne vous concerne pas.'],
+ nai:['La date de naissance','Le jour, le mois et l\u2019année. On écrit d\u2019abord le jour, puis le mois : <b>12/03/1999</b> = le 12 mars 1999.'],
+ lieu:['La ville de naissance','La ville où vous êtes né, même si c\u2019est dans un autre pays.'],
+ nat:['La nationalité','Le pays dont vous avez les papiers. <b>Union européenne</b> = un des 27 pays d\u2019Europe (France, Espagne, Italie…). <b>Hors Union européenne</b> = tous les autres pays.<br>Le logement social est ouvert à tout le monde, si on a un titre de séjour valable.'],
+ fam:['La situation familiale','Est-ce que vous vivez en couple ?<br><b>Célibataire</b> : je ne suis pas en couple.<br><b>Marié</b> : je me suis marié à la mairie.<br><b>Pacsé</b> : j\u2019ai signé un PACS, un contrat de couple plus simple que le mariage.<br><b>En concubinage</b> : je vis avec quelqu\u2019un, sans mariage ni PACS.<br><b>Divorcé</b> : j\u2019étais marié, c\u2019est fini.<br><b>Veuf</b> : mon mari ou ma femme est décédé.'],
+ tel:['Le téléphone','Votre numéro de portable. <b>Très important</b> : c\u2019est par là qu\u2019on vous appellera quand un logement sera libre. Si le numéro change, il faut le changer sur la demande.'],
+ co:['Le co-demandeur','C\u2019est une <b>deuxième personne qui fait la demande avec vous</b> et qui signera le bail avec vous : votre mari, votre femme, votre concubin. Ce n\u2019est pas un ami qui vous héberge, ni vos enfants.<br>Si vous vivez seul : <b>Non</b>.'],
+ nbp:['Les personnes à loger','Toutes les personnes qui vont <b>habiter dans le logement</b>, vous compris. On dit aussi <b>le foyer</b> : ce mot ne veut pas dire « la maison », il veut dire « les gens qui vivent ensemble et partagent l\u2019argent ».<br>Si vous vivez seul : 1.'],
+ enf:['Un enfant à charge','« À charge » veut dire : <b>c\u2019est vous qui payez pour lui</b> — la nourriture, les vêtements, l\u2019école — et il habite chez vous. En général, c\u2019est jusqu\u2019à 20 ans.<br>Un enfant qui vit dans un autre pays, ou un petit frère qui vit chez ses parents, n\u2019est pas un enfant à votre charge.'],
+ hand:['La situation de handicap','Une personne qui a une maladie ou un problème physique <b>reconnu par la MDPH</b> (une administration), qui gêne dans la vie de tous les jours. Ça peut donner un logement adapté, ou une place prioritaire.<br>Il faut un papier officiel : on ne coche pas « oui » juste parce qu\u2019on a mal au dos.'],
+ sit:['La situation professionnelle','Votre travail aujourd\u2019hui.<br><b>CDI</b> : contrat sans date de fin.<br><b>CDD</b> : contrat avec une date de fin.<br><b>Intérimaire</b> : on travaille par missions, avec une agence.<br><b>Apprenti</b> : on travaille et on étudie en même temps, avec un contrat.<br><b>Stagiaire de la formation professionnelle</b> : on est en formation, on reçoit une rémunération, mais ce n\u2019est pas un salaire de travail.'],
+ emp:['L\u2019employeur','C\u2019est <b>l\u2019entreprise qui vous paie</b> et qui a signé votre contrat de travail. En formation, il n\u2019y a pas d\u2019employeur : le centre de formation n\u2019est pas votre employeur.'],
+ dte:['La date d\u2019embauche','Le premier jour de votre contrat de travail. Sans contrat de travail, il n\u2019y a pas de date d\u2019embauche.'],
+ rev:['Le revenu fiscal de référence','C\u2019est <b>tout l\u2019argent que vous avez gagné pendant une année entière</b>, calculé par les impôts. Ce n\u2019est pas le salaire d\u2019un mois.<br>On le trouve sur <b>l\u2019avis d\u2019imposition</b>, la feuille que les impôts envoient chaque année, en haut, dans le cadre « vos références ».<br>C\u2019est ce chiffre qui décide si vous avez droit au logement social : il faut gagner <b>moins</b> qu\u2019un certain montant.'],
+ pres:['Les prestations','L\u2019argent que les administrations vous versent chaque mois, en plus du salaire.<br><b>APL</b> : aide de la CAF pour payer le loyer.<br><b>RSA</b> : argent pour les personnes sans revenus.<br><b>AAH</b> : argent pour les personnes handicapées.<br><b>Allocations familiales</b> : argent quand on a au moins deux enfants.<br>Si vous ne recevez rien : <b>Aucune</b>.'],
+ pens:['La pension alimentaire','De l\u2019argent qu\u2019on <b>donne</b> chaque mois à son ex-conjoint pour les enfants, ou qu\u2019on <b>reçoit</b>. C\u2019est décidé par un juge après une séparation.<br>Si vous n\u2019êtes pas dans ce cas : laissez vide.'],
+ stat:['Votre situation aujourd\u2019hui','Où vous habitez en ce moment.<br><b>Locataire</b> : je paie un loyer.<br><b>Propriétaire</b> : la maison est à moi.<br><b>Hébergé chez un particulier</b> : je dors chez quelqu\u2019un — un ami, de la famille — sans contrat et souvent sans payer.<br><b>Hébergé en foyer</b> : je vis dans un bâtiment géré par une association.<br><b>Sans logement</b> : je n\u2019ai aucun endroit à moi.'],
+ loy:['Le loyer actuel','Ce que vous <b>payez chaque mois</b> pour votre logement d\u2019aujourd\u2019hui. Si vous êtes hébergé gratuitement chez quelqu\u2019un, vous ne payez pas de loyer : laissez vide.'],
+ dep:['Depuis quand ?','Le mois et l\u2019année où vous êtes arrivé dans ce logement. Exemple : <b>05/2026</b> = mai 2026.'],
+ type:['Le type de logement','<b>T1</b> : une seule pièce, plus la cuisine et la salle de bain.<br><b>T2</b> : deux pièces — une chambre et un salon.<br><b>T3</b> : trois pièces.<br>La cuisine, la salle de bain et les WC ne comptent jamais.<br>On ne peut pas demander plus grand que ce dont on a besoin.'],
+ com:['Les communes souhaitées','Les villes où vous acceptez d\u2019habiter. Une <b>commune</b>, c\u2019est une ville ou un village, avec sa mairie.<br>Plus vous en cochez, plus vous avez de chances d\u2019avoir vite une proposition. Mais il faut pouvoir aller au travail.'],
+ lmax:['Le loyer maximum','Le prix le plus haut que vous pouvez payer chaque mois, <b>charges comprises</b>. On compte en général un tiers de ce qu\u2019on gagne.'],
+ mot:['Le motif de la demande','<b>Pourquoi</b> vous cherchez un logement. C\u2019est important : la commission regarde ce motif pour décider qui passe en premier.<br><b>Logement insalubre</b> : un logement dangereux pour la santé — humidité, moisissures, pas de chauffage.<br><b>Mutation professionnelle</b> : mon entreprise m\u2019envoie travailler dans une autre ville.'],
+ part:['Une situation particulière','Des situations graves qui donnent une <b>priorité</b>.<br><b>Procédure d\u2019expulsion</b> : un juge a décidé que je dois quitter mon logement.<br><b>Violences</b> : quelqu\u2019un me fait du mal là où j\u2019habite.<br>On ne coche que si c\u2019est vraiment son cas : il faudra le prouver avec un papier.']
+};
+
+
+document.querySelectorAll('.champ[data-def]').forEach(ch=>{
+  const k=ch.dataset.def,d=DEF[k];if(!d)return;
+  const lab=ch.querySelector('label');if(!lab)return;
+  const b=document.createElement('button');
+  b.className='defbtn';b.textContent='?';b.setAttribute('aria-label','Explication : '+d[0]);
+  const p=document.createElement('div');p.className='def';p.innerHTML='<b>'+d[0]+'</b><br>'+d[1];
+  b.onclick=e=>{e.preventDefault();p.classList.toggle('on');};
+  lab.appendChild(b);lab.insertAdjacentElement('afterend',p);
+});
+function glossaire(o){
+  const m=document.getElementById('glo');
+  if(o&&!m.dataset.pret){
+    m.querySelector('.liste').innerHTML=Object.keys(DEF).map(k=>
+      '<div style="padding:12px 0;border-bottom:1px solid #D8D8D8"><b style="color:#A0561B">'+
+      DEF[k][0]+'</b><div style="font-size:14.5px;margin-top:3px">'+DEF[k][1]+'</div></div>').join('');
+    m.dataset.pret=1;}
+  m.classList.toggle('on',!!o);
+}
+newCapt();go(0);
+</script>
+</body>
+</html>
