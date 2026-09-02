@@ -221,12 +221,28 @@ font-size:21px;font-weight:800;min-height:56px;cursor:pointer;color:var(--txt)}
 .pave button.op{background:#fff;color:var(--or);border-color:var(--or)}
 .pave button.val{background:var(--vert);color:#fff;border-color:var(--vert);font-size:16px}
 .pave button.eff{background:#fff;color:var(--rouge);border-color:var(--rouge)}
+
+.lirebtn{background:#fff;border:1.5px solid #666;border-radius:22px;padding:8px 14px;font-size:17px;
+cursor:pointer;font-family:inherit;min-height:44px;margin-top:9px;display:inline-flex;align-items:center;gap:7px}
+.lirebtn.on{background:#161616;border-color:#161616;color:#fff}
+.langbar{display:flex;gap:6px;overflow-x:auto;padding:9px 12px;background:#fff;border-bottom:1px solid #ddd}
+.langbar::-webkit-scrollbar{display:none}
+.langbar button{flex:0 0 auto;border:1.5px solid #999;background:#fff;border-radius:22px;padding:9px 15px;
+font-family:inherit;font-size:14.5px;font-weight:700;cursor:pointer;min-height:44px;white-space:nowrap;color:#222}
+.langbar button.on{background:#161616;border-color:#161616;color:#fff}
+.tr{margin-top:10px;padding-top:9px;border-top:1px dashed #A9B4C0;font-size:15.5px;line-height:1.8;
+font-family:'Noto Naskh Arabic','Noto Sans',inherit}
+.tr.rtl{direction:rtl;text-align:right}
+.tr .nt{display:block;font-size:12.5px;opacity:.7;margin-top:5px;direction:ltr;text-align:left}
 @media(min-width:760px){body{max-width:520px;margin:0 auto;border-left:1px solid var(--bordl);border-right:1px solid var(--bordl)}}
 </style>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;600&display=swap" rel="stylesheet">
+<script src="traductions.js" onerror="void 0"></script>
 </head>
 <body>
 
 <div class="bandeau">⚠️ Exercice — les annonces sont inventées, on ne contacte personne.</div>
+<div class="langbar" id="langbar"></div>
 <div class="etq">Étape <span id="sn">1</span> sur 3 — <span id="stit">Chercher une annonce</span></div>
 <div class="jauge" id="jauge"><i class="on"></i><i></i><i></i></div>
 
@@ -519,6 +535,60 @@ font-size:21px;font-weight:800;min-height:56px;cursor:pointer;color:var(--txt)}
 </div>
 
 <script>
+
+
+/* ---------- LECTURE À VOIX HAUTE ---------- */
+const VOIX={fr:'fr-FR',ff:'fr-FR',ar:'ar-SA',ps:'ps-AF',ru:'ru-RU'};
+function nettoie(t){return t.replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim();}
+function lire(btn,k){
+  if(!('speechSynthesis' in window)){alert('La lecture à voix haute ne marche pas sur ce téléphone.');return;}
+  if(speechSynthesis.speaking){speechSynthesis.cancel();
+    document.querySelectorAll('.lirebtn.on').forEach(b=>{b.classList.remove('on');b.textContent='🔊';});
+    if(btn.dataset.encours){delete btn.dataset.encours;return;}}
+  let txt='';
+  if(LANG==='fr'){const d=(window.DEF&&DEF[k])?DEF[k]:null;txt=d?nettoie(d[0]+'. '+d[1]):'';}
+  else{const t=(window.TRAD&&TRAD[k])?TRAD[k][LANG]:null;
+    if(!t){const d=(window.DEF&&DEF[k])?DEF[k]:null;txt=d?nettoie(d[0]+'. '+d[1]):'';}
+    else txt=nettoie(t);}
+  if(!txt)return;
+  const u=new SpeechSynthesisUtterance(txt);
+  u.lang=VOIX[LANG]||'fr-FR';
+  u.rate=(LANG==='ff')?0.72:0.85;
+  const vs=speechSynthesis.getVoices().filter(v=>v.lang&&v.lang.indexOf(u.lang.slice(0,2))===0);
+  if(vs.length)u.voice=vs[0];
+  else if(LANG!=='fr'&&LANG!=='ff'){
+    alert("Ce téléphone n'a pas la voix pour cette langue.\nLa lecture se fera en français.");
+    u.lang='fr-FR';}
+  btn.classList.add('on');btn.textContent='⏸';btn.dataset.encours=1;
+  u.onend=()=>{btn.classList.remove('on');btn.textContent='🔊';delete btn.dataset.encours;};
+  speechSynthesis.speak(u);
+}
+function boutonLire(k){
+  return '<button class="lirebtn" onclick="lire(this,\''+k+'\')" aria-label="Écouter">🔊</button>';
+}
+/* ---------- TRADUCTIONS ---------- */
+const LANGUES=[['fr','Français'],['ff','Français facile'],['ar','العربية'],['ps','پښتو'],['ru','Русский']];
+let LANG=localStorage.getItem('hope_lang')||'fr';
+function estRTL(l){return l==='ar'||l==='ps';}
+function trad(k){
+  if(LANG==='fr')return '';
+  const ui=(window.TRAD_UI&&window.TRAD_UI[LANG])||{note:''};
+  const t=(window.TRAD&&window.TRAD[k])?window.TRAD[k][LANG]:null;
+  const cl='tr'+(estRTL(LANG)?' rtl':'');
+  if(!t)return '<div class="'+cl+'" style="direction:ltr;text-align:left"><i>'+ui.note+'</i></div>';
+  return '<div class="'+cl+'">'+t+'<span class="nt">'+ui.note+'</span></div>';
+}
+function majTrad(){
+  document.querySelectorAll('[data-trk]').forEach(e=>{e.innerHTML=trad(e.dataset.trk);});
+  document.querySelectorAll('.langbar button').forEach(b=>b.classList.toggle('on',b.dataset.l===LANG));
+}
+function setLang(l){LANG=l;try{localStorage.setItem('hope_lang',l);}catch(e){}majTrad();}
+(function(){
+  const z=document.getElementById('langbar');if(!z)return;
+  LANGUES.forEach(([c,n])=>{
+    const b=document.createElement('button');b.dataset.l=c;b.textContent=n;
+    b.onclick=()=>setLang(c);z.appendChild(b);});
+})();
 const IMG=(typeof window.IMG==='object'&&window.IMG)?window.IMG:{};
 function ph(k,em){return IMG[k]?'<img src="'+IMG[k]+'" alt="">':em;}
 function rien(){alert('Exercice : cette partie n\u2019est pas active.');}
@@ -777,7 +847,7 @@ const DEF={
 function expl(cle,ap){
   const b=document.createElement('button');b.className='dbtn';b.textContent='?';
   const p=document.createElement('div');p.className='dexp';
-  p.innerHTML='<b>'+DEF[cle][0]+'</b><br>'+DEF[cle][1];
+  p.innerHTML='<b>'+DEF[cle][0]+'</b><br>'+DEF[cle][1]+'<div data-trk="'+cle+'">'+trad(cle)+'</div>'+boutonLire(cle);
   b.onclick=e=>{e.preventDefault();e.stopPropagation();p.classList.toggle('on');};
   ap.appendChild(b);ap.insertAdjacentElement('afterend',p);
 }
@@ -917,7 +987,7 @@ function plier(){
   m.classList.toggle('reduit');
   m.querySelector('.plier').textContent=m.classList.contains('reduit')?'⌄':'⌃';
 }
-majRechs();majMission();maj();poserExpl();
+majRechs();majMission();maj();poserExpl();majTrad();
 
 /* ---------- CALCULATRICE ---------- */
 let cible=null,ecr='0';
